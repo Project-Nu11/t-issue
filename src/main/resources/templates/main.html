@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="main" style="">
+    <h1>T-issue</h1>
+    <div id="timer" style="width: 50px; height: 50px; background-color: gray">타이머</div>
+    <div id="map" style="width:576px;height:700px; margin:0 auto;">
+    </div>
+    <div id="mainButton" style="display: grid; grid-template-columns: repeat(3,1fr); grid-gap: 10px">
+        <div id="searchButton" style="width: 50px;height: 50px; background-color: gray">검색</div>
+        <div id="sosButton" style="width: 50px;height: 50px; background-color: gray">긴급</div>
+        <button id="listButton" style="width: 50px;height: 50px; background-color: gray">목록</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=?"></script>
+<script>
+    var container = document.getElementById('map');
+    var options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667), //카카오 좌표
+        level: 3
+    };
+    var map = new kakao.maps.Map(container, options);
+
+    if (navigator.geolocation) {
+
+        navigator.geolocation.getCurrentPosition(function (position){
+
+            var lat = position.coords.latitude,
+                lon = position.coords.longitude;
+
+            var locPosition = new kakao.maps.LatLng(lat,lon);
+
+            displayMarker(locPosition);
+        });
+
+    } else { //geolocation 사용 불가 시
+
+        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667)
+
+        displayMarker(locPosition);
+    }
+
+    function displayMarker(locPosition) {
+
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: locPosition
+        });
+
+        map.setCenter(locPosition);
+    }
+</script>
+</body>
+</html>
