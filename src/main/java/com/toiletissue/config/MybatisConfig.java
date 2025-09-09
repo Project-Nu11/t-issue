@@ -5,6 +5,6 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan(basePackages = "com.tissue", annotationClass = Mapper.class)
+@MapperScan(basePackages = "com.toiletissue", annotationClass = Mapper.class)
 public class MybatisConfig {
 }
