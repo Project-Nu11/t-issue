@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #content-layout{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        #noticelist,#details{
+            width: 500px;
+            height: 400px;
+        }
+        .details{
+            background-color: aqua;
+            display: none;
+        }
+        .detailsdisplay{
+            background-color: aqua;
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<h1>관리자 공지사항 페이지</h1>
+<button onclick="location.href='/notice/insert'">공지사항 추가</button>
+<br>
+<br>
+<div id="content-layout">
+    <table border="1" id="noticelist">
+        <tr>
+            <th>제목</th>
+            <th>내용</th>
+            <th>날짜</th>
+            <th>상세 조회</th>
+        </tr>
+        <tr th:each="notice, noticestat : ${noticeList}">
+            <td th:text="${notice.title}"></td>
+            <td th:text="${notice.content}"></td>
+            <td th:text="${notice.date}"></td>
+            <td th:text="${noticestat.current}"></td>
+        </tr>
+    </table>
+    <div id="details" class="details">상세 내용입니다.</div>
+</div>
+<button onclick="location.href='/notice/delete'">공지사항 삭제</button>
+<script>
+    const $detailbtn = document.getElementsByClassName('detailbtn')
+    const $detail = document.querySelector('.details')
+    Array.from($detailbtn).forEach(function (btn){
+        btn.onclick = function (){
+            $detail.classList.replace("details","detailsdisplay");
+        }
+    })
+
+</script>
+</body>
+</html>
