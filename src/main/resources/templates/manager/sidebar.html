@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .menubtn{
+            width: 120px;
+            height: 80px;
+            background: white;
+            border: #d9d9d9 solid 4px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            font-size: 16x;
+            font-family: Aggravo;
+            /*margin-top: 50px;*/
+        }
+        #sidebar{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: fixed;
+            top: 230px;
+            left: 50px;
+            /*border: black solid 10px;*/
+        }
+        .hovering{
+            background: #FAFAC2;
+        }
+    </style>
+</head>
+<body>
+<div id="mainmenu">
+    <aside id="sidebar">
+        <button class="menubtn" id="membtn" onclick="location.href='/member/manager'">
+            <div><img src="/image/free-icon-user-747376.png" height="50" width="50"></div>
+            <div>회원관리</div>
+        </button>
+        <button class="menubtn" id="penbtn" onclick="location.href='/penalty/manager'">
+            <div><img src="/image/free-icon-yellow-card-7458915.png" height="50" width="50"></div>
+            <div>벌점 회원 관리</div>
+        </button>
+        <button class="menubtn" id="revbtn" onclick="location.href='/review/manager'">
+            <div><img src="/image/free-icon-review-4047898.png" height="50" width="50"/></div>
+            <div>리뷰 관리</div>
+        </button>
+        <button class="menubtn" id="toibtn" onclick="location.href='/toliet/manager'">
+            <div><img src="/image/free-icon-wc-7179987.png" height="50" width="50"></div>
+            <div>화장실 관리</div>
+        </button>
+        <button class="menubtn" id="reqbtn" onclick="location.href='/request/manager'">
+            <div><img src="/image/icons8-why-quest-100.png" height="50" width="50"/></div>
+            <div>문의 관리</div>
+        </button>
+        <button class="menubtn" id="notbtn" onclick="location.href='/notice/manager'">
+            <div><img src="/image/free-icon-feedback-11714233.png" height="50" width="50"></div>
+            <div>공지사항 관리</div>
+        </button>
+    </aside>
+</div>
+<script>
+    const $menubtns = document.querySelectorAll(".menubtn");
+    $menubtns.forEach((a)=>{
+        a.addEventListener('mouseover',()=>{
+            a.classList.add('hovering')
+        })
+        a.addEventListener('mouseout',()=>{
+            a.classList.remove('hovering')
+        })
+    })
+</script>
+</body>
+</html>

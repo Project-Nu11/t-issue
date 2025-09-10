@@ -21,31 +21,60 @@
             background-color: aqua;
             display: flex;
         }
+        #notbtn{
+             background: #FAFAC2;
+        }
+        .content {
+            font-size: 35px;
+        }
+        #noticelist{
+            background: white;
+            width: 30%;
+            position: absolute;
+            left: 20%;
+        }
+
+
+
+
     </style>
 </head>
 <body>
-<h1>관리자 공지사항 페이지</h1>
-<button onclick="location.href='/notice/insert'">공지사항 추가</button>
-<br>
-<br>
-<div id="content-layout">
-    <table border="1" id="noticelist">
-        <tr>
-            <th>제목</th>
-            <th>내용</th>
-            <th>날짜</th>
-            <th>상세 조회</th>
-        </tr>
-        <tr th:each="notice, noticestat : ${noticeList}">
-            <td th:text="${notice.title}"></td>
-            <td th:text="${notice.content}"></td>
-            <td th:text="${notice.date}"></td>
-            <td th:text="${noticestat.current}"></td>
-        </tr>
-    </table>
-    <div id="details" class="details">상세 내용입니다.</div>
+<div th:include="manager/backgroundandbanner.html"></div>
+<div th:include="manager/sidebar.html"></div>
+<div id="mainmenu">
+    <div id="noticelist">
+        <div class="notice" th:each="notice : ${noticeList}">
+            <div class="title" th:text="${notice.title}"></div>
+            <div class="content" th:text="${notice.content}"></div>
+            <div class="empty">공백</div>
+        </div>
+    </div>
 </div>
-<button onclick="location.href='/notice/delete'">공지사항 삭제</button>
+    <!--<button onclick="location.href='/notice/insert'">공지사항 추가</button>
+    &lt;!&ndash;<br>
+    <br>
+    <div id="content-layout">
+        <table border="1" id="noticelist">
+            <tr>
+                <th>제목</th>
+                <th>내용</th>
+                <th>날짜</th>
+                <th>상세 조회</th>
+            </tr>
+            <tr th:each="notice, noticestat : ${noticeList}">
+                <td th:text="${notice.title}"></td>
+                <td th:text="${notice.content}"></td>
+                <td th:text="${notice.date}"></td>
+                <td th:text="${noticestat.current}"></td>
+            </tr>
+        </table>
+        <div id="details" class="details">상세 내용입니다.</div>
+    </div>&ndash;&gt;
+    <button onclick="location.href='/notice/delete'">공지사항 삭제</button>-->
+
+
+
 <script>
     const $detailbtn = document.getElementsByClassName('detailbtn')
     const $detail = document.querySelector('.details')
