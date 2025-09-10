@@ -1,4 +1,5 @@
 application.yml
+http-client.env.json
 HELP.md
 .gradle
 build/
