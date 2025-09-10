@@ -2,6 +2,7 @@ package com.toiletissue.member.model.dto;
 
 public class MemberSignupDTO {
 
+
     private String memberId;
     private String memberPwd;
     private String memberName;

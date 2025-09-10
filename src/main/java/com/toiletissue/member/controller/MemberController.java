@@ -1,17 +1,21 @@
 package com.toiletissue.member.controller;
 
+
 import com.toiletissue.member.model.dto.MemberSignupDTO;
 import com.toiletissue.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller
 @RequestMapping("/member")
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
+  
+    @GetMapping("/manager")
+    public void reviewManager(){}
 
     @GetMapping("/signup")
     public void signup() {
@@ -31,5 +35,4 @@ public class MemberController {
 
         return mv;
     }
-
 }
