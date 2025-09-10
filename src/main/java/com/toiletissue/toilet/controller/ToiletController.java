@@ -20,7 +20,7 @@ public class ToiletController {
     }
 
     @GetMapping("/subwayName")
-    public void staNameToiletList() {}
+    public void stationNameToiletList() {}
 
     @GetMapping("/toiletName")
     public void toiletDetails() {}
