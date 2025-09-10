@@ -23,7 +23,7 @@
         null,
         #{title},
         #{content},
-        now()
+        date_format(now(),'%y.%m.%d')
         )
     </insert>
 
