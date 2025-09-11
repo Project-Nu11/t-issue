@@ -40,7 +40,9 @@
 //    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 //        /* 요청에 대한 권한 체크 */
 //        http.authorizeHttpRequests( auth -> {
+
 //            auth.requestMatchers("/auth/login", "/member/signup", "/auth/fail", "/", "/main").permitAll();
+ 
 //            auth.requestMatchers("/manager/*").hasAnyAuthority(MemberRole.manager.getRole());
 //            auth.requestMatchers("/member/*").hasAnyAuthority(MemberRole.member.getRole());
 //            auth.anyRequest().authenticated();

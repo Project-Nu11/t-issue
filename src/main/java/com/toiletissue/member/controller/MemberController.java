@@ -14,7 +14,7 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
-  
+
     @GetMapping("/manager")
     public void reviewManager(){}
 

@@ -5,9 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-<div id="main" style="">
-    <h1>T-issue</h1>
-    <button onclick="location.href='/timer'" id="timer" style="width: 50px; height: 50px; background-color: gray">타이머</button>
+
+<div th:include="/common/header.html"></div>
+<div id="main">
+    <button onclick="location.href='timer'" id="timer" style="width: 50px; height: 50px; background-color: gray">타이머</button>
+
     <div id="map" style="width:576px;height:200px; margin:0 auto;">
     </div>
     <div id="mainButton" style="display: grid; grid-template-columns: repeat(3,1fr); grid-gap: 10px">

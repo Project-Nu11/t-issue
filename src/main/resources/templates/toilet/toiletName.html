@@ -18,12 +18,43 @@
             border: 1px solid #000000;
             font-weight: normal;
         }
+        /* modal은 모달창 뒤 어두운 배경 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index:1;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .detailModal {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding : 20px;
+            border: 1px solid #888;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        .modalContent {
+            width: 300px;
+            height: 300px;
+            border: 1px solid gray;
+            margin-left: 100px;
+        }
     </style>
 </head>
 <body>
+<div th:include="/common/header.html"></div>
+<div id="main">
     <section>
         <div>김포공항역 지하 1층 외부 화장실</div>
-        <div>취소</div>
+        <div>&times;</div>
     </section>
     <div><img src="" alt="입구 사진"></div>
     <section>
@@ -41,12 +72,21 @@
                 <th class="context">05:00 ~ 24:00</th>
             </tr>
         </table>
-        <div>
-            <div>남자화장실아이콘</div> <!--아이콘 클릭 시 변기 수 등의 정보가 담긴 모달창-->
-            <div>여자화장실아이콘</div>
-            <div>장애인화장실아이콘</div>
-            <div>기저귀교환대아이콘</div>
+        <div> <!--아이콘 클릭 시 변기 수 등의 정보가 담긴 모달창-->
+            <div id="backModal" class="modal">
+                <div class="detailModal">
+                    <p class="modalTitle">남자화장실</p>
+                    <div class="modalContent">
+                        <p>화장실정보</p>
+                    </div>
+                </div>
+            </div>
+            <button id="openManModal">남자화장실아이콘</button>
+            <button id="openWomanModal">여자화장실아이콘</button>
+            <button id="openDisabledModal">장애인화장실아이콘</button>
+            <button id="openDiaperModal">기저귀교환대아이콘</button>
         </div>
+
         <section>
             <div>
                 <div>리뷰</div>
@@ -63,10 +103,22 @@
                     리뷰3(작성자, 내용, 일자, 신고버튼)
                 </div>
             </div>
-
-
         </section>
-
     </section>
+</div>
+<script>
+    var modal = document.getElementById("backModal");
+
+    var btn = document.getElementById("openManModal");
+
+    btn.onclick=function (){
+        modal.style.display="block";
+    }
+    window.onclick=function (event) {
+        if (event.target === modal) {
+            modal.style.display="none";
+        }
+    }
+</script>
 </body>
 </html>
