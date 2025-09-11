@@ -29,7 +29,8 @@ public class MemberController {
 
         if (result > 0) {
             rttr.addFlashAttribute("message", "회원가입이 정상적으로 완료되었습니다.");
-            return "redirect:/auth/login";// 로그인 페이지 리다이렉트
+//            return "redirect:/auth/login";// 로그인 페이지 리다이렉트
+            return "main";
 
         } else {
             rttr.addFlashAttribute("message", "회원가입에 실패하였습니다.");
