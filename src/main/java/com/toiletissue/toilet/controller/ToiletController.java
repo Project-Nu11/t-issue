@@ -19,10 +19,10 @@ public class ToiletController {
         return "toilet/subway";
     }
 
-    @GetMapping("/subwayName")
+    @GetMapping("/subway-name")
     public void stationNameToiletList() {}
 
-    @GetMapping("/toiletName")
+    @GetMapping("/toilet-name")
     public void toiletDetails() {}
 
 

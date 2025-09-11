@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        @font-face {
+            font-family: 'Aggravo';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+            font-weight: 700;
+            font-display: swap;
+        }
         html, body {
             margin: 0;
             height: calc(100%);
             background-color: black;
+            font-family: Aggravo;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,6 +28,14 @@
             justify-content: space-between;
             align-items: center;
         }
+        #logo {
+            margin: 29px 0 23px 29px;
+            font-size: 48px;
+            font-weight: bold;
+            /*filter: drop-shadow(4px 5px 6.5px rgba(0,0,0,0.25));*/
+
+
+        }
         #main {
             width: 576px;
             height: calc(100% - 100px);
@@ -31,15 +46,34 @@
             /*justify-content: center;*/
             /*align-items: center;*/
         }
+        #mypageBtn, #noticeBtn {
+            margin: 29px 29px 26px 0;
+            border: none;
+            background-color: white;
+        }
     </style>
 </head>
 <body>
     <header>
-        <div><strong>T-issue</strong></div>
+        <div id="logo">T-issue</div>
         <div>
-            <button>공지사항</button>
-            <button>마이페이지</button>
+            <button id="noticeBtn" onclick="location.href='/notice/'">
+                <div>
+                    <img src="/icon/free-icon-feedback-11714233.png" width="45" height="45">
+                </div>
+            </button>
+            <button id="mypageBtn" onclick="location.href='/mypage/mypage'">
+                <div>
+                    <img src="/icon/free-icon-user-747376.png" width="45" height="45">
+                </div>
+            </button>
         </div>
     </header>
+<script>
+    const $tomain = document.querySelector("#logo");
+    $tomain.addEventListener('click',function (){
+        window.location.href = "http://www.localhost:8001/main"
+    })
+</script>
 </body>
 </html>
