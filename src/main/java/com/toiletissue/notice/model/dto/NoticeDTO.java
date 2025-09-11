@@ -7,11 +7,11 @@ public class NoticeDTO {
     private int no;
     private String title;
     private String content;
-    private Date date;
+    private String date;
 
     public NoticeDTO(){}
 
-    public NoticeDTO(int no, String title, String content, Date date) {
+    public NoticeDTO(int no, String title, String content, String date) {
         this.no = no;
         this.title = title;
         this.content = content;
@@ -42,11 +42,11 @@ public class NoticeDTO {
         this.content = content;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
