@@ -4,6 +4,7 @@ package com.toiletissue.member.controller;
 import com.toiletissue.member.model.dto.MemberSignupDTO;
 import com.toiletissue.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
