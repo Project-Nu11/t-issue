@@ -5,15 +5,16 @@
     <title>Title</title>
 </head>
 <body>
+<div th:include="/common/header.html"></div>
+<div id="main">
     <div>X</div>
-    <div id="timer" style="width: 200px;height: 200px;border-radius: 50%;border: 1px solid black;text-align: center">10:00</div>
+    <div id="timer" style="width: 200px;height: 200px;border-radius: 50%;font-size: 50px; border: 1px solid black;text-align: center;align-items: center">10:00</div>
     <section>
         <button id="startBtn">시작</button> <!-- 시작버튼 클릭 시 ▶ -> ⏸ 모양으로 변경되도록 -->
         <button id="stopBtn">멈춤</button> <!-- 멈춤버튼 클릭 시 ⏸ -> ▶ 모양으로 변경되도록 -->
         <button id="resetBtn">초기화</button> <!-- 버튼(⏹) 클릭 시 10:00 으로 초기화-->
     </section>
-
-
+</div>
 
 <script>
     let totalSeconds = 10 * 60;
