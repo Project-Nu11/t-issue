@@ -50,7 +50,7 @@
             left: 20%;
         }
         /*공지사항 추가버튼*/
-        #insertbtn{
+        .insertbtn{
             position: fixed;
             top: 15%;
             left: 76%;
@@ -124,22 +124,25 @@
             align-items: center;
         }
         /*상세페이지 내용 레이아웃*/
-        #layout{
+        .layout{
             padding: 5%;
             font-family: AggravoM;
+            width: 90%;
         }
-        /*수정 삭제버튼 레이아웃*/
-        #btns{
-            position: absolute;
-            left: 80%;
-            top: 90%;
+        /*수정 삭제 등록 취소 버튼 레이아웃*/
+        .btns{
+            position: fixed;
+            left: 69%;
+            top: 75%;
             width: 100%;
             height: 100%;
+            display: flex;
+            gap: 1%;
         }
-        /*수정 삭제 버튼 디자인*/
-        #update,#delete{
+        /*수정 삭제 등록 취소 버튼 디자인*/
+        .updatebtn,.deletebtn,.registbtn,.cancelbtn{
+            font-family: AggravoM;
             font-size: 20px;
-
             width: 80px;
             height: 30px;
             background: white;
@@ -148,6 +151,56 @@
             text-align: center;
             align-content: center;
         }
+        /*공지사항 추가 모달 레아아웃(none)*/
+        .insert{
+            width: 30%;
+            height: 60%;
+            position: fixed;
+            left: 51%;
+            top: 22%;
+            background: white;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            display: none;
+            /*justify-content: center;*!*/
+            flex-direction: column;
+            align-items: center;
+        }
+        /*공지사항 추가 모달 레이아웃(flex)*/
+        .viewinsert{
+            width: 30%;
+            height: 60%;
+            position: fixed;
+            left: 51%;
+            top: 22%;
+            background: white;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            display: flex;
+            /*justify-content: center;*!*/
+            flex-direction: column;
+            align-items: center;
+        }
+        /*공지사항 추가 내용 길이 (최대300)*/
+        .contentlen{
+            display: flex;
+            justify-content: end;
+            position: relative;
+            bottom: 110%;
+        }
+/*        !*삭제 모달 배경(none)*!
+        #deleteback{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,50%);
+            z-index: 1100;
+            display: flex;
+        }
+        #viewdeleteback{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,50%);
+            z-index: 1100;
+            display: flex;
+        }*/
 
 
 
@@ -160,36 +213,101 @@
 <div th:include="manager/sidebar.html"></div>
 <div id="mainmenu">
     <div id="pagetitle">공지사항 관리</div>
-    <div id="insertbtn">추가</div>
+    <div class="insertbtn">추가</div>
+    <!--공지사항 요약 리스트-->
     <div id="noticelist">
         <div class="notice" th:each="notice,n : ${noticeList}">
             <div class="detailbtn">▶</div> <!--detailbtn은 여러개있을 수 있고 그에 따른 인덱스 있음-->
-<!--            <div th:text="${n.count}"></div> &lt;!&ndash;count 1부터&ndash;&gt;-->
             <div class="title" th:text="${notice.title}"></div>
             <div class="content" th:text="${notice.content}"></div>
             <div class="empty"></div>
         </div>
     </div>
+
+    <!--공지사항 상세 정보-->
     <div class="details">
         <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >공지사항</div>
-        <div id="layout">
+        <div class="layout">
             <div style="font-family: AggravoB;font-size: 20px;">제목</div>
             <div id="dtitle" style="font-family: AggravoB;font-size: 20px;"></div>
             <br>
             <div style="font-family: AggravoM;font-size: 20px;">내용</div>
             <div id="dcontent" style="font-family: AggravoL;font-size: 20px;"></div>
-            <div id="btns">
-                <div id="update">수정</div>
-                <div id="delete">삭제</div>
+            <div class="btns">
+                <button class="updatebtn">수정</button>
+                <button class="deletebtn">삭제</button>
             </div>
         </div>
     </div>
+
+    <!--공지사항 추가 모달-->
+    <div class="insert">
+        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >공지사항</div>
+        <div class="layout">
+            <form action="/notice/manager" method="post" style="height: 100%">
+            <div style="font-family: AggravoB;font-size: 20px;"><label for="ititle">제목</label></div>
+            <div style="height: 25px;width: 100%"><input type="text" placeholder="제목을 입력하세요." id="ititle" name="title" style="font-family: AggravoL;height: 25px;width: 100%"></div>
+            <br>
+            <div style="font-family: AggravoM;font-size: 20px;"><label for="icontent">내용</label></div>
+            <div style="width: 100%;height:100%;"><textarea name="content" id="icontent"  style="font-family: AggravoL; width: 100%;height:100%;resize: none" placeholder="내용을 입력하세요(최대 300자)" maxlength="300"></textarea></div>
+                <div class="contentlen"><span class="contentlength">0</span>/300</div>
+            <div class="btns">
+                <button class="registbtn">등록</button>
+                <button class="cancelbtn" type="button">취소</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!--공지사항 삭제 모달-->
+<!--    <div id="deleteback">&lt;!&ndash;배경&ndash;&gt;
+        <div id="deletemodal">
+            공지사항을 삭제하시겠습니까?
+
+        </div>
+
+    </div>-->
 </div>
 <script>
     const $detailbtn = document.querySelectorAll('.detailbtn');
     const $detail = document.querySelector('.details');
     const $dtitle = document.getElementById('dtitle');
     const $dcontent = document.getElementById('dcontent');
+    const $contentlen = document.querySelector(".contentlength");
+    const $contentinput = document.querySelector('#icontent');
+
+    const $insertbtn = document.querySelector('.insertbtn');
+    const $insert = document.querySelector('.insert');
+    const $cancel = document.querySelector('.cancelbtn');
+
+    // 추가 버튼 누르면 상세페이지 꺼지게
+    $insertbtn.addEventListener('click',function(){
+        $insert.classList.replace('insert','viewinsert')
+        if($detail.classList.contains('viewdetails')){
+            $detail.classList.replace('viewdetails','details')
+        }
+    })
+    //추가 모달창 내용 입력글자 수 제한 300
+    $contentinput.addEventListener('input',function (){
+
+        let currenlength = $contentinput.value.length;
+
+        $contentlen.textContent = currenlength;
+    })
+
+    /*취소버튼 누르면 공지사항 추가 모달창 꺼지도록
+    * 입력했던 내용도 삭제되게
+    * */
+
+    const $ititle = $insert.querySelector('#ititle')
+    const $icontent = $insert.querySelector('#icontent')
+
+    $cancel.addEventListener('click',function (){
+        $insert.classList.replace('viewinsert','insert');
+        $ititle.value='';
+        $icontent.value='';
+    })
+
 
     let openedIndex = null;
     // 상세버튼 눌렀을 때 모달창 띄우기
@@ -214,8 +332,14 @@
 
             $detail.classList.replace("details","viewdetails")
             openedIndex = i;
+
+            if($insert.classList.contains('viewinsert')){
+                $insert.classList.replace('viewinsert','insert')
+            }
         })
     })
+
+
 
 
 
