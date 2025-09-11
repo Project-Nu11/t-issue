@@ -3,8 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        html, body {
+            margin: 0;
+            height: calc(100%);
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 576px;
+            height: 100px;
+            background-color: white;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #main {
+            width: 576px;
+            height: calc(100% - 100px);
+            background-image: linear-gradient(#ffffff 0%, #C396D5 58%, #996CAC 100%);
+            margin: 0 auto;
+            padding: 0;
+            /*display: flex;*/
+            /*justify-content: center;*/
+            /*align-items: center;*/
+        }
+    </style>
 </head>
 <body>
-
+    <header>
+        <div><strong>T-issue</strong></div>
+        <div>
+            <button>공지사항</button>
+            <button>마이페이지</button>
+        </div>
+    </header>
 </body>
 </html>
