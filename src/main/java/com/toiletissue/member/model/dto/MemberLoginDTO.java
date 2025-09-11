@@ -67,7 +67,8 @@ public class MemberLoginDTO {
         return "MemberLoginDTO{" +
                 "memberId='" + memberId + '\'' +
                 ", memberPwd='" + memberPwd + '\'' +
-                ", memberRole=" + memberRole +
+                ", memberRole=" + memberRole + '\'' +
+                ", endStatus=" + endStatus +
                 '}';
     }
 }
