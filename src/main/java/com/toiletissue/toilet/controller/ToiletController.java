@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/toilet")
 public class ToiletController {
 
+    @GetMapping("/manager")
+    public void toiletManager(){}
+
     @GetMapping("/subway")
     public String stationToiletList(Model model) {
 

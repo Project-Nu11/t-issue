@@ -37,7 +37,7 @@ public class NoticeController {
     @GetMapping("/delete")
     public void deleteNotice(){}
 
-    @PostMapping("/insert")
+    /*@PostMapping("/insert")
     public ModelAndView inertNotice(ModelAndView mv, @ModelAttribute NoticeDTO noticeDTO){
 
         int result = noticeService.insertNotice(noticeDTO);
@@ -67,6 +67,16 @@ public class NoticeController {
         } else{
             mv.setViewName("/notice/delete");
         }
+
+        return mv;
+    }*/
+
+    @PostMapping("/manager")
+    public ModelAndView insertNotice(ModelAndView mv, @ModelAttribute NoticeDTO noticeDTO){
+
+        noticeService.insertNotice(noticeDTO);
+
+        mv.setViewName("redirect:/notice/manager");
 
         return mv;
     }
