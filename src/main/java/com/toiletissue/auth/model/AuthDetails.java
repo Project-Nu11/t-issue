@@ -42,7 +42,7 @@ public class AuthDetails implements UserDetails {
      * */
     @Override
     public String getUsername() {
-        return memberLoginDTO.getMemberPwd();
+        return memberLoginDTO.getMemberId();
     }
 
     /* 사용자의 아이디를 반환하는 메소드이다.
@@ -50,7 +50,7 @@ public class AuthDetails implements UserDetails {
      * */
     @Override
     public String getPassword() {
-        return memberLoginDTO.getMemberId();
+        return memberLoginDTO.getMemberPwd();
     }
 
     /* 계정 만료 여부를 표현하는 메소드로 false이면 해당 계정을 사용할 수 없다. */
