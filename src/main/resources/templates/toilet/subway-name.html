@@ -5,16 +5,19 @@
     <title>Title</title>
 </head>
 <body>
+<div th:include="/common/header.html"></div>
+<div id="main">
 <!--역 이름과 해당 역의 화장실 목록은 데이터 불러오도록 예시로 작성함-->
     <section>
         <div>김포공항역 화장실</div>
-        <div>취소</div>
+        <div>&times;</div>
     </section>
     <section>
         <ul>
-            <li onclick="location.href='toiletName'">김포공항역 지하 1층 외부 화장실</li>
+            <li onclick="location.href='toilet-name'">김포공항역 지하 1층 외부 화장실</li>
             <li>김포공항역 지하 2층 외부 화장실</li>
         </ul>
     </section>
+</div>
 </body>
 </html>

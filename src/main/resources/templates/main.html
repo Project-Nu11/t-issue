@@ -3,19 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #map {
+            width:576px;
+            height:calc(100% - 100px);
+            margin:0 auto;
+            position: relative;
+        }
+        .map-btn{
+            position: absolute;
+            width:75px;
+            height: 75px;
+            background-color: rgba(152, 144, 144, 0.56);
+            border: none;
+            border: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            border-radius: 50px;
+        }
+
+        #timer {
+            top: 29px;
+            left: 29px;
+        }
+        #mainButton {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%); /* 가운데 정렬 */
+            display: flex;
+            width: 518px;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        #mainButton button {
+            width: 75px;
+            height: 75px;
+            background-color: rgba(152, 144, 144, 0.56);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+    </style>
 </head>
 <body>
-<div id="main" style="">
-    <h1>T-issue</h1>
-    <button onclick="location.href='timer'" id="timer" style="width: 50px; height: 50px; background-color: gray">타이머</button>
-    <div id="map" style="width:576px;height:200px; margin:0 auto;">
+
+<div th:include="/common/header.html"></div>
+
+<div id="map">
+
+    <button class="map-btn" onclick="location.href='timer'" id="timer">타이머</button>
+
+    <div id="mainButton">
+        <button onclick="location.href='toilet/toilet-search'">검색</button>
+        <button onclick="location.href='toilet/toilet-sos'">긴급</button>
+        <button onclick="location.href='toilet/subway'">목록</button>
+
     </div>
-    <div id="mainButton" style="display: grid; grid-template-columns: repeat(3,1fr); grid-gap: 10px">
-        <button onclick="location.href='toilet/toilet-search'" style="width: 50px;height: 50px; background-color: gray">검색</button>
-        <button onclick="location.href='toilet/toilet-sos'" style="width: 50px;height: 50px; background-color: gray">긴급</button>
-        <button onclick="location.href='toilet/subway'" style="width: 50px;height: 50px; background-color: gray">목록</button>
-    </div>
+
 </div>
+
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=?"></script>
 <script>

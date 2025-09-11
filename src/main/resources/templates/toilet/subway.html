@@ -5,9 +5,11 @@
     <title>Title</title>
 </head>
 <body>
+<div th:include="/common/header.html"></div>
+<div id="main">
   <section>
     <div>5호선 지하철 화장실</div>
-    <div>취소</div>
+    <div>&times;</div>
   </section>
   <section>
     <div style="width: 30px;height: 30px;background-color: white">ㄱ</div>
@@ -22,7 +24,7 @@
     <ul>
       <li>510 방화</li>
       <li>511 개화산</li>
-      <li onclick="location.href='subwayName'">512 김포공항</li>
+      <li onclick="location.href='subway-name'">512 김포공항</li>
       <li>513 송정</li>
       <li>514 마곡</li>
       <li>515 발산</li>
@@ -30,5 +32,6 @@
       <li>517 화곡</li>
     </ul>
   </section>
+</div>
 </body>
 </html>

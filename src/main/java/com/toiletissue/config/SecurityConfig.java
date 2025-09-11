@@ -1,5 +1,3 @@
-package com.toiletissue.config;
-
 import com.toiletissue.common.MemberRole;
 import com.toiletissue.config.handler.AuthFailHandler;
 import com.sun.source.tree.ReturnTree;
@@ -67,3 +65,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
