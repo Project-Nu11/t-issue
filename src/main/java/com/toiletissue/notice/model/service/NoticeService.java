@@ -26,18 +26,15 @@ public class NoticeService {
         return result;
     }
 
-    public int deleteNotice(NoticeDTO noticeDTO) {
-        int result = 0;
-        try{
-            noticeMapper.deleteNotice(noticeDTO);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return result;
+    public void deleteNotice(int no) {
+
+        noticeMapper.deleteNotice(no);
     }
+
 
     public List<NoticeDTO> selectAllNotice() {
 
         return noticeMapper.selectAllNotice();
     }
+
 }

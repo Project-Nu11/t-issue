@@ -16,4 +16,5 @@ public interface MemberMapper {
 
     int exists(@Param("memberId") String memberId);
 
+    void login(MemberLoginDTO memberLoginDTO);
 }
