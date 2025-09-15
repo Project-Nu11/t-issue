@@ -5,8 +5,8 @@
     <title>Title</title>
     <style>
         .menubtn{
-            width: 25%;
-            height: 294px;
+            width: 20%;
+            height: 30%;
             background: white;
             border: #d9d9d9 solid 7px;
             border-radius: 8px;
@@ -15,18 +15,61 @@
             align-items: center;
             justify-content: space-around;
             font-size: 40px;
-            font-family: Aggravo;
+            font-family: AggravoM;
             /*margin-top: 50px;*/
+
 
         }
         #mainmenu{
-            display: block;
+            display: flex;
             flex-wrap: wrap;
             column-gap: 7%;
+            width: 100%;
+            height: 100%;
+
         }
         .hovering{
             background: #FAFAC2;
         }
+        /*리뷰 관리 (flex)*/
+        .revbtnview{
+            display: flex;
+        }
+        /*리뷰 관리 (none)*/
+        .revbtnnone{
+            display: none;
+        }
+        #membtn{
+            position: fixed;
+            top: 20%;
+            left: 10%;
+        }
+        #penbtn{
+            position: fixed;
+            top: 20%;
+            left: 40%;
+        }
+       #revbtn{
+            position: fixed;
+           top: 20%;
+           left: 70%;
+        }
+        #toibtn{
+            position: fixed;
+            top: 60%;
+            left: 10%;
+        }
+       #reqbtn{
+            position: fixed;
+           top: 60%;
+           left: 40%;
+        }
+        #notbtn{
+            position: fixed;
+            top: 60%;
+            left: 70%;
+        }
+
 
     </style>
 </head>
@@ -41,7 +84,7 @@
             <div><img src="/icon/free-icon-yellow-card-7458915.png" height="150" width="150"></div>
             <div>벌점 회원 관리</div>
         </button>
-        <button class="menubtn" id="revbtn" onclick="location.href='/review/manager'">
+        <button class="menubtn revbtnview" id="revbtn" onclick="location.href='/review/manager'">
             <div><img src="/icon/free-icon-review-4047898.png" height="150" width="150"/></div>
             <div>리뷰 관리</div>
         </button>

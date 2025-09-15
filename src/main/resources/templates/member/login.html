@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000; /* 양옆 검정 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .login-container {
+      width: 576px;
+      height: 1024px;
+      background: linear-gradient(to bottom,#FFFFFF,#C396D5, #C396D5); /* 보라 그라데이션 */
+      padding: 40px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      line-height: 24px;
+    }
+
+    .login-container h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .login-container h2 {
+      font-size: 22px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin: 10px 0 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .btn-row button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #fff;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      margin-top: 100px;
+      width: auto;
+      padding: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background-color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <h1>T-issue</h1>
+  <h2>로그인</h2>
+
+  <form action="/login" method="post">
+    <label for="memberId">아이디</label>
+    <input type="text" name="memberId" id="memberId"/>
+
+    <label for="memberPwd">비밀번호</label>
+    <input type="password" name="memberPwd" id="memberPwd" />
+
+    <div class="btn-row">
+      <button type="button">아이디 찾기</button>
+      <button type="button">비밀번호 찾기</button>
+      <button type="button" onclick="location.href='/member/register'">회원가입</button>
+    </div>
+
+    <button type="submit" class="login-btn">로그인</button>
+  </form>
+</div>
+</body>
+</html>
