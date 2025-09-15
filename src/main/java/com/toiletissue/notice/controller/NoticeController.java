@@ -5,10 +5,7 @@ import com.toiletissue.notice.model.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -31,11 +28,11 @@ public class NoticeController {
         return "notice/manager";
     }
 
-    @GetMapping("/insert")
-    public void insertNotice(){}
-
-    @GetMapping("/delete")
-    public void deleteNotice(){}
+//    @GetMapping("/insert")
+    ////    public void insertNotice(){}
+    ////
+    ////    @GetMapping("/delete")
+    ////    public void deleteNotice(){}
 
     /*@PostMapping("/insert")
     public ModelAndView inertNotice(ModelAndView mv, @ModelAttribute NoticeDTO noticeDTO){
@@ -71,11 +68,31 @@ public class NoticeController {
         return mv;
     }*/
 
-    @PostMapping("/manager")
+    @PostMapping("/manager/insert")
     public ModelAndView insertNotice(ModelAndView mv, @ModelAttribute NoticeDTO noticeDTO){
 
+        System.out.println(noticeDTO);
         noticeService.insertNotice(noticeDTO);
+        System.out.println(noticeDTO);
+        mv.setViewName("redirect:/notice/manager");
 
+        return mv;
+    }
+
+    @PostMapping("/manager/delete")
+    public ModelAndView deleteNotice(ModelAndView mv, @RequestParam int no){
+        System.out.println(no);
+        noticeService.deleteNotice(no);
+
+        mv.setViewName("redirect:/notice/manager");
+
+        return mv;
+    }
+
+    @PostMapping("/manager/update")
+    public ModelAndView updateNotice(ModelAndView mv,@ModelAttribute NoticeDTO noticeDTO){
+        System.out.println(noticeDTO);
+        noticeService.updateNotice(noticeDTO);
         mv.setViewName("redirect:/notice/manager");
 
         return mv;

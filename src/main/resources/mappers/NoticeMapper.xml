@@ -27,7 +27,7 @@
         )
     </insert>
 
-    <delete id="deleteNotice" >
+    <delete id="deleteNotice">
         delete from notice where notice_no = #{no}
     </delete>
 
@@ -39,4 +39,12 @@
         notice_date
         from notice;
     </select>
+
+    <update id="updateNotice">
+        update notice
+        set notice_title = #{title},
+        notice_content = #{content},
+        notice_date = date_format(now(),'%y-%m-%d')
+        where notice_no = #{no}
+    </update>
 </mapper>

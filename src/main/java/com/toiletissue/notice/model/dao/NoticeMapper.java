@@ -7,9 +7,12 @@ import java.util.List;
 
 @Mapper
 public interface NoticeMapper {
-    int insertNotice(NoticeDTO noticeDTO);
-
-    void deleteNotice(NoticeDTO noticeDTO);
 
     List<NoticeDTO> selectAllNotice();
+
+    int insertNotice(NoticeDTO noticeDTO);
+
+    void deleteNotice(int no);
+
+    void updateNotice(NoticeDTO noticeDTO);
 }
