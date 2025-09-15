@@ -2,6 +2,7 @@
 package com.toiletissue.auth.model.service;
 
 import com.toiletissue.auth.model.AuthDetails;
+import com.toiletissue.member.model.dao.MemberMapper;
 import com.toiletissue.member.model.dto.MemberLoginDTO;
 import com.toiletissue.member.model.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class AuthService implements UserDetailsService {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private MemberMapper memberMapper;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -28,6 +32,11 @@ public class AuthService implements UserDetailsService {
         }
 
         return new AuthDetails(login);
+    }
+
+    public void login(MemberLoginDTO memberLoginDTO) {
+
+        memberMapper.login(memberLoginDTO);
     }
 }
 

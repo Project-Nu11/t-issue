@@ -27,7 +27,7 @@
         )
     </insert>
 
-    <delete id="deleteNotice" >
+    <delete id="deleteNotice">
         delete from notice where notice_no = #{no}
     </delete>
 
