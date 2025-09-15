@@ -14,21 +14,4 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
-
-    @GetMapping("/login")
-    public void login(){}
-
-    @PostMapping("/login")
-    public ModelAndView login(ModelAndView mv, MemberLoginDTO memberLoginDTO){
-
-        authService.login(memberLoginDTO);
-
-        mv.setViewName("/main");
-
-        return mv;
-    }
-
-
 }
