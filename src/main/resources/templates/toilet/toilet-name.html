@@ -73,10 +73,13 @@
         </table>
         <div> <!--아이콘 클릭 시 변기 수 등의 정보가 담긴 모달창-->
             <div id="backModal" class="modal">
-                <div class="detailModal">
+                <div th:each="toilet : ${toilets}" class="detailModal">
                     <p class="modalTitle">남자화장실</p>
                     <div class="modalContent">
-                        <p>화장실정보</p>
+                        <li>대변기 수 : <span th:text="${toilet.남성용대변기수}">0</span></li>
+                        <li>소변기 수 : <span th:text="${toilet.남성용소변기수}">0</span></li>
+                        <li>어린이용 대변기 수 : <span th:text="${toilet.남성용어린이용대변기수}">0</span></li>
+                        <li>어린이용 소변기 수 : <span th:text="${toilet.남성용어린이용대변기수}">0</span></li>
                     </div>
                 </div>
             </div>

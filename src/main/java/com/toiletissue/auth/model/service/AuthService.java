@@ -1,4 +1,3 @@
-
 package com.toiletissue.auth.model.service;
 
 import com.toiletissue.auth.model.AuthDetails;
@@ -39,4 +38,5 @@ public class AuthService implements UserDetailsService {
         memberMapper.login(memberLoginDTO);
     }
 }
+
 

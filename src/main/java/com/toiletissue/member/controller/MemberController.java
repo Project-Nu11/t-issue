@@ -1,3 +1,4 @@
+
 package com.toiletissue.member.controller;
 
 
@@ -46,5 +47,3 @@ public class MemberController {
         return memberService.exists(memberId) ? "이미 존재하는 아이디입니다." : "사용 가능한 아이디입니다.";  //프론트
     }
 }
-
-

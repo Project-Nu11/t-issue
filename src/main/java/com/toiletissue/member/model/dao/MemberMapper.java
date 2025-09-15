@@ -15,6 +15,5 @@ public interface MemberMapper {
     MemberLoginDTO findByMemberId(@Param("memberId") String memberId);  //로그인은 아이디(memberId)로
 
     int exists(@Param("memberId") String memberId);
-
-    void login(MemberLoginDTO memberLoginDTO);
 }
+

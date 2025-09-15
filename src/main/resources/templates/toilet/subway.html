@@ -3,35 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+  <style>
+    .top-nav {
+      display: flex;
+      flex-direction: row;
+    }
+    #lineFive {
+      font-size: 48px;
+      font-weight: bold;
+      margin-left: 29px;
+      margin-top: 29px;
+    }
+    .cancel {
+      margin-top: 29px;
+      margin-left: 46px;
+    }
+    .letter {
+      margin-top: 20px;
+      margin-right: 29px;
+      margin-left: 29px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 29px;
+      justify-content: center;
+    }
+    button {
+      flex: calc(100%/7 - 29px);
+      height: 49px;
+      border: none;
+      background-color: white;
+      font-family: Aggravo;
+      font-size: 15px;
+    }
+    ul li {
+      list-style: none;
+      font-size: 40px;
+      margin-bottom: 15px;
+      margin-left: 70px;
+    }
+    #subwayList {
+      margin-top: 40px;
+    }
+
+  </style>
 </head>
 <body>
 <div th:include="/common/header.html"></div>
 <div id="main">
-  <section>
-    <div>5호선 지하철 화장실</div>
-    <div>&times;</div>
+  <section class="top-nav">
+    <div id="lineFive">5호선 지하철 화장실</div>
+    <div class="cancel">
+      <img src="/icon/cancel_11212407.png" width="40" height="40">
+    </div>
   </section>
-  <section>
-    <div style="width: 30px;height: 30px;background-color: white">ㄱ</div>
-    <div style="width: 30px;height: 30px;background-color: white">ㄴ</div>
-    <div style="width: 30px;height: 30px;background-color: white">ㄷ</div>
+  <section class="letter">
+    <button>ㄱ,ㄲ</button>
+    <button>ㄴ</button>
+    <button>ㄷ,ㄸ</button>
+    <button>ㄹ</button>
+    <button>ㅁ</button>
+    <button>ㅂ,ㅃ</button>
+    <button>ㅅ,ㅆ</button>
+    <button>ㅇ</button>
+    <button>ㅈ,ㅉ</button>
+    <button>ㅊ</button>
+    <button>ㅋ</button>
+    <button>ㅌ</button>
+    <button>ㅍ</button>
+    <button>ㅎ</button>
   </section>
-  <section>
+  <section id="subwayList">
     <!--
     목록아이콘 클릭 시 역번호로 정렬 되도록(필요하면 페이징 처리)
     예시로 작성함
     -->
     <ul>
-      <li>510 방화</li>
-      <li>511 개화산</li>
-      <li onclick="location.href='subway-name'">512 김포공항</li>
-      <li>513 송정</li>
-      <li>514 마곡</li>
-      <li>515 발산</li>
-      <li>516 우장산</li>
-      <li>517 화곡</li>
+      <li th:each="station : ${stations}">
+        <a th:href="@{'toilet/subway/'+${station}}" th:text="${station}">역 이름</a>
+      </li>
     </ul>
   </section>
 </div>
 </body>
 </html>
+
+<!--      <li onclick="location.href='subway-name'">512   김포공항</li>-->
