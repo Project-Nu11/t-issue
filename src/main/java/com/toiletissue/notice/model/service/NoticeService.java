@@ -37,4 +37,9 @@ public class NoticeService {
         return noticeMapper.selectAllNotice();
     }
 
+    public void updateNotice(NoticeDTO noticeDTO) {
+
+        System.out.println(noticeDTO);
+        noticeMapper.updateNotice(noticeDTO);
+    }
 }
