@@ -1,6 +1,6 @@
 //package com.toiletissue.auth.model;
 //
-//import com.toiletissue.member.model.dto.MemberLoginDTO;
+//import com.toiletissue.member.model.dto.MemberDTO;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import java.util.ArrayList;
@@ -9,20 +9,20 @@
 //
 //public class AuthDetails implements UserDetails {
 //
-//    private MemberLoginDTO memberLoginDTO;
+//    private MemberDTO memberDTO;
 //
 //    public AuthDetails() {}
 //
-//    public AuthDetails(MemberLoginDTO memberLoginDTO) {
-//        this.memberLoginDTO = memberLoginDTO;
+//    public AuthDetails(MemberDTO memberDTO) {
+//        this.memberDTO = memberDTO;
 //    }
 //
-//    public MemberLoginDTO getMemberLoginDTO() {
-//        return memberLoginDTO;
+//    public MemberDTO getMemberDTO() {
+//        return memberDTO;
 //    }
 //
-//    public void setMemberLoginDTO(MemberLoginDTO memberLoginDTO) {
-//        this.memberLoginDTO = memberLoginDTO;
+//    public void setMemberDTO(MemberDTO memberDTO) {
+//        this.memberDTO = memberDTO;
 //    }
 //
 //    /* 권한 정보를 반환하는 메소드이다.
@@ -32,7 +32,7 @@
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
 //
 //        Collection<GrantedAuthority> authorities = new ArrayList<>();
-//        memberLoginDTO.getRole().forEach(role -> authorities.add(() -> role));
+//        memberDTO.getRole().forEach(role -> authorities.add(() -> role));
 //
 //        return authorities;
 //    }
@@ -42,7 +42,7 @@
 //     * */
 //    @Override
 //    public String getUsername() {
-//        return memberLoginDTO.getMemberId();
+//        return memberDTO.getMemberId();
 //    }
 //
 //    /* 사용자의 아이디를 반환하는 메소드이다.
@@ -50,7 +50,7 @@
 //     * */
 //    @Override
 //    public String getPassword() {
-//        return memberLoginDTO.getMemberPwd();
+//        return memberDTO.getMemberPwd();
 //    }
 //
 //    /* 계정 만료 여부를 표현하는 메소드로 false이면 해당 계정을 사용할 수 없다. */
@@ -74,7 +74,7 @@
 //    /* 계정 비활성화 여부로 사용자가 사용할 수 없는 상태, false이면 해당 계정을 사용할 수 없다. */
 //    @Override
 //    public boolean isEnabled() {
-//        return  memberLoginDTO.isEndStatus();
+//        return  memberDTO.isEndStatus();
 //    }
 //
 //}

@@ -1,19 +1,20 @@
 package com.toiletissue.member.model.dao;
 
-import com.toiletissue.member.model.dto.MemberLoginDTO;
-import com.toiletissue.member.model.dto.MemberSignupDTO;
+import com.toiletissue.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.userdetails.User;
 
-import java.util.Map;
+import java.util.List;
 
 @Mapper
 public interface MemberMapper {
 
-    int insert(MemberSignupDTO memberSignupDTO);
+    void insertMember(MemberDTO member);   // 회원가입
 
-    MemberLoginDTO findByMemberId(@Param("memberId") String memberId);  //로그인은 아이디(memberId)로
+    MemberDTO findById(@Param("memberId")String memberId);   // 로그인/단일조회
 
-    int exists(@Param("memberId") String memberId);
+    List<MemberDTO> findAll();             // 전체조회
+
+//    MemberDTO select(int id);
 }
-

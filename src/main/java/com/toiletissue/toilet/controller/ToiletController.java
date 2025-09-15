@@ -21,34 +21,34 @@ public class ToiletController {
     @GetMapping("/manager")
     public void toiletManager(){}
 
-    @Value("${api.data.serviceKey}")
-    private String serviceKey;
+//    @Value("${api.data.serviceKey}")
+//    private String serviceKey;
 
-    @GetMapping("/subway")
-    public String stationToiletList(Model model) {
-
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=1&serviceKey=" + serviceKey;
-
-        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-        Map<String, Object> body = response.getBody();
-
-        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<ToiletDTO> allToilets = dataList.stream()
-                .map(m -> mapper.convertValue(m, ToiletDTO.class))
-                .collect(Collectors.toList());
-
-        List<String> stationNames = allToilets.stream()
-                .map(ToiletDTO::get역명)
-                .distinct()
-                .collect(Collectors.toList());
-
-        model.addAttribute("stations", stationNames);
-
-        return "toilet/subway";
-    }
+//    @GetMapping("/subway")
+//    public String stationToiletList(Model model) {
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=1&serviceKey=" + serviceKey;
+//
+//        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+//        Map<String, Object> body = response.getBody();
+//
+//        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        List<ToiletDTO> allToilets = dataList.stream()
+//                .map(m -> mapper.convertValue(m, ToiletDTO.class))
+//                .collect(Collectors.toList());
+//
+//        List<String> stationNames = allToilets.stream()
+//                .map(ToiletDTO::get역명)
+//                .distinct()
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("stations", stationNames);
+//
+//        return "toilet/subway";
+//    }
 
     @GetMapping("/station")
     public void stationNameToiletList() {}
