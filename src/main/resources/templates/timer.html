@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #timer {
+            width: 506px;
+            height: 506px;
+            border-radius: 50%;
+            font-size: 110px;
+            border: 1px solid black;
+            text-align: center;
+            align-items: center
+        }
+    </style>
 </head>
 <body>
 <div th:include="/common/header.html"></div>
 <div id="main">
     <div>X</div>
-    <div id="timer" style="width: 200px;height: 200px;border-radius: 50%;font-size: 50px; border: 1px solid black;text-align: center;align-items: center">10:00</div>
+    <div id="timer">10:00</div>
     <section>
         <button id="startBtn">시작</button> <!-- 시작버튼 클릭 시 ▶ -> ⏸ 모양으로 변경되도록 -->
         <button id="stopBtn">멈춤</button> <!-- 멈춤버튼 클릭 시 ⏸ -> ▶ 모양으로 변경되도록 -->
