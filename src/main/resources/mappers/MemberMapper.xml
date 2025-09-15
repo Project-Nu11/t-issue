@@ -2,51 +2,59 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.toiletissue.member.model.dao.MemberMapper">
 
+    <!-- 매핑 규칙 -->
+    <resultMap id="member" type="com.toiletissue.member.model.dto.MemberDTO">
+        <id property="memberId" column="member_id"/>
+        <result property="memberPwd" column="member_pwd"/>
+        <result property="memberName" column="member_name"/>
+        <result property="email" column="email"/>
+        <result property="memberBdate" column="member_bdate"/>
+        <result property="memberGender" column="member_gender"/>
+        <result property="role" column="role"/>
+        <result property="endStatus" column="end_status"/>
+        <result property="endDate" column="end_date"/>
+    </resultMap>
+
     <!-- 회원가입 -->
-    <insert id="insert" parameterType="com.toiletissue.member.model.dto.MemberSignupDTO">
-        INSERT INTO member (
+    <insert id="insertMember" parameterType="com.toiletissue.member.model.dto.MemberDTO">
+        INSERT INTO member
+        (member_id, member_pwd, member_name, email, member_bdate, member_gender, role, end_status, end_date)
+        VALUES
+        (#{memberId}, #{memberPwd}, #{memberName}, #{email}, #{memberBdate}, #{memberGender}, #{role}, #{endStatus}, #{endDate})
+    </insert>
+
+    <!-- 로그인/단일조회 -->
+    <select id="findById" parameterType="string" resultMap="member">
+        SELECT
         member_id,
         member_pwd,
         member_name,
         email,
         member_bdate,
         member_gender,
-        end_status
-        ) VALUES (
-        #{memberId},
-        #{memberPwd},
-        #{memberName},
-        #{email},
-        #{memberBdate},
-        #{memberGender},
-        TRUE <!-- 회원가입 시 계정 활성화 -->
-        )
-    </insert>
-
-    <!-- 로그인 -->
-    <resultMap id="login" type="com.toiletissue.member.model.dto.MemberLoginDTO">
-        <result property="memberId"  column="member_id"/>
-        <result property="memberPwd" column="member_pwd"/>
-        <result property="endStatus" column="end_status"/>
-    </resultMap>
-
-    <select id="findByMemberId" parameterType="string" resultMap="login">
-        SELECT
-        member_id,
-        member_pwd,
-        end_status
+        role,
+        end_status,
+        end_date
         FROM member
         WHERE member_id = #{memberId}
     </select>
 
-    <!-- 아이디 중복 -->
-    <select id="exists" parameterType="string" resultType="int">
+    <!-- 전체조회 -->
+    <select id="findAll" resultMap="member">
         SELECT
-        COUNT(*)
+        member_id,
+        member_pwd,
+        member_name,
+        email,
+        member_bdate,
+        member_gender,
+        role,
+        end_status,
+        end_date
         FROM member
-        WHERE member_id = #{memberId}
     </select>
 
 </mapper>

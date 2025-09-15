@@ -1,70 +1,85 @@
 package com.toiletissue.config;
 
-import com.toiletissue.common.MemberRole;
-import com.toiletissue.config.handler.AuthFailHandler;
-import com.sun.source.tree.ReturnTree;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import com.toiletissue.member.model.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private AuthFailHandler authFailHandler;
+    private final MemberService memberService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-
-        return new BCryptPasswordEncoder();
-    }
-
-    /* 정적리소스에 대한 요청을 제외하겠다는 설정 static 파일 하위 */
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-
-        return web -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    public SecurityConfig(@Lazy MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        /* 요청에 대한 권한 체크 */
-        http.authorizeHttpRequests( auth -> {
-            auth.requestMatchers( "/member/signup", "/auth/fail", "/", "/main").permitAll();
-            auth.requestMatchers("/manager/*").hasAnyAuthority(MemberRole.manager.getRole());
-            auth.requestMatchers("/member/*").hasAnyAuthority(MemberRole.member.getRole());
-            auth.anyRequest().authenticated();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        }).formLogin( login -> {
-            login.loginPage("/auth/login");
-            login.usernameParameter("memberId");
-            login.passwordParameter("memberPwd");
-            login.defaultSuccessUrl("/", true);
-            login.failureHandler(authFailHandler);
+        var authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(memberService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        http.authenticationProvider(authProvider);
 
-        }).logout( logout -> {
-            logout.logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"));
-            logout.deleteCookies("JSESSIONID");
-            logout.invalidateHttpSession(true);
-            logout.logoutSuccessUrl("/");
-
-        }).sessionManagement( session -> {
-            session.maximumSessions(1);
-            session.invalidSessionUrl("/");
-
-        }).csrf( csrf -> csrf.disable());
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/member/login", "/member/fail", "/member/register",
+                                "/main", "/error", "/toilet/subway",
+                                "/css/**","/js/**","/images/**","/webjars/**"
+                        ).permitAll()
+                        .requestMatchers("/member/list","/member/select","/member/mypage").hasAuthority("ROLE_USER")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/member/login")
+                        .loginProcessingUrl("/member/login")  // POST: 스프링 시큐리티가 처리 (컨트롤러 X)
+                        .usernameParameter("memberId")
+                        .passwordParameter("memberPwd")
+                        .defaultSuccessUrl("/main", true)
+                        .failureUrl("/member/fail?message=로그인에%20실패했습니다")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/main")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
+                )
+                .csrf(csrf -> csrf.disable()); // 개발 중이면 꺼야함
 
         return http.build();
     }
+
+
+//    // AuthenticationProvider 빈 생성
+//    @Bean
+//    public DaoAuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(userService);
+//        authProvider.setPasswordEncoder(passwordEncoder());
+//        return authProvider;
+//    }
+//
+//    // AuthenticationManager 빈
+//    @Bean
+//    public AuthenticationManager authenticationManager(DaoAuthenticationProvider authProvider) {
+//        return authentication -> authProvider.authenticate(authentication);
+//    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
 }
 

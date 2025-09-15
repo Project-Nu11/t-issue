@@ -1,49 +1,80 @@
 package com.toiletissue.member.controller;
 
-
-import com.toiletissue.member.model.dto.MemberSignupDTO;
+import com.toiletissue.member.model.dto.MemberDTO;
 import com.toiletissue.member.model.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/member")   // ★ 모든 경로를 /member 하위로 통일
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+    public MemberController(MemberService memberService) { this.memberService = memberService; }
 
-    @GetMapping("/manager")
-    public void reviewManager(){}
-
-    @GetMapping("/signup")
-    public void signup() {
+    @GetMapping("/main")
+    public String main() {
+        return "main";   // → src/main/resources/templates/main.html
     }
 
-    @PostMapping("/signup")
-    public String signup(MemberSignupDTO memberSignupDTO, RedirectAttributes rttr) {
+    /* ---------- 로그인 ---------- */
+    // 로그인 폼(GET) - 시큐리티 formLogin().loginPage("/member/login")와 매칭
+    @GetMapping("/login")
+    public String loginPage() {
+        return "member/login";   // templates/member/login.html
+    }
 
-        int result = memberService.insert(memberSignupDTO);
+//    // 로그인 실패(GET) - 시큐리티 failureUrl("/member/fail?...")와 매칭
+//    @GetMapping("/fail")
+//    public ModelAndView loginFail(ModelAndView mv, @RequestParam(required = false) String message) {
+//        mv.addObject("message", message);
+//        mv.setViewName("member/fail");     // templates/member/fail.html
+//        return mv;
+//    }
 
-        if (result > 0) {
-            rttr.addFlashAttribute("message", "회원가입이 정상적으로 완료되었습니다.");
-//            return "redirect:/auth/login";// 로그인 페이지 리다이렉트
-            return "main";
-
-        } else {
-            rttr.addFlashAttribute("message", "회원가입에 실패하였습니다.");
-            return "redirect:/member/signup";       // 다시 회원가입 화면
+    /* ---------- 회원가입 ---------- */
+    // 회원가입 폼(GET)
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+        if (!model.containsAttribute("member")) {
+            model.addAttribute("member", new MemberDTO());
         }
+        return "member/register";          // templates/member/register.html
     }
 
-
-    @GetMapping("/check-id")
-    @ResponseBody
-    public String checkId(@RequestParam String memberId) {
-        return memberService.exists(memberId) ? "이미 존재하는 아이디입니다." : "사용 가능한 아이디입니다.";  //프론트
+    // 회원가입 처리(POST)
+    @PostMapping("/register")
+    public String register(@ModelAttribute("member") MemberDTO member) {
+        memberService.register(member);
+        return "redirect:/member/login";
     }
+
+//    /* ---------- 마이페이지/목록/단건 ---------- */
+//    @GetMapping("/mypage")
+//    public String mypage() {
+//        return "member/mypage";            // templates/member/mypage.html
+//    }
+//
+//    @GetMapping("/list")
+//    public String list(Model model) {
+//        List<MemberDTO> members = memberService.findAll();
+//        model.addAttribute("members", members);
+//        return "member/list";              // templates/member/list.html
+//    }
+//
+//    @PostMapping("/select")
+//    public ModelAndView select(ModelAndView mv, @RequestParam String memberId) {
+//        MemberDTO member = memberService.findById(memberId);
+//        mv.addObject("member", member);
+//        mv.setViewName("member/select");   // templates/member/select.html
+//        return mv;
+//    }
 }
+
+
 
 
