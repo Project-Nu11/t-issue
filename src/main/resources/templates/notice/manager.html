@@ -149,7 +149,7 @@
             gap: 1%;
         }
         /*수정 삭제 등록 취소 버튼 디자인*/
-        .updatebtn,.deletebtn,.registbtn,.cancelbtn{
+        .updatebtn,.deletebtn,.registbtn,.cancelbtn,.updatecancelbtn,.updateregistbtn{
             font-family: AggravoM;
             font-size: 20px;
             width: 80px;
@@ -258,6 +258,35 @@
 
         }
 
+        /*공지사항 수정 모달 레아아웃(none)*/
+        .update{
+            width: 30%;
+            height: 60%;
+            position: fixed;
+            left: 51%;
+            top: 22%;
+            background: white;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            display: none;
+            /*justify-content: center;*!*/
+            flex-direction: column;
+            align-items: center;
+        }
+        /*공지사항 수정 모달 레이아웃(flex)*/
+        .viewupdate{
+            width: 30%;
+            height: 60%;
+            position: fixed;
+            left: 51%;
+            top: 22%;
+            background: white;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            display: flex;
+            /*justify-content: center;*!*/
+            flex-direction: column;
+            align-items: center;
+        }
+
 
 
 
@@ -307,7 +336,7 @@
 
     <!--공지사항 추가 모달-->
     <div class="insert">
-        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >공지사항</div>
+        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >공지사항 추가</div>
         <div class="layout">
             <form action="/notice/manager/insert" method="post" style="height: 100%">
             <div style="font-family: AggravoB;font-size: 20px;"><label for="ititle">제목</label></div>
@@ -324,7 +353,7 @@
         </div>
     </div>
 
-<!--    공지사항 삭제 모달-->
+    <!--공지사항 삭제 모달-->
     <div class="deleteback"><!--배경-->
         <div id="deletemodal">
             <div style="position: relative;top:30%">공지사항을 삭제하시겠습니까?</div>
@@ -340,6 +369,29 @@
             공지사항이 삭제되었습니다.
         </div>
     </div>
+
+    <!--공지사항 수정 모달 -->
+    <div class="update">
+        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >공지사항 수정</div>
+        <div class="layout">
+            <form action="/notice/manager/update" method="post" style="height: 100%">
+                <div style="font-family: AggravoB;font-size: 20px;"><label for="utitle">제목</label></div>
+                <div style="height: 25px;width: 100%"><input type="text" id="utitle" name="title" style="font-family: AggravoL;height: 25px;width: 100%"></div>
+                <br>
+                <div style="font-family: AggravoM;font-size: 20px;"><label for="ucontent">내용</label></div>
+                <div style="width: 100%;height:100%;"><textarea name="content" id="ucontent"  style="font-family: AggravoL; width: 100%;height:100%;resize: none" maxlength="300"></textarea></div>
+                <div class="contentlen"><span class="contentlength1">0</span>/300</div>
+                <input type="hidden" name="no" id="updateNo">
+                <div class="btns">
+                    <button class="updateregistbtn" type="submit">수정</button>
+                    <button class="updatecancelbtn" type="button">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
 </div>
 <script>
     const $detailbtn = document.querySelectorAll('.detailbtn');
@@ -354,6 +406,8 @@
     const $insertbtn = document.querySelector('.insertbtn');
     const $insert = document.querySelector('.insert');
     const $cancel = document.querySelector('.cancelbtn');
+    const $ititle = $insert.querySelector('#ititle')
+    const $icontent = $insert.querySelector('#icontent')
 
     const $delmodal = document.querySelector('.deleteback');
     const $deletebtn = document.querySelector('.deletebtn');
@@ -362,14 +416,54 @@
     const $deleteNoInput = document.querySelector('#deleteNo')
     const $deletesuccess = document.querySelector('.deletesuccess')
 
+    const $updatebtn = document.querySelector('.updatebtn')
+    const $update = document.querySelector('.update')
+    const $updatecancelbtn = document.querySelector('.updatecancelbtn')
+    const $utitle = document.querySelector('#utitle')
+    const $ucontent = document.querySelector('#ucontent')
+    const $contentlen1 = document.querySelector(".contentlength1");
+    const $contentinput1 = document.querySelector('#ucontent');
+    const $updateNoInput = document.querySelector('#updateNo')
+
+    $contentinput1.addEventListener('input',function (){
+
+        let currenlength1 = $contentinput1.value.length;
+
+        $contentlen1.textContent = currenlength1;
+    })
+
+
+
+
+    // 수정 버튼
+    $updatebtn.addEventListener('click',function (){
+        // 상세 조회창 끄기
+        $detail.classList.replace('viewdetails','details')
+        // 수정 창 켜기
+        $update.classList.replace('update','viewupdate')
+        $utitle.value = $dtitle.textContent;
+        $ucontent.value = $dcontent.textContent;
+
+        $upd = $dtitle.closest('.layout');
+        $updateno = $upd.querySelector('#dno').textContent;
+        $updateNoInput.value=$updateno
+        console.log($updateno)
+    })
+    // 수정 취소 버튼
+    $updatecancelbtn.addEventListener('click',function(){
+        // 수정 창 끄기
+        $update.classList.replace('viewupdate','update')
+        // 상세 조회 창 켜기
+        $detail.classList.replace('details','viewdetails')
+    })
+
+
     // 삭제 확인 모달
     $deletebtn.addEventListener('click', function(){
         $delmodal.classList.replace('deleteback','viewdeleteback');
         $delete = $dtitle.closest('.layout');
         $deleteno = $delete.querySelector('#dno').textContent;
-        console.log($deleteno)
         $deleteNoInput.value=$deleteno
-        console.log($deleteNoInput.value)
     })
     // 삭제 취소
     $delN.addEventListener('click',function(){
@@ -384,11 +478,14 @@
         $deletesuccess.classList.replace('deletesucess','viewdeletesuccess')
     })
 
-    // 추가 버튼 누르면 상세페이지 꺼지게
+    // 추가 버튼 누르면 상세페이지,수정 꺼지게
     $insertbtn.addEventListener('click',function(){
         $insert.classList.replace('insert','viewinsert')
         if($detail.classList.contains('viewdetails')){
             $detail.classList.replace('viewdetails','details')
+        }
+        if($update.classList.contains('viewupdate')){
+            $update.classList.replace('viewupdate','update');
         }
     })
     //추가 모달창 내용 입력글자 수 제한 300
@@ -402,10 +499,6 @@
     /*취소버튼 누르면 공지사항 추가 모달창 꺼지도록
     * 입력했던 내용도 삭제되게
     * */
-
-    const $ititle = $insert.querySelector('#ititle')
-    const $icontent = $insert.querySelector('#icontent')
-
     $cancel.addEventListener('click',function (){
         $insert.classList.replace('viewinsert','insert');
         $ititle.value='';
@@ -417,6 +510,12 @@
     // 상세버튼 눌렀을 때 모달창 띄우기
     $detailbtn.forEach((btn,i)=>{
         btn.addEventListener('click',function (){
+
+            // 수정 창 끄기
+            $update.classList.replace('viewupdate','update')
+            // 추가 입력 정보 삭제
+            $ititle.value='';
+            $icontent.value='';
 
 
             const $notice = btn.closest('.notice');/*closest() : 가장 가까운 태그로 초기화*/

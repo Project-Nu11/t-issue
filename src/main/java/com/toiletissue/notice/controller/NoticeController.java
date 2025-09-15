@@ -89,4 +89,13 @@ public class NoticeController {
         return mv;
     }
 
+    @PostMapping("/manager/update")
+    public ModelAndView updateNotice(ModelAndView mv,@ModelAttribute NoticeDTO noticeDTO){
+        System.out.println(noticeDTO);
+        noticeService.updateNotice(noticeDTO);
+        mv.setViewName("redirect:/notice/manager");
+
+        return mv;
+    }
+
 }
