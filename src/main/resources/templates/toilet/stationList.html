@@ -41,8 +41,30 @@
       margin-bottom: 15px;
       margin-left: 70px;
     }
+    li span {
+      margin: 0 5px;
+    }
     #subwayList {
       margin-top: 40px;
+    }
+    ul li a {
+      font-size: 30px;
+      text-decoration-line: none;
+      display: inline-block;
+      margin: 0 25px;
+      color: black;
+      font-weight: normal;
+    }
+    .paging {
+      display: flex;
+      justify-content: center;
+      /*position: fixed;*/
+    }
+    .paging a {
+      font-weight: normal;
+      color: black;
+      margin: 0 5px;
+      text-decoration-line: none;
     }
 
   </style>
@@ -73,18 +95,25 @@
     <button>ㅎ</button>
   </section>
   <section id="subwayList">
-    <!--
-    목록아이콘 클릭 시 역번호로 정렬 되도록(필요하면 페이징 처리)
-    예시로 작성함
-    -->
+
     <ul>
+      <!--stations를 반복 출력-->
       <li th:each="station : ${stations}">
-        <a th:href="@{'toilet/subway/'+${station}}" th:text="${station}">역 이름</a>
+<!--        <a th:href="@{/toilet/station/{name}(name=${station.name})}">-->
+        <a th:href="@{/toilet/{name}(name=${station.name})}">
+          <span th:text="${station.number}">510</span>
+          <span th:text="${station.name}">역 이름</span>
+        </a>
       </li>
     </ul>
   </section>
+
+  <div class="paging">
+    <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{/toilet/stationList(page=${i})}" th:text="${i}"
+           th:classappend="${i == currentPage} ? 'active' : ''"></a>
+    </span>
+  </div>
 </div>
 </body>
 </html>
-
-<!--      <li onclick="location.href='subway-name'">512   김포공항</li>-->

@@ -8,15 +8,18 @@ public class ToiletDTO {
     private String 근접출입구번호;
 
     @JsonProperty("개방시간")
-    private String 개방시간;
+    private String openingTime;
 
     @JsonProperty("게이트 내외 구분")
-    private String 게이트내외구분;
+    private String gateInOut;
 
+    @JsonProperty("경도")
     private String 경도;
 
+    @JsonProperty("관리기관명")
     private String 관리기관명;
 
+    @JsonProperty("구분")
     private String 구분;
 
     @JsonProperty("기저귀교환대설치유무-남자장애인화장실")
@@ -62,10 +65,10 @@ public class ToiletDTO {
     private String 비상벨설치유무;
 
     @JsonProperty("상세위치")
-    private String 상세위치;
+    private String location;
 
     @JsonProperty("소재지도로명주소")
-    private String 소재지도로명주소;
+    private String address;
 
     @JsonProperty("소재지지번주소")
     private String 소재지지번주소;
@@ -80,21 +83,28 @@ public class ToiletDTO {
     private Integer 여성용장애인용대변기수;
 
     @JsonProperty("역명")
-    private String 역명;
+    private String name;
 
     @JsonProperty("역층")
-    private Integer 역층;
+    private Integer floor;
 
     @JsonProperty("연번")
     private Integer 연번;
 
+    @JsonProperty("오물처리방식")
     private String 오물처리방식;
-    private String 운영노선명;
+
+    @JsonProperty("운영노선명")
+    private String lines;
+
+    @JsonProperty("위도")
     private String 위도;
+
+    @JsonProperty("전화번호")
     private String 전화번호;
 
     @JsonProperty("지상 또는 지하 구분")
-    private String 지상또는지하구분;
+    private String ground;
 
     @JsonProperty("화장실 설치장소 유형")
     private String 화장실설치장소유형;
@@ -102,12 +112,13 @@ public class ToiletDTO {
     @JsonProperty("화장실입구cctv설치유무")
     private String 화장실입구cctv설치유무;
 
-    private ToiletDTO() {}
+    private ToiletDTO() {
+    }
 
-    public ToiletDTO(String 근접출입구번호, String 개방시간, String 게이트내외구분, String 경도, String 관리기관명, String 구분, String 기저귀교환대설치유무남자장애인화장실, String 기저귀교환대설치유무남자화장실, String 기저귀교환대설치유무여자장애인화장실, String 기저귀교환대설치유무여자화장실, String 남녀공용화장실여부, Integer 남성용대변기수, String 남성용소변기수, Integer 남성용어린이용대변기수, Integer 남성용어린이용소변기수, Integer 남성용장애인용대변기수, Integer 남성용장애인용소변기수, String 데이터기준일자, String 리모델링연도, String 비상벨설치유무, String 상세위치, String 소재지도로명주소, String 소재지지번주소, Integer 여성용대변기수, Integer 여성용어린이용대변기수, Integer 여성용장애인용대변기수, String 역명, Integer 역층, Integer 연번, String 오물처리방식, String 운영노선명, String 위도, String 전화번호, String 지상또는지하구분, String 화장실설치장소유형, String 화장실입구cctv설치유무) {
+    public ToiletDTO(String 근접출입구번호, String openingTime, String gateInOut, String 경도, String 관리기관명, String 구분, String 기저귀교환대설치유무남자장애인화장실, String 기저귀교환대설치유무남자화장실, String 기저귀교환대설치유무여자장애인화장실, String 기저귀교환대설치유무여자화장실, String 남녀공용화장실여부, Integer 남성용대변기수, String 남성용소변기수, Integer 남성용어린이용대변기수, Integer 남성용어린이용소변기수, Integer 남성용장애인용대변기수, Integer 남성용장애인용소변기수, String 데이터기준일자, String 리모델링연도, String 비상벨설치유무, String location, String address, String 소재지지번주소, Integer 여성용대변기수, Integer 여성용어린이용대변기수, Integer 여성용장애인용대변기수, String name, Integer floor, Integer 연번, String 오물처리방식, String lines, String 위도, String 전화번호, String ground, String 화장실설치장소유형, String 화장실입구cctv설치유무) {
         this.근접출입구번호 = 근접출입구번호;
-        this.개방시간 = 개방시간;
-        this.게이트내외구분 = 게이트내외구분;
+        this.openingTime = openingTime;
+        this.gateInOut = gateInOut;
         this.경도 = 경도;
         this.관리기관명 = 관리기관명;
         this.구분 = 구분;
@@ -125,20 +136,20 @@ public class ToiletDTO {
         this.데이터기준일자 = 데이터기준일자;
         this.리모델링연도 = 리모델링연도;
         this.비상벨설치유무 = 비상벨설치유무;
-        this.상세위치 = 상세위치;
-        this.소재지도로명주소 = 소재지도로명주소;
+        this.location = location;
+        this.address = address;
         this.소재지지번주소 = 소재지지번주소;
         this.여성용대변기수 = 여성용대변기수;
         this.여성용어린이용대변기수 = 여성용어린이용대변기수;
         this.여성용장애인용대변기수 = 여성용장애인용대변기수;
-        this.역명 = 역명;
-        this.역층 = 역층;
+        this.name = name;
+        this.floor = floor;
         this.연번 = 연번;
         this.오물처리방식 = 오물처리방식;
-        this.운영노선명 = 운영노선명;
+        this.lines = lines;
         this.위도 = 위도;
         this.전화번호 = 전화번호;
-        this.지상또는지하구분 = 지상또는지하구분;
+        this.ground = ground;
         this.화장실설치장소유형 = 화장실설치장소유형;
         this.화장실입구cctv설치유무 = 화장실입구cctv설치유무;
     }
@@ -151,20 +162,20 @@ public class ToiletDTO {
         this.근접출입구번호 = 근접출입구번호;
     }
 
-    public String get개방시간() {
-        return 개방시간;
+    public String getOpeningTime() {
+        return openingTime;
     }
 
-    public void set개방시간(String 개방시간) {
-        this.개방시간 = 개방시간;
+    public void setOpeningTime(String openingTime) {
+        this.openingTime = openingTime;
     }
 
-    public String get게이트내외구분() {
-        return 게이트내외구분;
+    public String getGateInOut() {
+        return gateInOut;
     }
 
-    public void set게이트내외구분(String 게이트내외구분) {
-        this.게이트내외구분 = 게이트내외구분;
+    public void setGateInOut(String gateInOut) {
+        this.gateInOut = gateInOut;
     }
 
     public String get경도() {
@@ -303,20 +314,20 @@ public class ToiletDTO {
         this.비상벨설치유무 = 비상벨설치유무;
     }
 
-    public String get상세위치() {
-        return 상세위치;
+    public String getLocation() {
+        return location;
     }
 
-    public void set상세위치(String 상세위치) {
-        this.상세위치 = 상세위치;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public String get소재지도로명주소() {
-        return 소재지도로명주소;
+    public String getAddress() {
+        return address;
     }
 
-    public void set소재지도로명주소(String 소재지도로명주소) {
-        this.소재지도로명주소 = 소재지도로명주소;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String get소재지지번주소() {
@@ -351,20 +362,20 @@ public class ToiletDTO {
         this.여성용장애인용대변기수 = 여성용장애인용대변기수;
     }
 
-    public String get역명() {
-        return 역명;
+    public String getName() {
+        return name;
     }
 
-    public void set역명(String 역명) {
-        this.역명 = 역명;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer get역층() {
-        return 역층;
+    public Integer getFloor() {
+        return floor;
     }
 
-    public void set역층(Integer 역층) {
-        this.역층 = 역층;
+    public void setFloor(Integer floor) {
+        this.floor = floor;
     }
 
     public Integer get연번() {
@@ -383,12 +394,12 @@ public class ToiletDTO {
         this.오물처리방식 = 오물처리방식;
     }
 
-    public String get운영노선명() {
-        return 운영노선명;
+    public String getLines() {
+        return lines;
     }
 
-    public void set운영노선명(String 운영노선명) {
-        this.운영노선명 = 운영노선명;
+    public void setLines(String lines) {
+        this.lines = lines;
     }
 
     public String get위도() {
@@ -407,12 +418,12 @@ public class ToiletDTO {
         this.전화번호 = 전화번호;
     }
 
-    public String get지상또는지하구분() {
-        return 지상또는지하구분;
+    public String getGround() {
+        return ground;
     }
 
-    public void set지상또는지하구분(String 지상또는지하구분) {
-        this.지상또는지하구분 = 지상또는지하구분;
+    public void setGround(String ground) {
+        this.ground = ground;
     }
 
     public String get화장실설치장소유형() {
@@ -435,8 +446,8 @@ public class ToiletDTO {
     public String toString() {
         return "ToiletDTO{" +
                 "근접출입구번호='" + 근접출입구번호 + '\'' +
-                ", 개방시간='" + 개방시간 + '\'' +
-                ", 게이트내외구분='" + 게이트내외구분 + '\'' +
+                ", openingTime='" + openingTime + '\'' +
+                ", gateInOut='" + gateInOut + '\'' +
                 ", 경도='" + 경도 + '\'' +
                 ", 관리기관명='" + 관리기관명 + '\'' +
                 ", 구분='" + 구분 + '\'' +
@@ -454,20 +465,20 @@ public class ToiletDTO {
                 ", 데이터기준일자='" + 데이터기준일자 + '\'' +
                 ", 리모델링연도='" + 리모델링연도 + '\'' +
                 ", 비상벨설치유무='" + 비상벨설치유무 + '\'' +
-                ", 상세위치='" + 상세위치 + '\'' +
-                ", 소재지도로명주소='" + 소재지도로명주소 + '\'' +
+                ", location='" + location + '\'' +
+                ", address='" + address + '\'' +
                 ", 소재지지번주소='" + 소재지지번주소 + '\'' +
                 ", 여성용대변기수=" + 여성용대변기수 +
                 ", 여성용어린이용대변기수=" + 여성용어린이용대변기수 +
                 ", 여성용장애인용대변기수=" + 여성용장애인용대변기수 +
-                ", 역명='" + 역명 + '\'' +
-                ", 역층=" + 역층 +
+                ", name='" + name + '\'' +
+                ", floor=" + floor +
                 ", 연번=" + 연번 +
                 ", 오물처리방식='" + 오물처리방식 + '\'' +
-                ", 운영노선명='" + 운영노선명 + '\'' +
+                ", lines='" + lines + '\'' +
                 ", 위도='" + 위도 + '\'' +
                 ", 전화번호='" + 전화번호 + '\'' +
-                ", 지상또는지하구분='" + 지상또는지하구분 + '\'' +
+                ", ground='" + ground + '\'' +
                 ", 화장실설치장소유형='" + 화장실설치장소유형 + '\'' +
                 ", 화장실입구cctv설치유무='" + 화장실입구cctv설치유무 + '\'' +
                 '}';

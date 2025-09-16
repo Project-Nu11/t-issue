@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        .top-nav {
+            display: flex;
+            flex-direction: row;
+        }
+        .stationToilet {
+            font-size: 40px;
+            font-weight: bold;
+            margin-left: 29px;
+            margin-top: 29px;
+        }
         .title {
             width: 100px ;
             height: 50px;
@@ -51,9 +61,8 @@
 <body>
 <div th:include="/common/header.html"></div>
 <div id="main">
-    <section>
-        <div>김포공항역 지하 1층 외부 화장실</div>
-        <div>&times;</div>
+    <section class="top-nav">
+        <div class="stationToilet" th:text="${stationName} + '역 ' + ${toilet.ground} + ' ' + ${toilet.floor} + '층 ' + ${toilet.gateInOut} + ' 화장실'">화장실 이름</div>
     </section>
     <div><img src="" alt="입구 사진"></div>
     <section>
