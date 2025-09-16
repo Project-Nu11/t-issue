@@ -3,21 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .top-nav {
+            display: flex;
+            flex-direction: row;
+        }
+        .stationToilet {
+            font-size: 40px;
+            font-weight: bold;
+            margin-left: 29px;
+            margin-top: 29px;
+        }
+        #toiletList {
+            margin-top: 200px;
+        }
+        li {
+            list-style: none;
+            font-size: 25px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div th:include="/common/header.html"></div>
 <div id="main">
-<!--역 이름과 해당 역의 화장실 목록은 데이터 불러오도록 예시로 작성함-->
-    <section>
-        <div>김포공항역 화장실</div>
-        <div>&times;</div>
+    <section class="top-nav">
+        <div class="stationToilet" th:text="${stationName} + '역 화장실'">역 화장실</div>
     </section>
-    <section>
+
+    <section id="toiletList">
         <ul>
-            <li onclick="location.href='toilet-name'">김포공항역 지하 1층 외부 화장실</li>
-            <li>김포공항역 지하 2층 외부 화장실</li>
+            <li th:each="toilet : ${toilets}"
+                th:text="|${stationName}역 ${toilet.ground} ${toilet.floor}층 ${toilet.gateInOut} 화장실|"
+                th:attr="data-station=${stationName}, data-toilet=${stationName + '역 ' + toilet.ground + ' ' + toilet.floor + ' ' + toilet.gateInOut + ' 화장실'}"
+                class="toilet-item">
+            </li>
         </ul>
     </section>
 </div>
+
+<script>
+    document.querySelectorAll('.toilet-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const station = item.dataset.station;
+            const toiletName = item.dataset.toilet;
+
+            window.location.href = `/toilet/details?stationName=${station}&toiletName=${toiletName}`;
+        });
+    });
+</script>
 </body>
 </html>

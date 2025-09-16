@@ -7,9 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,64 +23,144 @@ import java.util.stream.Collectors;
 public class ToiletController {
 
     @GetMapping("/manager")
-    public void toiletManager(){}
+    public void toiletManager() {}
 
-//    @Value("${api.data.serviceKey}")
-//    private String serviceKey;
+    @Value("${api.data.serviceKey}")
+    private String serviceKey;
 
-//    @GetMapping("/subway")
-//    public String stationToiletList(Model model) {
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=1&serviceKey=" + serviceKey;
-//
-//        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-//        Map<String, Object> body = response.getBody();
-//
-//        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//        List<ToiletDTO> allToilets = dataList.stream()
-//                .map(m -> mapper.convertValue(m, ToiletDTO.class))
-//                .collect(Collectors.toList());
-//
-//        List<String> stationNames = allToilets.stream()
-//                .map(ToiletDTO::get역명)
-//                .distinct()
-//                .collect(Collectors.toList());
-//
-//        model.addAttribute("stations", stationNames);
-//
-//        return "toilet/subway";
-//    }
+    @GetMapping("/stationList")
+    public String stationList(Model model,
+                                    @RequestParam(value = "page", defaultValue = "1") int page) {
 
-    @GetMapping("/station")
-    public void stationNameToiletList() {}
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
 
-//    @GetMapping("/station")
-//    public String toiletDetails(Model model, Map map) {
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=1&serviceKey="+serviceKey;
-//
-//        // Map으로 response 받기
-//        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-//        Map<String, Object> body = response.getBody();
-//
-//        // data 배열 추출??
-//        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
-//
-//        ObjectMapper mapper = new ObjectMapper();
-////        ToiletDTO toilet = mapper.convertValue(dataList.get(0), ToiletDTO.class);
-//        List<ToiletDTO> toilets = dataList.stream()
-//                        .map(m->mapper.convertValue(m, ToiletDTO.class))
-//                                .toList();
-//
-//        model.addAttribute("toilets", toilets);
-//
-//        return "toilet/toilet-name";
-//    }
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        Map<String, Object> body = response.getBody();
 
+        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
 
+        ObjectMapper mapper = new ObjectMapper();
+        List<ToiletDTO> allToilets = dataList.stream()
+                .map(m -> mapper.convertValue(m, ToiletDTO.class))
+                .collect(Collectors.toList());
+
+        // 5호선
+        List<ToiletDTO> line5Toilets=allToilets.stream()
+                .filter(t->"5호선".equals(t.getLines()))
+                .collect(Collectors.toList());
+
+        // 필터링 후 역이름으로 리스트
+        List<String> stationNames = line5Toilets.stream()
+                .map(ToiletDTO::getName)
+                .distinct()
+                .collect(Collectors.toList());
+
+        // 페이징
+        int pageSize = 8;
+        int totalStations = stationNames.size();
+        int totalPages = (int) Math.ceil((double) totalStations/pageSize);
+
+        if (totalPages == 0) totalPages = 1;
+
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+
+        int start = (page -1)*pageSize;
+        int end = Math.min(start+pageSize, totalStations);
+
+        List<String> pagedStations = (start < totalStations) ? stationNames.subList(start, end) : new ArrayList<>();
+
+        // 번호 510부터 시작, 전체 기준으로 계산
+        int startNumber = 510;
+        List<Map<String, String>> stationsWithNumber = new ArrayList<>();
+        for (int i = 0; i < pagedStations.size(); i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("name", pagedStations.get(i));
+
+            String numberStr;
+
+            int globalIndex = start + i; // 전체 역에서의 인덱스
+            if (globalIndex >= totalStations - 7) {
+                numberStr = "P" + (549 + (globalIndex - (totalStations - 7)));
+            } else if (globalIndex <= 26) { // 510~536
+                numberStr = String.valueOf(startNumber + globalIndex);
+            } else { // 나머지 역 538~
+                numberStr = String.valueOf(538 + (globalIndex - 27));
+            }
+
+            map.put("number", String.valueOf(numberStr));
+            stationsWithNumber.add(map);
+        }
+
+        model.addAttribute("stations", stationsWithNumber);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        return "toilet/stationList";
+    }
+
+    @GetMapping("/{name}")
+    public String toiletListByStation(@PathVariable String name, Model model) {
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey="+serviceKey;
+
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        Map<String, Object> body = response.getBody();
+
+        // data 배열 추출
+        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<ToiletDTO> toilets = dataList.stream()
+                .map(m -> mapper.convertValue(m, ToiletDTO.class))
+//                .filter(t -> t.getName() != null && t.getName().contains(name))
+                .filter(t-> name.equals(t.getName()) && "5호선".equals(t.getLines()))
+                .collect(Collectors.toMap(
+                        t -> t.getGround() + "_" + t.getFloor() + "_" + t.getGateInOut(), // 고유키
+                        t -> t,
+                        (existing, replacement) -> existing
+                ))
+                .values()
+                .stream()
+                .toList();
+
+        model.addAttribute("stationName", name);
+        model.addAttribute("toilets", toilets);
+
+        return "toilet/station";
+    }
+
+    @GetMapping("/details")
+    public String toiletDetails(
+            @RequestParam String stationName,
+            @RequestParam String toiletName,
+            Model model) {
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
+
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        Map<String, Object> body = response.getBody();
+
+        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
+        ObjectMapper mapper = new ObjectMapper();
+
+        // stationName과 toiletName으로 필터링
+        ToiletDTO toilet = dataList.stream()
+                .map(m -> mapper.convertValue(m, ToiletDTO.class))
+                .filter(t -> (t.getName().equals(stationName) &&
+                        (t.getName() + "역 " + t.getGround() + " " + t.getFloor() + " " + t.getGateInOut() + " 화장실")
+                                .equals(toiletName)))
+                .findFirst()
+                .orElse(null);
+
+        model.addAttribute("toilet", toilet);
+        model.addAttribute("stationName", stationName);
+
+        return "toilet/details";
+    }
 
 }
