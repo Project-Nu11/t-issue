@@ -49,6 +49,7 @@
             height: 500px;
             display: flex;
             flex-direction: column;
+            z-index: 1004;
         }
         .modalContent {
             width: 300px;
@@ -69,11 +70,11 @@
         <table id="details">
             <tr>
                 <th class="title">주소</th>
-                <th class="context">서울특별시 강서구 하늘길 지하 77(방화동)</th>
+                <th class="context" th:text="${toilet.address}"></th>
             </tr>
             <tr>
                 <th class="title">위치</th>
-                <th class="context">대합실 지하 1층, 1번 출구 옆(지하철 경찰센터 옆)</th>
+                <th class="context" th:text="${toilet.location}"></th>
             </tr>
             <tr>
                 <th class="title">개방시간</th>

@@ -56,15 +56,21 @@
       font-weight: normal;
     }
     .paging {
+      width: 10%;
       display: flex;
       justify-content: center;
-      /*position: fixed;*/
+      position: fixed;
+      top:95%;
+      left: 45%;
     }
     .paging a {
       font-weight: normal;
       color: black;
       margin: 0 5px;
       text-decoration-line: none;
+    }
+    .paging a.active{
+      color: #d9d9d9;
     }
 
   </style>
@@ -102,7 +108,7 @@
 <!--        <a th:href="@{/toilet/station/{name}(name=${station.name})}">-->
         <a th:href="@{/toilet/{name}(name=${station.name})}">
           <span th:text="${station.number}">510</span>
-          <span th:text="${station.name}">역 이름</span>
+          <span style="position: fixed;left: 48%" th:text="${station.name}">역 이름</span>
         </a>
       </li>
     </ul>
@@ -110,7 +116,7 @@
 
   <div class="paging">
     <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-        <a th:href="@{/toilet/stationList(page=${i})}" th:text="${i}"
+        <a class="pagingBtn" th:href="@{/toilet/stationList(page=${i})}" th:text="${i}"
            th:classappend="${i == currentPage} ? 'active' : ''"></a>
     </span>
   </div>
