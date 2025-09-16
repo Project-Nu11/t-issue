@@ -23,6 +23,7 @@ public class NoticeController {
         List<NoticeDTO> noticeList = noticeService.selectAllNotice();
 
 
+
         model.addAttribute("noticeList",noticeList);
 
         return "notice/manager";

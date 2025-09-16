@@ -3,4 +3,64 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.toiletissue.request.model.dao.RequestMapper">
+
+    <resultMap id="request" type="com.toiletissue.request.model.dto.RequestDTO">
+        <id property="no" column="req_no"/>
+        <result property="id" column="member_id"/>
+        <result property="title" column="req_title"/>
+        <result property="content" column="req_content"/>
+        <result property="type" column="req_type"/>
+        <result property="datetime" column="req_date"/>
+        <result property="status" column="req_status"/>
+        <result property="answer" column="answer"/>
+        <result property="reject" column="reject"/>
+    </resultMap>
+    <select id="selectAllRequest" resultMap="request">
+        select
+               req_no,
+               member_id,
+               req_title,
+               req_content,
+               req_type,
+               req_date,
+               req_status,
+               answer,
+               reject
+          from request
+        where req_status like #{value}
+        limit 0,10
+    </select>
+
+    <select id="selectRequestsByCriteria" resultMap="request">
+        select
+        req_no,
+        member_id,
+        req_title,
+        req_content,
+        req_type,
+        req_date,
+        req_status,
+        answer,
+        reject
+        from request
+        where req_status like #{value}
+        limit 0,10
+
+    </select>
+
+    <update id="requestReject">
+        update request
+           set req_status = '답변 거절',
+               reject = #{reject}
+         where req_no = #{no}
+    </update>
+
+    <update id="requestAnswer">
+        update request
+           set answer = #{answer},
+               req_status = '답변 완료'
+         where req_no = #{no}
+    </update>
+
+
 </mapper>
