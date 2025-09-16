@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" >
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 - 약관동의</title>
+    <style>
+        .content {
+            padding: 24px 20px;
+        }
+        .title {
+            margin: 0 0 8px;
+            font-weight: 700;
+        }
+        .card {
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+        .box {
+            background: #fff;
+            border: 1px solid rgba(0,0,0,.25);
+            border-radius: 8px;
+            padding: 12px;
+            height: 110px;
+            overflow: auto;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        .btns {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+        .btns button, #nextBtn {
+            height: 32px;
+            padding: 0 12px;
+            border: 1px solid rgba(0,0,0,.25);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+        }
+        #nextBtn {
+            display: block;
+            margin: 15px 20px 0 auto;
+            height: 32px;
+            padding: 0 16px;
+            border: 1px solid rgba(0,0,0,0.25);
+            border-radius: 8px;
+            background: #fff;
+            color: #000000;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #nextBtn:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="/common/header.html"></div>
+
+<div id="main">
+    <div class="content">
+        <p class="title">회원가입</p>
+
+        <form th:action="@{/member/register/consent}" method="post">
+            <!-- CSRF 사용 시 주석 해제 -->
+            <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> -->
+
+            <section class="card">
+                <label class="check">
+                    <input type="checkbox" name="agreePrivacy" id="agreePrivacy" value="true">
+                    개인정보 수집 및 이용 동의
+                </label>
+                <div class="box">…약관 내용… 동의 해야만 가입 할 수 있지롱 😜</div>
+            </section>
+
+            <section class="card">
+                <label class="check">
+                    <input type="checkbox" name="agreeTerms" id="agreeTerms" value="true">
+                    이용약관 동의
+                </label>
+                <div class="box">…약관 내용…동의 해라 아니면 가입 못한다 😤</div>
+            </section>
+
+            <div class="btns">
+                <button type="button" id="selectAgree">선택동의</button>
+                <button type="button" id="allAgree">전체동의</button>
+            </div>
+
+            <button type="submit" id="nextBtn">다음</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const p = document.getElementById('agreePrivacy');
+    const t = document.getElementById('agreeTerms');
+    const next = document.getElementById('nextBtn');
+
+    function update() { next.disabled = !(p.checked && t.checked); }
+    document.getElementById('selectAgree').onclick = update;
+    document.getElementById('allAgree').onclick = () => { p.checked = true; t.checked = true; update(); };
+    p.onchange = t.onchange = update; update();
+</script>
+</body>
+</html>
+

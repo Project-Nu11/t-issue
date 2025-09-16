@@ -54,6 +54,25 @@ public class MemberController {
         return mv;
     }
 
+    //회원가입 - 약관동의
+    @GetMapping("/register/consent")
+    public String registerConsent() {
+        return "member/register-consent";
+    }
+
+    // 약관동의 제출 (POST)
+    @PostMapping("/register/consent")
+    public String submitConsent(@RequestParam(value = "agreePrivacy", defaultValue = "false") boolean agreePrivacy,
+                                @RequestParam(value = "agreeTerms",   defaultValue = "false") boolean agreeTerms,
+                                org.springframework.web.servlet.mvc.support.RedirectAttributes rttr) {
+        if (!(agreePrivacy && agreeTerms)) {
+            rttr.addFlashAttribute("consentError", "필수 약관에 모두 동의해주세요.");
+            return "redirect:/member/register/consent";
+        }
+        return "redirect:/member/register"; // 2단계: 회원정보 입력 폼으로 이동
+    }
+
+
 //    /* ---------- 마이페이지/목록/단건 ---------- */
 //    @GetMapping("/mypage")
 //    public String mypage() {
