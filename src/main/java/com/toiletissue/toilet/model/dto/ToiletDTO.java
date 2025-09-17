@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ToiletDTO {
 
     @JsonProperty("(근접) 출입구 번호")
-    private String 근접출입구번호;
+    private String exit;
 
     @JsonProperty("개방시간")
     private String openingTime;
@@ -14,55 +14,55 @@ public class ToiletDTO {
     private String gateInOut;
 
     @JsonProperty("경도")
-    private String 경도;
+    private String longitude;
 
     @JsonProperty("관리기관명")
-    private String 관리기관명;
+    private String management;
 
     @JsonProperty("구분")
-    private String 구분;
+    private String division;
 
     @JsonProperty("기저귀교환대설치유무-남자장애인화장실")
-    private String 기저귀교환대설치유무남자장애인화장실;
+    private String diaperDeckYnDmt;
 
     @JsonProperty("기저귀교환대설치유무-남자화장실")
-    private String 기저귀교환대설치유무남자화장실;
+    private String diaperDeckYnMt;
 
     @JsonProperty("기저귀교환대설치유무-여자장애인화장실")
-    private String 기저귀교환대설치유무여자장애인화장실;
+    private String diaperDeckYnDwt;
 
     @JsonProperty("기저귀교환대설치유무-여자화장실")
-    private String 기저귀교환대설치유무여자화장실;
+    private String diaperDeckYnWt;
 
     @JsonProperty("남녀공용화장실여부")
-    private String 남녀공용화장실여부;
+    private String unisexToiletYn;
 
     @JsonProperty("남성용-대변기수")
-    private Integer 남성용대변기수;
+    private Integer menToilet;
 
     @JsonProperty("남성용-소변기수")
-    private String 남성용소변기수;
+    private String menUrinal;
 
     @JsonProperty("남성용-어린이용대변기수")
-    private Integer 남성용어린이용대변기수;
+    private Integer boyToilet;
 
     @JsonProperty("남성용-어린이용소변기수")
-    private Integer 남성용어린이용소변기수;
+    private Integer boyUrinal;
 
     @JsonProperty("남성용-장애인용대변기수")
-    private Integer 남성용장애인용대변기수;
+    private Integer disabledMenToilet;
 
     @JsonProperty("남성용-장애인용소변기수")
-    private Integer 남성용장애인용소변기수;
+    private Integer disabledMenUrinal;
 
     @JsonProperty("데이터기준일자")
-    private String 데이터기준일자;
+    private String dbDate;
 
     @JsonProperty("리모델링 연도")
-    private String 리모델링연도;
+    private String remodeling;
 
     @JsonProperty("비상벨 설치유무")
-    private String 비상벨설치유무;
+    private String emergencyBellYn;
 
     @JsonProperty("상세위치")
     private String location;
@@ -71,16 +71,16 @@ public class ToiletDTO {
     private String address;
 
     @JsonProperty("소재지지번주소")
-    private String 소재지지번주소;
+    private String streetAddress;
 
     @JsonProperty("여성용-대변기수")
-    private Integer 여성용대변기수;
+    private Integer womenToilet;
 
     @JsonProperty("여성용-어린이용대변기수")
-    private Integer 여성용어린이용대변기수;
+    private Integer girlToilet;
 
     @JsonProperty("여성용-장애인용대변기수")
-    private Integer 여성용장애인용대변기수;
+    private Integer disabledWomenToilet;
 
     @JsonProperty("역명")
     private String name;
@@ -89,77 +89,76 @@ public class ToiletDTO {
     private Integer floor;
 
     @JsonProperty("연번")
-    private Integer 연번;
+    private Integer serialNumber;
 
     @JsonProperty("오물처리방식")
-    private String 오물처리방식;
+    private String wasteDisposalMethod;
 
     @JsonProperty("운영노선명")
     private String lines;
 
     @JsonProperty("위도")
-    private String 위도;
+    private String latitude;
 
     @JsonProperty("전화번호")
-    private String 전화번호;
+    private String phone;
 
     @JsonProperty("지상 또는 지하 구분")
     private String ground;
 
     @JsonProperty("화장실 설치장소 유형")
-    private String 화장실설치장소유형;
+    private String locationType;
 
     @JsonProperty("화장실입구cctv설치유무")
-    private String 화장실입구cctv설치유무;
+    private String cctvYn;
 
-    private ToiletDTO() {
-    }
+    private ToiletDTO() {}
 
-    public ToiletDTO(String 근접출입구번호, String openingTime, String gateInOut, String 경도, String 관리기관명, String 구분, String 기저귀교환대설치유무남자장애인화장실, String 기저귀교환대설치유무남자화장실, String 기저귀교환대설치유무여자장애인화장실, String 기저귀교환대설치유무여자화장실, String 남녀공용화장실여부, Integer 남성용대변기수, String 남성용소변기수, Integer 남성용어린이용대변기수, Integer 남성용어린이용소변기수, Integer 남성용장애인용대변기수, Integer 남성용장애인용소변기수, String 데이터기준일자, String 리모델링연도, String 비상벨설치유무, String location, String address, String 소재지지번주소, Integer 여성용대변기수, Integer 여성용어린이용대변기수, Integer 여성용장애인용대변기수, String name, Integer floor, Integer 연번, String 오물처리방식, String lines, String 위도, String 전화번호, String ground, String 화장실설치장소유형, String 화장실입구cctv설치유무) {
-        this.근접출입구번호 = 근접출입구번호;
+    public ToiletDTO(String exit, String openingTime, String gateInOut, String longitude, String management, String division, String diaperDeckYnDmt, String diaperDeckYnMt, String diaperDeckYnDwt, String diaperDeckYnWt, String unisexToiletYn, Integer menToilet, String menUrinal, Integer boyToilet, Integer boyUrinal, Integer disabledMenToilet, Integer disabledMenUrinal, String dbDate, String remodeling, String emergencyBellYn, String location, String address, String streetAddress, Integer womenToilet, Integer girlToilet, Integer disabledWomenToilet, String name, Integer floor, Integer serialNumber, String wasteDisposalMethod, String lines, String latitude, String phone, String ground, String locationType, String cctvYn) {
+        this.exit = exit;
         this.openingTime = openingTime;
         this.gateInOut = gateInOut;
-        this.경도 = 경도;
-        this.관리기관명 = 관리기관명;
-        this.구분 = 구분;
-        this.기저귀교환대설치유무남자장애인화장실 = 기저귀교환대설치유무남자장애인화장실;
-        this.기저귀교환대설치유무남자화장실 = 기저귀교환대설치유무남자화장실;
-        this.기저귀교환대설치유무여자장애인화장실 = 기저귀교환대설치유무여자장애인화장실;
-        this.기저귀교환대설치유무여자화장실 = 기저귀교환대설치유무여자화장실;
-        this.남녀공용화장실여부 = 남녀공용화장실여부;
-        this.남성용대변기수 = 남성용대변기수;
-        this.남성용소변기수 = 남성용소변기수;
-        this.남성용어린이용대변기수 = 남성용어린이용대변기수;
-        this.남성용어린이용소변기수 = 남성용어린이용소변기수;
-        this.남성용장애인용대변기수 = 남성용장애인용대변기수;
-        this.남성용장애인용소변기수 = 남성용장애인용소변기수;
-        this.데이터기준일자 = 데이터기준일자;
-        this.리모델링연도 = 리모델링연도;
-        this.비상벨설치유무 = 비상벨설치유무;
+        this.longitude = longitude;
+        this.management = management;
+        this.division = division;
+        this.diaperDeckYnDmt = diaperDeckYnDmt;
+        this.diaperDeckYnMt = diaperDeckYnMt;
+        this.diaperDeckYnDwt = diaperDeckYnDwt;
+        this.diaperDeckYnWt = diaperDeckYnWt;
+        this.unisexToiletYn = unisexToiletYn;
+        this.menToilet = menToilet;
+        this.menUrinal = menUrinal;
+        this.boyToilet = boyToilet;
+        this.boyUrinal = boyUrinal;
+        this.disabledMenToilet = disabledMenToilet;
+        this.disabledMenUrinal = disabledMenUrinal;
+        this.dbDate = dbDate;
+        this.remodeling = remodeling;
+        this.emergencyBellYn = emergencyBellYn;
         this.location = location;
         this.address = address;
-        this.소재지지번주소 = 소재지지번주소;
-        this.여성용대변기수 = 여성용대변기수;
-        this.여성용어린이용대변기수 = 여성용어린이용대변기수;
-        this.여성용장애인용대변기수 = 여성용장애인용대변기수;
+        this.streetAddress = streetAddress;
+        this.womenToilet = womenToilet;
+        this.girlToilet = girlToilet;
+        this.disabledWomenToilet = disabledWomenToilet;
         this.name = name;
         this.floor = floor;
-        this.연번 = 연번;
-        this.오물처리방식 = 오물처리방식;
+        this.serialNumber = serialNumber;
+        this.wasteDisposalMethod = wasteDisposalMethod;
         this.lines = lines;
-        this.위도 = 위도;
-        this.전화번호 = 전화번호;
+        this.latitude = latitude;
+        this.phone = phone;
         this.ground = ground;
-        this.화장실설치장소유형 = 화장실설치장소유형;
-        this.화장실입구cctv설치유무 = 화장실입구cctv설치유무;
+        this.locationType = locationType;
+        this.cctvYn = cctvYn;
     }
 
-    public String get근접출입구번호() {
-        return 근접출입구번호;
+    public String getExit() {
+        return exit;
     }
 
-    public void set근접출입구번호(String 근접출입구번호) {
-        this.근접출입구번호 = 근접출입구번호;
+    public void setExit(String exit) {
+        this.exit = exit;
     }
 
     public String getOpeningTime() {
@@ -178,140 +177,140 @@ public class ToiletDTO {
         this.gateInOut = gateInOut;
     }
 
-    public String get경도() {
-        return 경도;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void set경도(String 경도) {
-        this.경도 = 경도;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
-    public String get관리기관명() {
-        return 관리기관명;
+    public String getManagement() {
+        return management;
     }
 
-    public void set관리기관명(String 관리기관명) {
-        this.관리기관명 = 관리기관명;
+    public void setManagement(String management) {
+        this.management = management;
     }
 
-    public String get구분() {
-        return 구분;
+    public String getDivision() {
+        return division;
     }
 
-    public void set구분(String 구분) {
-        this.구분 = 구분;
+    public void setDivision(String division) {
+        this.division = division;
     }
 
-    public String get기저귀교환대설치유무남자장애인화장실() {
-        return 기저귀교환대설치유무남자장애인화장실;
+    public String getDiaperDeckYnDmt() {
+        return diaperDeckYnDmt;
     }
 
-    public void set기저귀교환대설치유무남자장애인화장실(String 기저귀교환대설치유무남자장애인화장실) {
-        this.기저귀교환대설치유무남자장애인화장실 = 기저귀교환대설치유무남자장애인화장실;
+    public void setDiaperDeckYnDmt(String diaperDeckYnDmt) {
+        this.diaperDeckYnDmt = diaperDeckYnDmt;
     }
 
-    public String get기저귀교환대설치유무남자화장실() {
-        return 기저귀교환대설치유무남자화장실;
+    public String getDiaperDeckYnMt() {
+        return diaperDeckYnMt;
     }
 
-    public void set기저귀교환대설치유무남자화장실(String 기저귀교환대설치유무남자화장실) {
-        this.기저귀교환대설치유무남자화장실 = 기저귀교환대설치유무남자화장실;
+    public void setDiaperDeckYnMt(String diaperDeckYnMt) {
+        this.diaperDeckYnMt = diaperDeckYnMt;
     }
 
-    public String get기저귀교환대설치유무여자장애인화장실() {
-        return 기저귀교환대설치유무여자장애인화장실;
+    public String getDiaperDeckYnDwt() {
+        return diaperDeckYnDwt;
     }
 
-    public void set기저귀교환대설치유무여자장애인화장실(String 기저귀교환대설치유무여자장애인화장실) {
-        this.기저귀교환대설치유무여자장애인화장실 = 기저귀교환대설치유무여자장애인화장실;
+    public void setDiaperDeckYnDwt(String diaperDeckYnDwt) {
+        this.diaperDeckYnDwt = diaperDeckYnDwt;
     }
 
-    public String get기저귀교환대설치유무여자화장실() {
-        return 기저귀교환대설치유무여자화장실;
+    public String getDiaperDeckYnWt() {
+        return diaperDeckYnWt;
     }
 
-    public void set기저귀교환대설치유무여자화장실(String 기저귀교환대설치유무여자화장실) {
-        this.기저귀교환대설치유무여자화장실 = 기저귀교환대설치유무여자화장실;
+    public void setDiaperDeckYnWt(String diaperDeckYnWt) {
+        this.diaperDeckYnWt = diaperDeckYnWt;
     }
 
-    public String get남녀공용화장실여부() {
-        return 남녀공용화장실여부;
+    public String getUnisexToiletYn() {
+        return unisexToiletYn;
     }
 
-    public void set남녀공용화장실여부(String 남녀공용화장실여부) {
-        this.남녀공용화장실여부 = 남녀공용화장실여부;
+    public void setUnisexToiletYn(String unisexToiletYn) {
+        this.unisexToiletYn = unisexToiletYn;
     }
 
-    public Integer get남성용대변기수() {
-        return 남성용대변기수;
+    public Integer getMenToilet() {
+        return menToilet;
     }
 
-    public void set남성용대변기수(Integer 남성용대변기수) {
-        this.남성용대변기수 = 남성용대변기수;
+    public void setMenToilet(Integer menToilet) {
+        this.menToilet = menToilet;
     }
 
-    public String get남성용소변기수() {
-        return 남성용소변기수;
+    public String getMenUrinal() {
+        return menUrinal;
     }
 
-    public void set남성용소변기수(String 남성용소변기수) {
-        this.남성용소변기수 = 남성용소변기수;
+    public void setMenUrinal(String menUrinal) {
+        this.menUrinal = menUrinal;
     }
 
-    public Integer get남성용어린이용대변기수() {
-        return 남성용어린이용대변기수;
+    public Integer getBoyToilet() {
+        return boyToilet;
     }
 
-    public void set남성용어린이용대변기수(Integer 남성용어린이용대변기수) {
-        this.남성용어린이용대변기수 = 남성용어린이용대변기수;
+    public void setBoyToilet(Integer boyToilet) {
+        this.boyToilet = boyToilet;
     }
 
-    public Integer get남성용어린이용소변기수() {
-        return 남성용어린이용소변기수;
+    public Integer getBoyUrinal() {
+        return boyUrinal;
     }
 
-    public void set남성용어린이용소변기수(Integer 남성용어린이용소변기수) {
-        this.남성용어린이용소변기수 = 남성용어린이용소변기수;
+    public void setBoyUrinal(Integer boyUrinal) {
+        this.boyUrinal = boyUrinal;
     }
 
-    public Integer get남성용장애인용대변기수() {
-        return 남성용장애인용대변기수;
+    public Integer getDisabledMenToilet() {
+        return disabledMenToilet;
     }
 
-    public void set남성용장애인용대변기수(Integer 남성용장애인용대변기수) {
-        this.남성용장애인용대변기수 = 남성용장애인용대변기수;
+    public void setDisabledMenToilet(Integer disabledMenToilet) {
+        this.disabledMenToilet = disabledMenToilet;
     }
 
-    public Integer get남성용장애인용소변기수() {
-        return 남성용장애인용소변기수;
+    public Integer getDisabledMenUrinal() {
+        return disabledMenUrinal;
     }
 
-    public void set남성용장애인용소변기수(Integer 남성용장애인용소변기수) {
-        this.남성용장애인용소변기수 = 남성용장애인용소변기수;
+    public void setDisabledMenUrinal(Integer disabledMenUrinal) {
+        this.disabledMenUrinal = disabledMenUrinal;
     }
 
-    public String get데이터기준일자() {
-        return 데이터기준일자;
+    public String getDbDate() {
+        return dbDate;
     }
 
-    public void set데이터기준일자(String 데이터기준일자) {
-        this.데이터기준일자 = 데이터기준일자;
+    public void setDbDate(String dbDate) {
+        this.dbDate = dbDate;
     }
 
-    public String get리모델링연도() {
-        return 리모델링연도;
+    public String getRemodeling() {
+        return remodeling;
     }
 
-    public void set리모델링연도(String 리모델링연도) {
-        this.리모델링연도 = 리모델링연도;
+    public void setRemodeling(String remodeling) {
+        this.remodeling = remodeling;
     }
 
-    public String get비상벨설치유무() {
-        return 비상벨설치유무;
+    public String getEmergencyBellYn() {
+        return emergencyBellYn;
     }
 
-    public void set비상벨설치유무(String 비상벨설치유무) {
-        this.비상벨설치유무 = 비상벨설치유무;
+    public void setEmergencyBellYn(String emergencyBellYn) {
+        this.emergencyBellYn = emergencyBellYn;
     }
 
     public String getLocation() {
@@ -330,36 +329,36 @@ public class ToiletDTO {
         this.address = address;
     }
 
-    public String get소재지지번주소() {
-        return 소재지지번주소;
+    public String getStreetAddress() {
+        return streetAddress;
     }
 
-    public void set소재지지번주소(String 소재지지번주소) {
-        this.소재지지번주소 = 소재지지번주소;
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 
-    public Integer get여성용대변기수() {
-        return 여성용대변기수;
+    public Integer getWomenToilet() {
+        return womenToilet;
     }
 
-    public void set여성용대변기수(Integer 여성용대변기수) {
-        this.여성용대변기수 = 여성용대변기수;
+    public void setWomenToilet(Integer womenToilet) {
+        this.womenToilet = womenToilet;
     }
 
-    public Integer get여성용어린이용대변기수() {
-        return 여성용어린이용대변기수;
+    public Integer getGirlToilet() {
+        return girlToilet;
     }
 
-    public void set여성용어린이용대변기수(Integer 여성용어린이용대변기수) {
-        this.여성용어린이용대변기수 = 여성용어린이용대변기수;
+    public void setGirlToilet(Integer girlToilet) {
+        this.girlToilet = girlToilet;
     }
 
-    public Integer get여성용장애인용대변기수() {
-        return 여성용장애인용대변기수;
+    public Integer getDisabledWomenToilet() {
+        return disabledWomenToilet;
     }
 
-    public void set여성용장애인용대변기수(Integer 여성용장애인용대변기수) {
-        this.여성용장애인용대변기수 = 여성용장애인용대변기수;
+    public void setDisabledWomenToilet(Integer disabledWomenToilet) {
+        this.disabledWomenToilet = disabledWomenToilet;
     }
 
     public String getName() {
@@ -378,20 +377,20 @@ public class ToiletDTO {
         this.floor = floor;
     }
 
-    public Integer get연번() {
-        return 연번;
+    public Integer getSerialNumber() {
+        return serialNumber;
     }
 
-    public void set연번(Integer 연번) {
-        this.연번 = 연번;
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
-    public String get오물처리방식() {
-        return 오물처리방식;
+    public String getWasteDisposalMethod() {
+        return wasteDisposalMethod;
     }
 
-    public void set오물처리방식(String 오물처리방식) {
-        this.오물처리방식 = 오물처리방식;
+    public void setWasteDisposalMethod(String wasteDisposalMethod) {
+        this.wasteDisposalMethod = wasteDisposalMethod;
     }
 
     public String getLines() {
@@ -402,20 +401,20 @@ public class ToiletDTO {
         this.lines = lines;
     }
 
-    public String get위도() {
-        return 위도;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void set위도(String 위도) {
-        this.위도 = 위도;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
-    public String get전화번호() {
-        return 전화번호;
+    public String getPhone() {
+        return phone;
     }
 
-    public void set전화번호(String 전화번호) {
-        this.전화번호 = 전화번호;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getGround() {
@@ -426,61 +425,61 @@ public class ToiletDTO {
         this.ground = ground;
     }
 
-    public String get화장실설치장소유형() {
-        return 화장실설치장소유형;
+    public String getLocationType() {
+        return locationType;
     }
 
-    public void set화장실설치장소유형(String 화장실설치장소유형) {
-        this.화장실설치장소유형 = 화장실설치장소유형;
+    public void setLocationType(String locationType) {
+        this.locationType = locationType;
     }
 
-    public String get화장실입구cctv설치유무() {
-        return 화장실입구cctv설치유무;
+    public String getCctvYn() {
+        return cctvYn;
     }
 
-    public void set화장실입구cctv설치유무(String 화장실입구cctv설치유무) {
-        this.화장실입구cctv설치유무 = 화장실입구cctv설치유무;
+    public void setCctvYn(String cctvYn) {
+        this.cctvYn = cctvYn;
     }
 
     @Override
     public String toString() {
         return "ToiletDTO{" +
-                "근접출입구번호='" + 근접출입구번호 + '\'' +
+                "exit='" + exit + '\'' +
                 ", openingTime='" + openingTime + '\'' +
                 ", gateInOut='" + gateInOut + '\'' +
-                ", 경도='" + 경도 + '\'' +
-                ", 관리기관명='" + 관리기관명 + '\'' +
-                ", 구분='" + 구분 + '\'' +
-                ", 기저귀교환대설치유무남자장애인화장실='" + 기저귀교환대설치유무남자장애인화장실 + '\'' +
-                ", 기저귀교환대설치유무남자화장실='" + 기저귀교환대설치유무남자화장실 + '\'' +
-                ", 기저귀교환대설치유무여자장애인화장실='" + 기저귀교환대설치유무여자장애인화장실 + '\'' +
-                ", 기저귀교환대설치유무여자화장실='" + 기저귀교환대설치유무여자화장실 + '\'' +
-                ", 남녀공용화장실여부='" + 남녀공용화장실여부 + '\'' +
-                ", 남성용대변기수=" + 남성용대변기수 +
-                ", 남성용소변기수='" + 남성용소변기수 + '\'' +
-                ", 남성용어린이용대변기수=" + 남성용어린이용대변기수 +
-                ", 남성용어린이용소변기수=" + 남성용어린이용소변기수 +
-                ", 남성용장애인용대변기수=" + 남성용장애인용대변기수 +
-                ", 남성용장애인용소변기수=" + 남성용장애인용소변기수 +
-                ", 데이터기준일자='" + 데이터기준일자 + '\'' +
-                ", 리모델링연도='" + 리모델링연도 + '\'' +
-                ", 비상벨설치유무='" + 비상벨설치유무 + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", management='" + management + '\'' +
+                ", division='" + division + '\'' +
+                ", diaperDeckYnDmt='" + diaperDeckYnDmt + '\'' +
+                ", diaperDeckYnMt='" + diaperDeckYnMt + '\'' +
+                ", diaperDeckYnDwt='" + diaperDeckYnDwt + '\'' +
+                ", diaperDeckYnWt='" + diaperDeckYnWt + '\'' +
+                ", unisexToiletYn='" + unisexToiletYn + '\'' +
+                ", menToilet=" + menToilet +
+                ", menUrinal='" + menUrinal + '\'' +
+                ", boyToilet=" + boyToilet +
+                ", boyUrinal=" + boyUrinal +
+                ", disabledMenToilet=" + disabledMenToilet +
+                ", disabledMenUrinal=" + disabledMenUrinal +
+                ", dbDate='" + dbDate + '\'' +
+                ", remodeling='" + remodeling + '\'' +
+                ", emergencyBellYn='" + emergencyBellYn + '\'' +
                 ", location='" + location + '\'' +
                 ", address='" + address + '\'' +
-                ", 소재지지번주소='" + 소재지지번주소 + '\'' +
-                ", 여성용대변기수=" + 여성용대변기수 +
-                ", 여성용어린이용대변기수=" + 여성용어린이용대변기수 +
-                ", 여성용장애인용대변기수=" + 여성용장애인용대변기수 +
+                ", streetAddress='" + streetAddress + '\'' +
+                ", womenToilet=" + womenToilet +
+                ", girlToilet=" + girlToilet +
+                ", disabledWomenToilet=" + disabledWomenToilet +
                 ", name='" + name + '\'' +
                 ", floor=" + floor +
-                ", 연번=" + 연번 +
-                ", 오물처리방식='" + 오물처리방식 + '\'' +
+                ", serialNumber=" + serialNumber +
+                ", wasteDisposalMethod='" + wasteDisposalMethod + '\'' +
                 ", lines='" + lines + '\'' +
-                ", 위도='" + 위도 + '\'' +
-                ", 전화번호='" + 전화번호 + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", phone='" + phone + '\'' +
                 ", ground='" + ground + '\'' +
-                ", 화장실설치장소유형='" + 화장실설치장소유형 + '\'' +
-                ", 화장실입구cctv설치유무='" + 화장실입구cctv설치유무 + '\'' +
+                ", locationType='" + locationType + '\'' +
+                ", cctvYn='" + cctvYn + '\'' +
                 '}';
     }
 }
