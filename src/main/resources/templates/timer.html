@@ -8,22 +8,43 @@
             width: 506px;
             height: 506px;
             border-radius: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-size: 110px;
-            border: 1px solid black;
-            text-align: center;
-            align-items: center
+        }
+        #control {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 70px
+        }
+        button {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: none;
         }
     </style>
 </head>
 <body>
 <div th:include="/common/header.html"></div>
 <div id="main">
-    <div>X</div>
-    <div id="timer">10:00</div>
-    <section>
-        <button id="startBtn">시작</button> <!-- 시작버튼 클릭 시 ▶ -> ⏸ 모양으로 변경되도록 -->
-        <button id="stopBtn">멈춤</button> <!-- 멈춤버튼 클릭 시 ⏸ -> ▶ 모양으로 변경되도록 -->
-        <button id="resetBtn">초기화</button> <!-- 버튼(⏹) 클릭 시 10:00 으로 초기화-->
+    <div style="display: flex;justify-content: center;align-items: center;margin-top: 70px">
+        <div id="timer">
+            <p id="ten">10 : 00</p>
+        </div>
+    </div>
+
+    <section id="control">
+        <button id="startBtn">
+            <img id="startIcon" src="/icon/free-icon-play-4211344.png" alt="시작" width="42" height="42">
+        </button> <!-- 버튼 클릭 시 ▶ -> ⏸ 모양으로 변경되도록 재시작 시 ⏸-> ▶ -->
+        <button id="resetBtn">
+            <img src="/icon/free-icon-stop-button-7513168.png" alt="초기화" width="55" height="55">
+        </button> <!-- 버튼(⏹) 클릭 시 10:00 으로 초기화-->
     </section>
 </div>
 
@@ -34,8 +55,8 @@
     let isRunning = false;
 
     const tenMinute = document.getElementById("timer");
+    const startIcon = document.getElementById("startBtn").querySelector("img");
     const startBtn = document.getElementById("startBtn");
-    const stopBtn = document.getElementById("stopBtn");
     const resetBtn = document.getElementById("resetBtn");
 
     function tenMinuteTimer() {
@@ -59,14 +80,11 @@
         if (!isRunning) {
             timerInterval = setInterval(tenMinuteTimer, 1000);
             isRunning = true;
-        }
-    });
-
-    // 멈춤버튼
-    stopBtn.addEventListener("click", () => {
-        if (isRunning) {
+            startIcon.src="/icon/free-icon-pause-button-64485.png";
+        } else {
             clearInterval(timerInterval);
             isRunning = false;
+            startIcon.src ="/icon/free-icon-play-4211344.png";
         }
     });
 

@@ -106,7 +106,7 @@
       <!--stations를 반복 출력-->
       <li th:each="station : ${stations}">
 <!--        <a th:href="@{/toilet/station/{name}(name=${station.name})}">-->
-        <a th:href="@{/toilet/{name}(name=${station.name})}">
+        <a th:href="@{/toilet/station(stationName=${station.name})}">
           <span th:text="${station.number}">510</span>
           <span style="position: fixed;left: 48%" th:text="${station.name}">역 이름</span>
         </a>

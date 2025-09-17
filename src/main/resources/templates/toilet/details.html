@@ -9,24 +9,48 @@
             flex-direction: row;
         }
         .stationToilet {
-            font-size: 40px;
+            font-size: 36px;
             font-weight: bold;
             margin-left: 29px;
             margin-top: 29px;
+        }
+        #toiletExit {
+            width: 400px;
+            height: 300px;
+            margin-top: 29px;
+        }
+        #details {
+            margin-left: 29px;
+            margin-right: 29px;
+            margin-top: 5px;
         }
         .title {
             width: 100px ;
             height: 50px;
             text-align: center;
-            border: 1px solid #000;
+            /*border: 1px solid #000;*/
             font-weight: bold;
+            font-size: 24px;
         }
         .context {
-            width: 300px;
+            width: 418px;
             height: 50px;
             text-align: center;
-            border: 1px solid #000000;
+            /*border: 1px solid #000000;*/
             font-weight: normal;
+            font-size: 16px;
+        }
+        #icons {
+            margin-top: 10px;
+            display: flex;
+            gap: 55px;
+            justify-content: center;
+        }
+        #icons button {
+            width: 75px;
+            height: 75px;
+            border-radius: 50px;
+            border: none;
         }
         /* modal은 모달창 뒤 어두운 배경 */
         .modal {
@@ -38,24 +62,67 @@
             width:100%;
             height:100%;
             background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
         }
 
         .detailModal {
             background-color: #fefefe;
             margin: 15% auto;
-            padding : 20px;
+            padding : 15px;
             border: 1px solid #888;
-            width: 500px;
-            height: 500px;
+            width: 400px;
+            height: 320px;
             display: flex;
             flex-direction: column;
-            z-index: 1004;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            /*z-index: 1004;*/
+            /*position: relative;*/
+        }
+        .modalTitle {
+            font-size: 28px;
         }
         .modalContent {
-            width: 300px;
-            height: 300px;
-            border: 1px solid gray;
-            margin-left: 100px;
+            width: 350px;
+            height: 250px;
+            /*border: 1px solid gray;*/
+            border-radius: 7px;
+            box-shadow: inset 2px 2px 5.8px rgba(0,0,0,0.25);
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+        li {
+            list-style: none;
+            padding: 15px;
+        }
+        #review {
+            margin-left: 29px;
+        }
+        #reviewNav {
+            margin-top: 20px;
+            display: flex;
+        }
+        #reviewContext {
+            margin-top: 20px;
+        }
+        #review button {
+            border: none;
+            background: none;
+        }
+        #reviewModal {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding : 15px;
+            border: 1px solid #888;
+            width: 400px;
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -65,7 +132,8 @@
     <section class="top-nav">
         <div class="stationToilet" th:text="${stationName} + '역 ' + ${toilet.ground} + ' ' + ${toilet.floor} + '층 ' + ${toilet.gateInOut} + ' 화장실'">화장실 이름</div>
     </section>
-    <div><img src="" alt="입구 사진"></div>
+    <!-- 사진은 마지막에 어떻게 해야할 지.. -->
+    <div style="text-align: center"><img id="toiletExit" src="/image/512-1.png" alt="입구 사진"></div>
     <section>
         <table id="details">
             <tr>
@@ -81,30 +149,84 @@
                 <th class="context">05:00 ~ 24:00</th>
             </tr>
         </table>
-        <div> <!--아이콘 클릭 시 변기 수 등의 정보가 담긴 모달창-->
-            <div id="backModal" class="modal">
-                <div th:each="toilet : ${toilets}" class="detailModal">
+
+        <div id="icons"> <!--아이콘 클릭 시 변기 수 등의 정보가 담긴 모달창-->
+            <button id="openManModal">
+                <img src="/icon/toilet.png" alt="남자화장실아이콘" width="40" height="40">
+            </button>
+            <button id="openWomanModal">
+                <img src="/icon/women.png" alt="여자화장실아이콘" width="40" height="40">
+            </button>
+            <button id="openDisabledModal">
+                <img src="/icon/diffable.png" alt="장애인화장실아이콘" width="40" height="40">
+            </button>
+            <button id="openDiaperModal">
+                <img src="/icon/baby.png" alt="기저귀교환대아이콘" width="40" height="40">
+            </button>
+
+            <div id="manModal" class="modal">
+                <div class="detailModal">
                     <p class="modalTitle">남자화장실</p>
                     <div class="modalContent">
-                        <li>대변기 수 : <span th:text="${toilet.남성용대변기수}">0</span></li>
-                        <li>소변기 수 : <span th:text="${toilet.남성용소변기수}">0</span></li>
-                        <li>어린이용 대변기 수 : <span th:text="${toilet.남성용어린이용대변기수}">0</span></li>
-                        <li>어린이용 소변기 수 : <span th:text="${toilet.남성용어린이용대변기수}">0</span></li>
+                        <li>대변기 수 : <span th:text="${toilet.menToilet}">0</span></li>
+                        <li>소변기 수 : <span th:text="${toilet.menUrinal}">0</span></li>
+                        <li>어린이용 대변기 수 : <span th:text="${toilet.boyToilet}">0</span></li>
+                        <li>어린이용 소변기 수 : <span th:text="${toilet.boyUrinal}">0</span></li>
                     </div>
                 </div>
             </div>
-            <button id="openManModal">남자화장실아이콘</button>
-            <button id="openWomanModal">여자화장실아이콘</button>
-            <button id="openDisabledModal">장애인화장실아이콘</button>
-            <button id="openDiaperModal">기저귀교환대아이콘</button>
+            <!-- 여자 화장실 모달 -->
+            <div id="womanModal" class="modal">
+                <div class="detailModal">
+                    <p class="modalTitle">여자화장실</p>
+                    <div class="modalContent">
+                        <li>대변기 수 : <span th:text="${toilet.womenToilet}">0</span></li>
+                        <li>어린이용 대변기 수 : <span th:text="${toilet.girlToilet}">0</span></li>
+                    </div>
+                </div>
+            </div>
+            <!-- 장애인 화장실 모달 -->
+            <div id="disabledModal" class="modal">
+                <div class="detailModal">
+                    <p class="modalTitle">장애인화장실</p>
+                    <div class="modalContent">
+                        <li>남성 장애인용 대변기 수 : <span th:text="${toilet.disabledMenToilet}">0</span></li>
+                        <li>남성 장애인용 소변기 수 : <span th:text="${toilet.disabledMenUrinal}">0</span></li>
+                        <li>여성 장애인용 대변기 수 : <span th:text="${toilet.disabledWomenToilet}">0</span></li>
+                    </div>
+                </div>
+            </div>
+            <!-- 기저귀 교환대 모달 -->
+            <div id="diaperModal" class="modal">
+                <div class="detailModal">
+                    <p class="modalTitle">기저귀 교환대</p>
+                    <div class="modalContent">
+                        <li>여자 화장실 : <span th:text="${toilet.diaperDeckYnWt}">N</span></li>
+                        <li>여자 장애인 화장실 : <span th:text="${toilet.diaperDeckYnDwt}">N</span></li>
+                        <li>남자 화장실 : <span th:text="${toilet.diaperDeckYnMt}">N</span></li>
+                        <li>남자 장애인 화장실 : <span th:text="${toilet.diaperDeckYnDmt}">N</span></li>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <section>
-            <div>
-                <div>리뷰</div>
-                <button>작성</button> <!--작성 버튼 클릭 시 별점 및 리뷰 작성할 수 있는 모달창-->
+        <section id="review">
+            <div id="reviewNav">
+                <div style="font-size: 24px">리뷰</div>
+                    <button id = openReview>
+                        <img src="/icon/pen.png" alt="작성" width="25" height="25">
+                    </button>
+                    <!--작성 버튼 클릭 시 별점 및 리뷰 작성할 수 있는 모달창-->
+                    <div id="reviewModal" class="modal">
+                        <p class="star">별점</p>
+                            <div>별다섯개</div>
+                        <p>리뷰 내용</p>
+                            <div class="reviewContent">
+                                <p>쾌적해서 좋아용</p>
+                            </div>
+                    </div>
             </div>
-            <div>
+            <div id="reviewContext">
                 <div>
                     리뷰1(작성자, 내용, 일자, 신고버튼)
                 </div>
@@ -120,36 +242,32 @@
                 <div>
                     리뷰5(작성자, 내용, 일자, 신고버튼)
                 </div>
-                <div>
-                    리뷰6(작성자, 내용, 일자, 신고버튼)
-                </div>
-                <div>
-                    리뷰7(작성자, 내용, 일자, 신고버튼)
-                </div>
-                <div>
-                    리뷰8(작성자, 내용, 일자, 신고버튼)
-                </div>
-                <div>
-                    리뷰9(작성자, 내용, 일자, 신고버튼)
-                </div>
 
             </div>
         </section>
     </section>
 </div>
 <script>
-    var modal = document.getElementById("backModal");
-
-    var btn = document.getElementById("openManModal");
-
-    btn.onclick=function (){
-        modal.style.display="block";
+    function openModal(id) {
+        document.getElementById(id).style.display = "block";
     }
-    window.onclick=function (event) {
-        if (event.target === modal) {
-            modal.style.display="none";
+
+    function closeModal(event, id) {
+        if (event.target === document.getElementById(id)) {
+            document.getElementById(id).style.display = "none";
         }
     }
+
+    document.getElementById("openManModal").onclick = () => openModal("manModal");
+    document.getElementById("openWomanModal").onclick = () => openModal("womanModal");
+    document.getElementById("openDisabledModal").onclick = () => openModal("disabledModal");
+    document.getElementById("openDiaperModal").onclick = () => openModal("diaperModal");
+
+    document.getElementById("openReview").onclick = () => openModal("reviewModal");
+
+    window.onclick = (event) => {
+        ["manModal", "womanModal", "disabledModal", "diaperModal", "reviewModal"].forEach(id => closeModal(event, id));
+    };
 </script>
 </body>
 </html>

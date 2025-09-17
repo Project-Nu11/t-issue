@@ -100,8 +100,8 @@ public class ToiletController {
         return "toilet/stationList";
     }
 
-    @GetMapping("/{name}")
-    public String toiletListByStation(@PathVariable String name, Model model) {
+    @GetMapping("/station")
+    public String toiletListByStation(@RequestParam("stationName") String name, Model model) {
 
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey="+serviceKey;
