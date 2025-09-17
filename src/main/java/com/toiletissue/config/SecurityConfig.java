@@ -32,12 +32,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/member/login", "/member/fail", "/member/register", "/member/register/consent",
-                                "/main", "/error", "/toilet/subway",
+                                "/member/login", "/member/fail", "/member/register","/member/register/check-id",
+                                "/member/register/consent",
+                                 "/error", "/toilet/subway",
                                 "/css/**","/js/**","/images/**","/webjars/**"
                         ).permitAll()
                         .requestMatchers("/member/list","/member/select","/member/mypage").hasAuthority("ROLE_USER")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/member/login")
@@ -49,10 +50,11 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
+                        .logoutUrl("/member/logout")
                         .logoutSuccessUrl("/main")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
+                        .permitAll()
                 )
                 .csrf(csrf -> csrf.disable()); // 개발 중이면 꺼야함
 

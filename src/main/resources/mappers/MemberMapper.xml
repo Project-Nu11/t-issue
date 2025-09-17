@@ -20,11 +20,36 @@
 
     <!-- 회원가입 -->
     <insert id="insertMember" parameterType="com.toiletissue.member.model.dto.MemberDTO">
-        INSERT INTO member
-        (member_id, member_pwd, member_name, email, member_bdate, member_gender, role, end_status, end_date)
-        VALUES
-        (#{memberId}, #{memberPwd}, #{memberName}, #{email}, #{memberBdate}, #{memberGender}, #{role}, #{endStatus}, #{endDate})
+        INSERT INTO
+        member (
+        member_id,
+        member_pwd,
+        member_name,
+        email,
+        member_bdate,
+        member_gender,
+        role,
+        end_status,
+        end_date
+        ) VALUES (
+        #{memberId},
+        #{memberPwd},
+        #{memberName},
+        #{email},
+        #{memberBdate},
+        #{memberGender},
+        #{role},
+        #{endStatus},
+        #{endDate}
+        )
     </insert>
+
+    <!-- 아이디 중복 확인 -->
+    <select id="countById" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
 
     <!-- 로그인/단일조회 -->
     <select id="findById" parameterType="string" resultMap="member">

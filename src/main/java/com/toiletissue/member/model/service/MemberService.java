@@ -23,62 +23,71 @@ public class MemberService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * 회원가입
-     */
+    /* 아이디 중복확인*/
+    public boolean existsById(String memberId) {
+        return memberMapper.countById(memberId) > 0;
+    }
+
+    /* 회원가입 */
     @Transactional
     public void register(MemberDTO member) {
+
+        if (existsById(member.getMemberId())) {
+            throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
+        }
+
+        // 비밀번호 필수/길이
+        if (member.getMemberPwd() == null || member.getMemberPwd().length() < 8) {
+            throw new IllegalArgumentException("비밀번호는 8자 이상이어야 합니다.");
+        }
+
         // 비밀번호 암호화
         member.setMemberPwd(passwordEncoder.encode(member.getMemberPwd()));
 
-        // 기본 권한: ROLE_USER
+        // 기본 권한
         if (member.getRole() == null || member.getRole().isBlank()) {
             member.setRole("ROLE_USER");
         }
 
-        // 탈퇴 여부 기본값
+        // 탈퇴 여부
         member.setEndStatus(false);
-
-        System.out.println("회원가입 처리: " + member);
 
         memberMapper.insertMember(member);
     }
 
-    /**
-     * 로그인 시 호출되는 메서드 (Spring Security)
-     */
+    /* 로그인 시 호출 (Spring Security) */
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDTO member = memberMapper.findById(username);
-
         if (member == null) {
             throw new UsernameNotFoundException("해당 회원을 찾을 수 없습니다: " + username);
         }
 
+        // DB가 'ROLE_USER' 이라서 roles()에 넣기 위해 'ROLE_' 로
+        String roleForBuilder = (member.getRole() == null) ? "USER" : member.getRole().replace("ROLE_", "");
+
         return User.builder()
                 .username(member.getMemberId())
                 .password(member.getMemberPwd())
-                // DB에 ROLE_USER 저장되어 있으므로 ROLE_ 제거 후 roles() 사용
-                .roles(member.getRole().replace("ROLE_", ""))
+                .roles(roleForBuilder)
                 .build();
     }
 
-    /**
-     * 단일 회원 조회
-     */
+    /* 단일/전체 조회 */
+    @Transactional(readOnly = true)
     public MemberDTO findById(String memberId) {
         return memberMapper.findById(memberId);
     }
 
-    /**
-     * 전체 회원 조회
-     */
+    @Transactional(readOnly = true)
     public List<MemberDTO> findAll() {
         return memberMapper.findAll();
     }
 
-    public void login(MemberDTO memberDTO) {
-    }
+    public void login(MemberDTO memberDTO) {}
 }
+
+
 
 
