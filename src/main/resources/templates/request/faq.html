@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #faq{
+            font-size: 48px;
+            font-weight: bold;
+            margin-left: 29px;
+            margin-top: 29px;
+            display: flex;
+
+        }
+        .faqLayout{
+            width: 80%;
+            height: 80%;
+            background-color: white;
+            position: relative;
+            left: 10%;
+            top: 5%;
+            overflow-y: scroll;
+            scrollbar-width: none;
+        }
+        .faq{
+            width: 100%;
+            height: 20%;
+            background-color: #d9d9d9;
+            margin-bottom: 2%;
+        }
+        .q{
+            height: 20%;
+            position: relative;
+            background-color: yellow;
+            padding-top: 5%;
+            padding-left: 5%;
+            font-size: 40px;
+            font-family: AggravoM;
+
+        }
+        .a{
+            height: 40%;
+            position: relative;
+            background-color: pink;
+            display: none;
+        }
+        .que{
+            font-size: 30px;
+        }
+
+    </style>
+</head>
+<body>
+<div th:include="/common/header"></div>
+<div id="main">
+    <div id="faq">FAQ</div>
+    <div class="faqLayout">
+            <div class="q">Q. <div class="que">자주하는 질문 1번입니다.</div></div>
+            <div class="a">답변</div>
+        <br>
+            <div class="q">Q. <div class="que">자주하는 질문 2번입니다.</div></div>
+            <div class="a">답변</div>
+        <br>
+            <div class="q">Q. <div class="que">자주하는 질문 3번입니다.</div></div>
+            <div class="a">답변</div>
+        <br>
+            <div class="q">Q. <div class="que">자주하는 질문 4번입니다.</div></div>
+            <div class="a">답변</div>
+    </div>
+    <script>
+        $q = document.querySelectorAll(".q")
+        $a = document.querySelectorAll(".a")
+        $q.forEach((btn,i)=>{
+            btn[i].addEventListener('click',function(){
+                $a[i].style.display= 'flex';
+            })
+        })
+    </script>
+</div>
+</body>
+</html>

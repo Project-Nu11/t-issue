@@ -72,6 +72,7 @@
             flex-direction: row;
             /*border: black 1px solid;*/
             align-items: center;
+            border-radius: 8px;
         }
         .title,.status {
             background: white;
@@ -85,6 +86,7 @@
             z-index: 1001;
             height: 0%;
             font-size: 22px;
+            z-index: 1100;
         }
         /*공지사항 제목(요약)*/
         .title{
@@ -116,7 +118,7 @@
         }
         /*공지사항 날짜(요약에 안보이게)*/
         .date{
-            display: none;
+
         }
         /*공백*/
         .empty{
@@ -140,6 +142,7 @@
             /*justify-content: center;*!*/
             flex-direction: column;
             align-items: center;
+            border-radius: 8px;
         }
         /*상세페이지 내용 레이아웃*/
         .layout{
@@ -312,6 +315,33 @@
             top: 18%;
             left: 77%;
         }
+        .pagination{
+            width: 15%;
+            position: fixed;
+            top: 90%;
+            left: 45%;
+            /*border: black solid 1px;*/
+            display: flex;
+            justify-content: center;
+            gap: 10%;
+        }
+        .pagination a{
+            text-decoration: none;
+            color: black;
+            font-size: 30px;
+        }
+        .pagination a.active{
+            color: #d9d9d9;
+        }
+        .date{
+            position: relative;
+            top: 20%;
+            right: 2%;
+            z-index: 1005;
+            width: 50%;
+            font-family: AggravoL;
+            font-size: 15px;
+        }
 
 
 
@@ -345,11 +375,13 @@
             <div class="date" th:text="${request.datetime}"></div><!--날짜 확인용-->
             <div class="no" th:text="${request.no}" style="display: none"></div> <!--번호 확인용...-->
             <div class="id" th:text="${request.id}" style="display: none"></div> <!--id 확인용...-->
+            <div class="answer" th:text="${request.answer}" style="display: none"></div>
+            <div class="reject" th:text="${request.reject}" style="display: none"></div>
             <div class="empty"></div>
         </div>
     </div>
 
-    <!--공지사항 상세 정보-->
+    <!--문의 상세 정보-->
     <div class="details">
         <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >문의</div>
         <div class="layout">
@@ -358,6 +390,9 @@
             <br>
             <div style="font-family: AggravoM;font-size: 20px;">내용</div>
             <div id="dcontent" style="font-family: AggravoL;font-size: 20px;"></div>
+            <br>
+            <div style="font-family: AggravoM;font-size: 20px;">답변</div>
+            <div id="danswer" style="font-family: AggravoL;font-size: 20px;background-color: #d9d9d9;width: 100%;height: 40%"></div>
             <br>
             <div id="ddatelayout">
                 <div style="font-family: AggravoM;font-size: 20px;">날짜</div>
@@ -373,7 +408,7 @@
         </div>
     </div>
 
-<!--    공지사항 추가 모달--> <!-- 주석하면 상세 페이지 안나옴...-->
+    <!-- 주석하면 상세 페이지 안나옴...-->
     <div class="insert">
         <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >공지사항 추가</div>
         <div class="layout">
@@ -420,7 +455,7 @@
             <form action="/request/manager/answer" method="post" style="height: 200%;">
                 <div class="answer">
                     <div style="font-family: AggravoM;font-size: 20px;"><label for="ucontent">답변</label></div>
-                    <div style="width: 100%;height:100%;"><textarea name="content" id="utitle"  style="font-family: AggravoL; width: 100%;height:60%;resize: none;border: black solid 1px" maxlength="300"></textarea></div>
+                    <div style="width: 100%;height:100%;"><textarea name="answer" id="utitle"  style="font-family: AggravoL; width: 100%;height:60%;resize: none;border: black solid 1px" maxlength="300"></textarea></div>
                 </div>
 <!--                <div class="contentlen"><span class="contentlength1">0</span>/300</div>-->
                 <input type="hidden" name="no" id="updateNo">
@@ -432,10 +467,25 @@
         </div>
     </div>
 </div>
-    <div>
-        <a href="">이전</a>
-        <c:forEach begin="1" end="1"></c:forEach>
-        <a href="">다음</a>
+    <div class="pagination">
+
+        <!-- 이전 버튼 -->
+        <span th:if="${startPage > 1}">
+        <a th:href="@{/request/manager(status=${value}, page=${startPage - 1})}">◀</a>
+    </span>
+
+        <!-- 페이지 번호 버튼 -->
+        <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+        <a th:href="@{/request/manager(status=${value}, page=${i})}"
+           th:text="${i}"
+           th:classappend="${i == page} ? 'active' : ''"></a>
+    </span>
+
+        <!-- 다음 버튼 -->
+        <span th:if="${endPage < totalPages}">
+        <a th:href="@{/request/manager(status=${value}, page=${endPage + 1})}">▶</a>
+    </span>
+
     </div>
 <script>
     const $detailbtn = document.querySelectorAll('.detailbtn');
@@ -447,6 +497,7 @@
     const $dno = document.getElementById('dno')
     const $contentlen = document.querySelector(".contentlength");
     const $contentinput = document.querySelector('#icontent');
+    const $danswer = document.getElementById('danswer')
 
     const $insertbtn = document.querySelector('.insertbtn');
     const $insert = document.querySelector('.insert');
@@ -576,6 +627,9 @@
             const date = $notice.querySelector('.date')?.textContent||'';
             const id = $notice.querySelector('.id')?.textContent||'';
             const no = $notice.querySelector('.no')?.textContent||'';
+            const answer = $notice.querySelector('.answer')?.textContent||'';
+            const reject = $notice.querySelector('.reject')?.textContent||'';
+
 
             // 버튼에 해당하는 공지사항 제목,내용 모달창에 띄우기 (비동기)
             $dtitle.textContent=title;
@@ -583,6 +637,15 @@
             $ddate.textContent=date;
             $dno.textContent=no;
             $did.textContent=id;
+            if(reject===""){
+                $danswer.textContent=answer;
+            }
+            if(answer===""){
+                $danswer.textContent="거절사유 : "+reject;
+            }
+            if(reject==="" && answer===""){
+                $danswer.textContent="";
+            }
 
             // 인덱스에 해당하는 내용을 가진 모달창이 열려있을 때 상세버튼을 누르면 꺼지게
             if($detail.classList.contains('viewdetails') && openedIndex === i){

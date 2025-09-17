@@ -28,7 +28,8 @@
                reject
           from request
         where req_status like #{value}
-        limit 0,10
+        order by req_no desc
+<!--          and req_no between #{start} and #{end}-->
     </select>
 
     <select id="selectRequestsByCriteria" resultMap="request">
@@ -44,21 +45,24 @@
         reject
         from request
         where req_status like #{value}
-        limit 0,10
+        order by req_no desc
+<!--        limit 0,10-->
 
     </select>
 
     <update id="requestReject">
         update request
            set req_status = '답변 거절',
-               reject = #{reject}
+               reject = #{reject},
+               answer = ''
          where req_no = #{no}
     </update>
 
     <update id="requestAnswer">
         update request
            set answer = #{answer},
-               req_status = '답변 완료'
+               req_status = '답변 완료',
+               reject = ''
          where req_no = #{no}
     </update>
 

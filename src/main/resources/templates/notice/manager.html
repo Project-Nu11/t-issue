@@ -66,6 +66,7 @@
         /*리스트 레이아웃(한 개당)*/
         .notice{
             height: 50%;
+
         }
         .title,.content {
             background: white;
@@ -126,6 +127,7 @@
             /*justify-content: center;*!*/
             flex-direction: column;
             align-items: center;
+            border-radius: 8px;
         }
         /*상세페이지 내용 레이아웃*/
         .layout{
@@ -176,6 +178,7 @@
         }
         /*공지사항 추가 모달 레이아웃(flex)*/
         .viewinsert{
+            border-radius: 8px;
             width: 30%;
             height: 60%;
             position: fixed;
@@ -291,20 +294,22 @@
 
 
 
+
     </style>
 </head>
 <body>
 <div th:include="manager/backgroundandbanner.html"></div>
 <div th:include="manager/sidebar.html"></div>
 <div id="mainmenu">
+
     <div id="pagetitle">공지사항 관리</div>
     <div class="insertbtn">추가</div>
     <!--공지사항 요약 리스트-->
     <div id="noticelist">
-        <div class="notice" th:each="notice,n : ${noticeList}">
+        <div class="notice" th:each="notice,n : ${noticeList}" style="border-radius: 8px">
             <div class="detailbtn">▶</div> <!--detailbtn은 여러개있을 수 있고 그에 따른 인덱스 있음-->
-            <div class="title" th:text="${notice.title}"></div>
-            <div class="content" th:text="${notice.content}"></div>
+            <div class="title" th:text="${notice.title}" style="border-top-left-radius: 8px;border-top-right-radius: 8px"></div>
+            <div class="content" th:text="${notice.content}" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px"></div>
             <div class="date" th:text="${notice.date}"></div>
             <div class="no" th:text="${notice.no}" style="color: rgba(0,0,0,0)"></div> <!--공지사항 삭제 번호 확인용...-->
             <div class="date"></div>

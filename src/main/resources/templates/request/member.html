@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .pagination{
+            width: 15%;
+            position: fixed;
+            top: 95%;
+            left: 42.5%;
+            /*border: black solid 1px;*/
+            display: flex;
+            justify-content: center;
+            gap: 5%;
+        }
+        .pagination a{
+            text-decoration: none;
+            color: black;
+            font-size: 15px;
+        }
+        .pagination a.active{
+            color: #d9d9d9;
+        }
+        #myrequest{
+            font-size: 48px;
+            font-weight: bold;
+            margin-left: 29px;
+            margin-top: 29px;
+        }
+        .request{
+            width: 80%;
+            height: 7%;
+            background-color: white;
+            margin-bottom: 1%;
+            position: relative;
+            left: 10%;
+            top: 2%;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+        }
+        #rstatus{
+            height: 80%;
+            aspect-ratio: 2;
+            background-color: #d9d9d9;
+            position: relative;
+            left: 2%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            font-family: AggravoM;
+        }
+        #rtitle{
+            width: 45%;
+            /*border: 1px black solid;*/
+            position: relative;
+            left: 5%;
+            font-family: AggravoM;
+        }
+        #select{
+            position: relative;
+            left: 77.5%;
+        }
+        .detail-modal-back{
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        .detail-modal{
+            width: 25%;
+            aspect-ratio: 1;
+            background-color: white;
+            position: fixed;
+            top: 27.5%;
+            left: 37.5%;
+            /*text-align: center;*/
+            border-radius: 8px;
+
+        }
+        .flex{
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+        }
+        .detail-rtitle{
+            width: 80%;
+            position: relative;
+            left: 10%;
+            top: 5%;
+            font-family: AggravoM;
+        }
+        .detail-rcontent{
+            width: 80%;
+            height: 30%;
+            background-color: #d9d9d9;
+            position: relative;
+            left: 10%;
+            top: 10%;
+            font-family: AggravoM;
+        }
+        .detail-ranswer{
+            width: 80%;
+            height: 30%;
+            background-color: #d9d9d9;
+            position: relative;
+            left: 10%;
+            top: 15%;
+            font-family: AggravoM;
+        }
+        .detail-rdate{
+            width: 80%;
+            position: relative;
+            left: 10%;
+            top: 20%;
+            font-family: AggravoL;
+        }
+        #faq{
+            width: 80px;
+            height: 30px;
+            background-color: white;
+            border: #d9d9d9 solid  5px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 15%;
+            left: 57.5%;
+        }
+        #insert{
+            width: 80px;
+            height: 30px;
+            background-color: white;
+            border: #d9d9d9 solid  5px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 15%;
+            left: 52.5%;
+        }
+        .rdate{
+            width: 30%;
+            position: relative;
+            top: 30%;
+            left: 10%;
+            font-size: 10px;
+            font-family: AggravoL;
+        }
+        .insert-modal-back{
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        .insert-modal{
+            width: 25%;
+            aspect-ratio: 1;
+            background-color: white;
+            position: fixed;
+            top: 27.5%;
+            left: 37.5%;
+            /*text-align: center;*/
+            border-radius: 8px;
+
+        }
+        .flex{
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+        }
+        .insert-rtitle{
+            width: 80%;height: 5%;
+            position: relative;
+            left: 10%;
+            top: 15%;
+            font-family: AggravoM;
+        }
+        .insert-rcontent{
+            width: 80%;
+            height: 30%;
+            position: relative;
+            left: 10%;
+            top: 20%;
+            font-family: AggravoM;
+            resize: none;
+        }
+        .btn{
+            width: 5%;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border: #d9d9d9 solid 5px;
+            border-radius: 8px;
+        }
+        #regist{
+            position: fixed;
+            top: 75%;
+            left: 45%;
+        }
+        #cancel{
+            position: fixed;
+            top: 75%;
+            left: 50%;
+        }
+    </style>
+</head>
+<body>
+<div th:include="/common/header"></div>
+<div id="main">
+    <!--faq이동버튼-->
+    <div id="faq" onclick="location.href='/request/faq'">FAQ</div>
+    <!--문의하기-->
+    <div id="insert">문의 추가</div>
+    <div id="myrequest">내 문의 내역</div>
+    <form action="/request/member" method="get">
+        <select name="status" onchange="this.form.submit()" id="select">
+            <option value="%%" th:selected="${value == '%%'}">최신순</option>
+            <option value="대기중" th:selected="${value == '대기중'}">대기중</option>
+            <option value="답변 완료" th:selected="${value == '답변 완료'}">답변 완료</option>
+            <option value="답변 거절" th:selected="${value == '답변 거절'}">답변 거절</option>
+        </select>
+    </form>
+    <div class="request" th:each="requests : ${requestList}">
+        <div id="rstatus" th:text="${requests.status}"></div>
+        <div id="rtitle" th:text="${requests.title}">d</div>
+        <div class="rcontent" th:text="${requests.content}" hidden></div><!--문의 내용-->
+        <div class="rdate" th:text="${requests.datetime}"></div><!--문의 날짜-->
+        <div class="rno" th:text="${requests.no}" hidden></div><!--문의 번호-->
+        <div class="ranswer" th:text="${requests.answer}" hidden></div><!--답변-->
+        <div class="rreject" th:text="${requests.reject}" hidden></div><!--거절사류-->
+    </div>
+
+    <div class="pagination">
+        <!-- 이전 버튼 -->
+        <span th:if="${startPage > 1}">
+        <a th:href="@{/request/member(status=${value}, page=${startPage - 1})}">◀</a>
+    </span>
+        <!-- 페이지 번호 버튼 -->
+        <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+        <a th:href="@{/request/member(status=${value}, page=${i})}"
+           th:text="${i}"
+           th:classappend="${i == page} ? 'active' : ''"></a>
+    </span>
+        <!-- 다음 버튼 -->
+        <span th:if="${endPage < totalPages}">
+        <a th:href="@{/request/member(status=${value}, page=${endPage + 1})}">▶</a>
+    </span>
+    </div>
+
+
+    <!--문의 상세 모달-->
+    <div class="detail-modal-back">
+        <div class="detail-modal">
+            <div style="position: relative;top: 5%;font-size: 30px;text-align: center">문의내역</div>
+            <div class="detail-rtitle"></div>
+            <div class="detail-rcontent"></div>
+            <div class="detail-ranswer"></div>
+            <div class="detail-rdate"></div>
+
+        </div>
+    </div>
+    <!--문의 쓰기 모달-->
+    <div class="insert-modal-back">
+        <div class="insert-modal">
+            <div style="text-align: center;position: relative;top: 5%;font-size: 30px;">문의 추가</div>
+            <form action="/request/member/insert" method="post" style="height: 100%;aspect-ratio: 1">
+                <div style="position: relative;top: 15%;left: 10%">제목</div>
+                <input class="insert-rtitle" type="text" name="title" placeholder="제목을 입력해주세요">
+                <div style="position: relative;top: 20%;left: 10%">내용</div>
+                <textarea class="insert-rcontent" name="constent" id="" cols="300" rows="100" placeholder="내용을 입력해주세요"></textarea>
+                <button type="submit" id="regist" class="btn">작성</button>
+            </form>
+            <button id="cancel" class="btn">취소</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    const $request = document.querySelectorAll(".request")
+    const $modal = document.querySelector(".detail-modal-back")
+    const $dtitle = document.querySelector(".detail-rtitle")
+    const $dcontent = document.querySelector(".detail-rcontent")
+    const $ddate = document.querySelector(".detail-rdate")
+    const $danswer = document.querySelector(".detail-ranswer")
+
+    const $insertbtn = document.querySelector("#insert")
+    const $insert = document.querySelector('.insert-modal-back')
+
+    const $cancel = document.querySelector("#cancel")
+
+    $insertbtn.addEventListener('click',function(e){
+        e.stopPropagation()
+        $insert.style.display = "flex"
+    })
+
+    $cancel.addEventListener('click',function(){
+        $insert.style.display = 'none'
+    })
+
+
+    $request.forEach((btn)=>{
+        btn.addEventListener('click',function (e){
+            e.stopPropagation()
+            $modal.style.display='flex'
+
+
+            const $detailReq = btn.closest(".request")
+            const title = $detailReq.querySelector("#rtitle").textContent
+            const content = $detailReq.querySelector(".rcontent").textContent
+            const date = $detailReq.querySelector(".rdate").textContent
+            const no = $detailReq.querySelector(".rno").textContent
+            const answer = $detailReq.querySelector(".ranswer").textContent||''
+            const reject = $detailReq.querySelector(".rreject").textContent||''
+            console.log(title)
+            console.log(content)
+            console.log(date)
+            console.log(no)
+            console.log(answer)
+            console.log(reject)
+            $dtitle.textContent=title
+            $dcontent.textContent=content
+            $ddate.textContent=date
+            if(answer===""){
+                $danswer.textContent="거절 사유 : "+reject
+            }
+            if(reject===""){
+                $danswer.textContent = answer
+            }
+            if(reject==="" && answer===""){
+                $danswer.textContent = "";
+            }
+
+        })
+    })
+    window.addEventListener('click',function(){
+        $modal.style.display='none';
+    })
+
+
+
+</script>
+
+</body>
+</html>
