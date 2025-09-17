@@ -98,89 +98,142 @@
     <div class="content">
         <p class="title">회원가입</p>
 
-        <form th:action="@{/member/register}" method="post" th:object="${member}">
+        <form id="registerForm" th:action="@{/member/register}" method="post" th:object="${member}">
+            <!-- 아이디 -->
             <div class="field">
                 <label for="memberId">아이디</label>
                 <div class="input-row">
-                    <input class="input" type="text" th:field="*{memberId}" id="memberId" />
+                    <input class="input" type="text" th:field="*{memberId}" id="memberId"
+                           required minlength="4" maxlength="20" autocomplete="off"/>
+                            <!-- required minlength="4" : 4글자 이상 -->
                     <button class="check-btn" type="button" id="checkIdBtn">중복확인</button>
                 </div>
                 <span id="idMsg" class="hint"></span>
             </div>
 
+            <!-- 비밀번호 -->
             <div class="field">
                 <label for="memberPwd">비밀번호</label>
-                <input class="input" type="password" th:field="*{memberPwd}" id="memberPwd" />
-                <p class="hint">* 영문, 숫자 포함 8자 이상</p>
+                <input class="input" type="password" th:field="*{memberPwd}" id="memberPwd"
+                       required minlength="8" maxlength="30" autocomplete="new-password"/>
+                <p class="hint">* 영문/숫자 포함 8자 이상</p>
             </div>
 
+            <!-- 비밀번호 확인 -->
             <div class="field">
                 <label for="pwdConfirm">비밀번호 확인</label>
-                <input class="input" type="password" id="pwdConfirm" />
+                <input class="input" type="password" id="pwdConfirm" name="confirmPwd"
+                       required minlength="8" maxlength="30" autocomplete="new-password"/>
+                <!-- 비밀번호 일치/불일치 메시지 표시 -->
+                <span id="pwdMsg" class="hint"></span>
             </div>
 
+            <!-- 이메일 -->
             <div class="field">
                 <label for="email">이메일</label>
-                <input class="input" type="email" th:field="*{email}" id="email" />
+                <input class="input" type="email" th:field="*{email}" id="email" required/>
             </div>
 
+            <!-- 이름 -->
             <div class="field">
                 <label for="memberName">이름</label>
-                <input class="input" type="text" th:field="*{memberName}" id="memberName" />
+                <input class="input" type="text" th:field="*{memberName}" id="memberName" required/>
             </div>
 
+            <!-- 생년월일 -->
             <div class="field">
                 <label for="memberBdate">생년월일</label>
-                <input class="input" type="date" th:field="*{memberBdate}" id="memberBdate" />
+                <input class="input" type="date" th:field="*{memberBdate}" id="memberBdate" required/>
             </div>
 
+            <!-- 성별 -->
             <div class="field">
                 <label for="memberGender">성별</label>
-                <select class="input" th:field="*{memberGender}" id="memberGender">
+                <select class="input" th:field="*{memberGender}" id="memberGender" required>
                     <option value="M">남자</option>
                     <option value="F">여자</option>
                 </select>
             </div>
 
             <div class="actions">
-                <button id="nextBtn" type="submit">다음</button>
+                <button id="nextBtn" type="submit" disabled>다음</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    // 아이디 중복확인 (GET /member/register/check-id?memberId=xxx 로 가정)
-    document.getElementById('checkIdBtn').addEventListener('click', async () => {
-        const memberId = document.getElementById('memberId').value.trim();
-        const msg = document.getElementById('idMsg');
+    const $form = document.getElementById('registerForm');
+    const $submit = document.getElementById('nextBtn');
 
-        if (!memberId) { msg.textContent = '아이디를 입력하세요.'; msg.style.color='#a30000'; return; }
+    const $id = document.getElementById('memberId');
+    const $checkBtn = document.getElementById('checkIdBtn');
+    const $idMsg = document.getElementById('idMsg');
 
+    const $pwd = document.getElementById('memberPwd');
+    const $pwd2 = document.getElementById('pwdConfirm');
+    const $pwdMsg = document.getElementById('pwdMsg');
+
+    let idAvailable = false;
+
+    // 아이디 중복확인
+    $checkBtn.addEventListener('click', async () => {
+        const memberId = $id.value.trim();
+        if (memberId.length < 4) {
+            setIdMsg('아이디는 4자 이상 입력하세요.', false);
+            idAvailable = false;
+            updateSubmit();
+            return;
+        }
         try {
             const res = await fetch(`/member/register/check-id?memberId=${encodeURIComponent(memberId)}`);
-            const data = await res.json(); // {available:true/false}
-
-            msg.textContent = data.available ? '사용 가능한 아이디입니다.' : '이미 사용 중인 아이디입니다.';
-            msg.style.color = data.available ? '#2a7a2a' : '#a30000';
+            const data = await res.json();
+            idAvailable = !!data.available;
+            setIdMsg(idAvailable ? '사용 가능한 아이디입니다.' : '이미 사용 중인 아이디입니다.', idAvailable);
         } catch {
-            msg.textContent = '중복확인 API가 아직 연결되지 않았습니다.'; msg.style.color='#a30000';
+            setIdMsg('중복확인 API 오류', false);
+            idAvailable = false;
+        } finally {
+            updateSubmit();
         }
     });
 
-    // 비밀번호 일치 확인
-    document.getElementById('registerForm').addEventListener('submit', (e) => {
-        const p1 = document.getElementById('memberPwd').value;
-        const p2 = document.getElementById('pwdConfirm').value;
-        const hint = document.getElementById('pwdMsg');
+    $id.addEventListener('input', () => {
+        idAvailable = false;
+        $idMsg.textContent = '중복확인을 해주세요.';
+        $idMsg.style.color = '#a30000';
+        updateSubmit();
+    });
 
-        if (p1 !== p2) {
+    // 비밀번호 일치 실시간 체크
+    function pwdOK() {
+        const ok = $pwd.value.length >= 8 && $pwd.value === $pwd2.value;
+        if ($pwd.value === '' && $pwd2.value === '') {
+            $pwdMsg.textContent = '';
+        } else {
+            $pwdMsg.textContent = ok ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.';
+            $pwdMsg.style.color = ok ? '#000000' : '#a30000';
+        }
+        return ok;
+    }
+    $pwd.addEventListener('input', () => { pwdOK(); updateSubmit(); });
+    $pwd2.addEventListener('input', () => { pwdOK(); updateSubmit(); });
+
+    // 바로 다음으로 넘어가지 못하게
+    $form.addEventListener('submit', (e) => {
+        if (!idAvailable || !pwdOK()) {
             e.preventDefault();
-            hint.textContent = '비밀번호가 일치하지 않습니다.';
-            hint.style.color = '#a30000';
-            document.getElementById('pwdConfirm').focus();
+            if (!idAvailable) setIdMsg('아이디 중복확인을 완료하세요.', false);
         }
     });
+
+    function setIdMsg(text, ok) {
+        $idMsg.textContent = text;
+        $idMsg.style.color = ok ? '#000000' : '#a30000';
+    }
+    function updateSubmit() {
+        $submit.disabled = !(idAvailable && pwdOK());
+    }
 </script>
 </body>
 </html>

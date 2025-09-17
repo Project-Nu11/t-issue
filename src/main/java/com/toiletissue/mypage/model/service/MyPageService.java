@@ -1,4 +1,4 @@
 package com.toiletissue.mypage.model.service;
 
-public class MyPageController {
+public class MyPageService {
 }

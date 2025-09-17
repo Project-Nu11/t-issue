@@ -10,11 +10,15 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
-    void insertMember(MemberDTO member);   // 회원가입
+    // 회원가입
+    void insertMember(MemberDTO member);
 
-    MemberDTO findById(@Param("memberId")String memberId);   // 로그인/단일조회
+    // 아이디 중복 확인
+    int countById(@Param("memberId") String memberId);
 
-    List<MemberDTO> findAll();             // 전체조회
+    // 단일/전체 조회
+    MemberDTO findById(@Param("memberId") String memberId);
+    List<MemberDTO> findAll();
 
 //    MemberDTO select(int id);
 }
