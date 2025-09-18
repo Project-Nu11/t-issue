@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 아이디, 비밀번로 찾기 </title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        #main {
+            max-width: 520px;
+            margin: 32px auto;
+            padding: 24px;
+        }
+        .title {
+            font-size: 22px;
+            margin: 0 0 20px;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid rgba(0,0,0,.25);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
+        .tab-btn.active {
+            background: #f5f5f7;
+        }
+        form {
+            display: grid;
+            gap: 12px;
+            border: 1px solid rgba(0,0,0,.25);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        label {
+            font-size: 14px;
+        }
+        .input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid rgba(0,0,0,.25);
+            border-radius: 8px;
+        }
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .btn {
+            padding: 10px 14px;
+            border: 1px solid rgba(0,0,0,.25);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+        }
+        .submit {
+            padding: 12px 16px;
+            width: 100%;
+            border: 1px solid rgba(0,0,0,.25);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+        }
+        .hint {
+            font-size: 12px;
+            color: #666;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div th:include="/common/header.html"></div>
+
+<div id="main">
+    <p class="title">아이디 / 비밀번호 찾기</p>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="id">아이디 찾기</button>
+        <button type="button" class="tab-btn" data-tab="pwd">비밀번호 찾기</button>
+    </div>
+    <!-- 아이디 찾기 -->
+    <form id="form-id">
+        <div>
+            <label for="memberName">이름</label>
+            <input class="input" type="text" id="memberName" name="memberName" required autocomplete="off">
+        </div>
+        <div>
+            <label for="email">이메일</label>
+            <input class="input" type="email" id="email" name="email" required autocomplete="off">
+        </div>
+        <button class="submit" type="submit">아이디 찾기</button>
+    </form>
+
+    <!-- 비밀번호 찾기 -->
+    <form id="form-pwd" class="hidden">
+        <div>
+            <label for="memberId">아이디</label>
+            <input class="input" type="text" id="memberId" name="memberId"
+                   pattern="^[A-Za-z]{4,20}$"
+                   title="아이디는 영문 4~20자만 입력 가능합니다."
+                   required autocomplete="off"
+                   oninput="this.value=this.value.replace(/[^A-Za-z]/g,'');">
+            <div class="hint">아이디는 영문만 허용됩니다.</div>
+        </div>
+        <div>
+            <label for="memberName2">이름</label>
+            <input class="input" type="text" id="memberName2" name="memberName" required autocomplete="off">
+        </div>
+        <div>
+            <label for="email2">이메일</label>
+            <input class="input" type="email" id="email2" name="email" required autocomplete="off">
+        </div>
+        <button class="submit" type="submit">임시 비밀번호 발급</button>
+    </form>
+</div>
+
+<!-- 모달 -->
+<div id="modal-overlay" class="modal-overlay">
+    <div class="modal">
+        <h3 id="modal-title">결과</h3>
+        <p id="modal-msg"></p>
+        <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end;">
+            <button type="button" onclick="closeModal()">닫기</button>
+            <button type="button" onclick="location.href='/member/login'">로그인 페이지로 이동</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 탭 전환
+    (function () {
+        var tabBtns = document.querySelectorAll('.tab-btn');
+        var formId = document.getElementById('form-id');
+        var formPwd = document.getElementById('form-pwd');
+
+        function setTab(tab) {
+            tabBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.tab === tab); });
+            if (tab === 'pwd') {
+                formId.classList.add('hidden');
+                formPwd.classList.remove('hidden');
+            } else { formPwd.classList.add('hidden');
+                formId.classList.remove('hidden');
+            } if (location.hash !== '#' + tab) {
+                history.replaceState(null, '', '#' + tab);
+            }
+        }
+
+        tabBtns.forEach(function (b) { b.addEventListener('click', function () { setTab(this.dataset.tab); }); });
+
+        var hash = (location.hash || '').replace('#', '');
+        setTab(hash === 'pwd' ? 'pwd' : 'id');
+    })();
+
+    // 모달
+    function showModal(title, msg) {
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-msg').textContent = msg;
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    // 아이디 찾기 AJAX
+    document.getElementById('form-id').addEventListener('submit', function(e){
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch('/member/find/id', { method:'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success){
+                    showModal('아이디 찾기 결과', '아이디는 ' + data.foundId + ' 입니다.');
+                } else {
+                    showModal('아이디 찾기 결과', '일치하는 정보가 없습니다.');
+                }
+            });
+    });
+
+    // 비밀번호 찾기 AJAX
+    document.getElementById('form-pwd').addEventListener('submit', function(e){
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch('/member/find/pwd', { method:'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success){
+                    showModal('비밀번호 재설정', '임시 비밀번호: ' + data.tempPwd + '\n로그인 후 반드시 변경하세요.');
+                } else {
+                    showModal('비밀번호 재설정', '입력하신 정보가 일치하지 않습니다.');
+                }
+            });
+    });
+</script>
+</body>
+</html>

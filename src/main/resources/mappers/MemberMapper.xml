@@ -46,7 +46,8 @@
 
     <!-- 아이디 중복 확인 -->
     <select id="countById" parameterType="string" resultType="int">
-        SELECT COUNT(*)
+        SELECT
+        COUNT(*)
         FROM member
         WHERE member_id = #{memberId}
     </select>
@@ -81,5 +82,32 @@
         end_date
         FROM member
     </select>
+
+    <!-- 이름 + 이메일로 아이디 찾기 -->
+    <select id="findMemberIdByNameAndEmail" resultType="string">
+        SELECT
+        member_id
+        FROM member
+        WHERE member_name = #{memberName}
+        AND email = #{email}
+        LIMIT 1
+    </select>
+
+    <!-- 아이디 + 이름 + 이메일 존재 여부 확인 -->
+    <select id="existsByIdNameEmail" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM member
+        WHERE member_id = #{memberId}
+        AND member_name = #{memberName}
+        AND email = #{email}
+    </select>
+
+    <!-- 비밀번호 업데이트 (임시 비번 반영) -->
+    <update id="updatePasswordByMemberId">
+        UPDATE member
+        SET member_pwd = #{encodedPwd}
+        WHERE member_id = #{memberId}
+    </update>
 
 </mapper>

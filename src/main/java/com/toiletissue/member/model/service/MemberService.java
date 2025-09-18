@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 @Service
@@ -57,7 +58,7 @@ public class MemberService implements UserDetailsService {
 
     /* 로그인 시 호출 (Spring Security) */
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDTO member = memberMapper.findById(username);
         if (member == null) {
@@ -75,17 +76,55 @@ public class MemberService implements UserDetailsService {
     }
 
     /* 단일/전체 조회 */
-    @Transactional(readOnly = true)
+    @Transactional
     public MemberDTO findById(String memberId) {
         return memberMapper.findById(memberId);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<MemberDTO> findAll() {
         return memberMapper.findAll();
     }
 
+    /* 아이디 찾기 */
+    @Transactional
+    public String findMemberIdByNameAndEmail(String name, String email) {
+        return memberMapper.findMemberIdByNameAndEmail(name, email);
+    }
+
+    /* 비밀번호 초기화 (임시 발급) */
+    @Transactional
+    public String resetPasswordWithTemp(String memberId, String name, String email) {
+        Integer exists = memberMapper.existsByIdNameEmail(memberId, name, email);
+        if (exists == null || exists == 0) return null;
+
+        String temp = generateTempPassword(10);
+        String encoded = passwordEncoder.encode(temp);
+        int updated = memberMapper.updatePasswordByMemberId(memberId, encoded);
+        if (updated == 0) return null;
+
+        return temp;
+    }
+
+    /* 임시 비밀번호 */
+    private String generateTempPassword(int length) {
+        String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        String digits = "0123456789";
+        String all = letters + digits;
+        SecureRandom r = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(letters.charAt(r.nextInt(letters.length())));
+        sb.append(digits.charAt(r.nextInt(digits.length())));
+        for (int i = 2; i < length; i++) {
+            sb.append(all.charAt(r.nextInt(all.length())));
+        }
+        return sb.toString();
+    }
+
     public void login(MemberDTO memberDTO) {}
+
+
 }
 
 

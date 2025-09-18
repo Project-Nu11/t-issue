@@ -33,12 +33,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/member/login", "/member/fail", "/member/register","/member/register/check-id",
-                                "/member/register/consent",
+                                "/member/register/consent","/member/find/**",
                                  "/error", "/toilet/subway",
                                 "/css/**","/js/**","/images/**","/webjars/**"
                         ).permitAll()
                         .requestMatchers("/member/list","/member/select","/member/mypage").hasAuthority("ROLE_USER")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/member/login")
