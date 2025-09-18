@@ -2,6 +2,7 @@ package com.toiletissue.member.controller;
 
 import com.toiletissue.member.model.dto.MemberDTO;
 import com.toiletissue.member.model.service.MemberService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -92,6 +93,34 @@ public class MemberController {
         return "redirect:/member/register"; // 2단계: 회원정보 입력 폼으로 이동
     }
 
+    // 아아디, 비밀번호 찾기
+    @GetMapping("/find")
+    public String findPage() {
+        return "member/find";
+    }
+
+    @PostMapping("/id")
+    @ResponseBody
+    public ResponseEntity<?> findId(@RequestParam String memberName,
+                                    @RequestParam String email) {
+        String foundId = memberService.findMemberIdByNameAndEmail(memberName, email);
+        Map<String,Object> result = new HashMap<>();
+        result.put("success", foundId != null);
+        result.put("foundId", foundId);
+        return ResponseEntity.ok(result);
+    }
+    @PostMapping("/pwd")
+    @ResponseBody
+    public ResponseEntity<?> resetPwd(@RequestParam String memberId,
+                                      @RequestParam String memberName,
+                                      @RequestParam String email) {
+        String tempPwd = memberService.resetPasswordWithTemp(memberId, memberName, email);
+        Map<String,Object> result = new HashMap<>();
+        result.put("success", tempPwd != null);
+        result.put("tempPwd", tempPwd);
+        return ResponseEntity.ok(result);
+    }
+
     // MemberController 안에 추가
 //    @GetMapping("/mypage")
 //    public String mypage(org.springframework.security.core.Authentication authentication,
@@ -107,9 +136,7 @@ public class MemberController {
 //    }
 
     @GetMapping("/select")
-    public void select() {
-
-    }
+    public void select() {}
 
 
     @GetMapping("/manager")
