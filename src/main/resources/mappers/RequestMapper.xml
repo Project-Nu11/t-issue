@@ -66,5 +66,10 @@
          where req_no = #{no}
     </update>
 
-
+    <insert id="requestInsert">
+        insert into request
+        (req_title,req_content,member_id,req_type,req_date)
+        value
+        (#{title},#{content},'hong123','유형1',now())
+    </insert>
 </mapper>

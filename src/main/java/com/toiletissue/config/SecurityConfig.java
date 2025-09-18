@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 "/css/**","/js/**","/images/**","/webjars/**"
                         ).permitAll()
                         .requestMatchers("/member/list","/member/select","/member/mypage").hasAuthority("ROLE_USER")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/member/login")

@@ -119,20 +119,20 @@
         </button>
 
         <!--선택리뷰-->
-        <button class="menubtn revbtnview revbtns" id="dec">
+        <button onclick="location.href='/review/declared'" class="menubtn revbtnview revbtns" id="dec">
             <div><img src="/icon/free-icon-review-4047898.png" height="75" width="75"/></div>
             <div>신고 리뷰 관리</div>
         </button>
         <!--신고리뷰-->
-        <button class="menubtn revbtnview revbtns" id="search">
+        <button onclick="location.href='/review/search'"  class="menubtn revbtnview revbtns" id="search">
             <div><img src="/icon/free-icon-review-4047898.png" height="75" width="75"/></div>
             <div>선택 리뷰 관리</div>
         </button>
 
 
 
-        <button class="menubtn smallbtn decrev" style="display: none">신고 리뷰</button>
-        <button class="menubtn smallbtn searchrev" style="display: none">선택 리뷰</button>
+        <button onclick="location.href='/review/declared'" class="menubtn smallbtn decrev" style="display: none">신고 리뷰</button>
+        <button onclick="location.href='/review/search'" class="menubtn smallbtn searchrev" style="display: none">선택 리뷰</button>
 
 
 
@@ -160,13 +160,16 @@
         //     window.location.href="http://www.localhost:8001/request/manager";
         // })
 
-        const $revbtns =  document.querySelector("#revbtn")
-        $revbtns.addEventListener('click',function (){
-            $revbtns.classList.add('revbtnnone');
+        const $revbtn = document.querySelector("#revbtn")
+        $revbtn.addEventListener('click',function(e){
+            e.stopPropagation()
+            $revbtn.style.display='none';
         })
-        $revbtns.addEventListener('mouseout',function (){
-            $revbtns.classList.remove('revbtnnone');
+        window.addEventListener("click",function (){
+            $revbtn.style.display='flex';
+
         })
+
 
         const $menubtns = document.querySelectorAll(".menubtn");
         $menubtns.forEach((a)=>{

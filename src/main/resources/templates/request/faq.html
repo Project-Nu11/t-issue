@@ -14,13 +14,14 @@
         }
         .faqLayout{
             width: 80%;
-            height: 80%;
-            background-color: white;
+            height: 75%;
+            /*background-color: white;*/
             position: relative;
             left: 10%;
             top: 5%;
             overflow-y: scroll;
             scrollbar-width: none;
+            border-radius: 8px;
         }
         .faq{
             width: 100%;
@@ -31,21 +32,66 @@
         .q{
             height: 20%;
             position: relative;
-            background-color: yellow;
+            background-color: white;
             padding-top: 5%;
             padding-left: 5%;
             font-size: 40px;
             font-family: AggravoM;
-
+            border-radius: 8px;
+            z-index: 1000;
         }
         .a{
             height: 40%;
             position: relative;
-            background-color: pink;
+            background-color: #d9d9d9;
             display: none;
+            bottom: 1%;
+            z-index: 999;
+            border-radius: 8px;
+            font-family: AggravoM;
+            padding-top: 5%;
+            padding-left: 5%;
+            font-size: 40px;
         }
         .que{
             font-size: 30px;
+        }
+        .ans{
+            font-size: 30px;
+            position: relative;
+            top: 20%;
+            left: -10%;
+            width: 100%;
+            height: 70%;
+            /*border: black solid 1px;*/
+            word-break: break-all;
+        }
+
+        #myrequest{
+            width: 80px;
+            height: 30px;
+            background-color: white;
+            border: #d9d9d9 solid  5px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 15%;
+            left: 57.5%;
+        }
+        #insert{
+            width: 80px;
+            height: 30px;
+            background-color: white;
+            border: #d9d9d9 solid  5px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 15%;
+            left: 52.5%;
         }
 
     </style>
@@ -53,29 +99,52 @@
 <body>
 <div th:include="/common/header"></div>
 <div id="main">
+    <!--faq이동버튼-->
+    <div id="myrequest" onclick="location.href='/request/member'">내 문의</div>
+    <!--문의하기-->
+<!--    <div id="insert">문의 추가</div>-->
     <div id="faq">FAQ</div>
     <div class="faqLayout">
-            <div class="q">Q. <div class="que">자주하는 질문 1번입니다.</div></div>
-            <div class="a">답변</div>
+            <div class="q" id="q1">Q. <div class="que">자주하는 질문 1번입니다.</div></div>
+            <div class="a" id="a1">A. <div class="ans">답변 1번입니다.</div></div>
         <br>
-            <div class="q">Q. <div class="que">자주하는 질문 2번입니다.</div></div>
-            <div class="a">답변</div>
+            <div class="q" id="q2">Q. <div class="que">자주하는 질문 2번입니다.</div></div>
+            <div class="a" id="a2">A. <div class="ans">asdfasvasdfeadbaesfasdfasdvaedfasdfefads</div></div>
         <br>
-            <div class="q">Q. <div class="que">자주하는 질문 3번입니다.</div></div>
-            <div class="a">답변</div>
+            <div class="q" id="q3">Q. <div class="que">자주하는 질문 3번입니다.</div></div>
+            <div class="a" id="a3">A. <div class="ans">답변 3번입니다.</div></div>
         <br>
-            <div class="q">Q. <div class="que">자주하는 질문 4번입니다.</div></div>
-            <div class="a">답변</div>
+            <div class="q" id="q4">Q. <div class="que">자주하는 질문 4번입니다.</div></div>
+            <div class="a" id="a4">A. <div class="ans">답변 4 번입니다.</div></div>
+        <div style="height: 40%;background-color: rgba(0,0,0,0%)" ></div>
     </div>
     <script>
         $q = document.querySelectorAll(".q")
         $a = document.querySelectorAll(".a")
         $q.forEach((btn,i)=>{
-            btn[i].addEventListener('click',function(){
-                $a[i].style.display= 'flex';
+            btn.addEventListener('click',function(){
+                const isVisible = $a[i].style.display === 'flex';
+                $a.forEach(a => a.style.display = 'none');
+                if (!isVisible) {
+                    $a[i].style.display = 'flex';
+                }
+                btn.scrollIntoView({
+                    behavior:'smooth'
+                })
             })
         })
+
+        const $q1 = document.querySelector("#q1")
+        const $q2 = document.querySelector("#q2")
+        const $q3 = document.querySelector("#q3")
+        const $q4 = document.querySelector("#q4")
+        const $a1 = document.querySelector("#a1")
+        const $a2 = document.querySelector("#a2")
+        const $a3 = document.querySelector("#a3")
+        const $a4 = document.querySelector("#a4")
+
     </script>
+
 </div>
 </body>
 </html>
