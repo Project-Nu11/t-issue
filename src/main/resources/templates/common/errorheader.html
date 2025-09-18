@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        @font-face {
+            font-family: 'Aggravo';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+            font-weight: 700;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'AggravoL';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroL.woff') format('woff');
+            font-weight: 300;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'AggravoM';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroM.woff') format('woff');
+            font-weight: 500;
+            font-display: swap;
+        }
+        html, body {
+            margin: 0;
+            height: calc(100%);
+            background-color: black;
+            font-family: Aggravo;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 576px;
+            height: 100px;
+            background-color: white;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #logo {
+            margin: 29px 0 23px 29px;
+            font-size: 48px;
+            font-weight: bold;
+            /*filter: drop-shadow(4px 5px 6.5px rgba(0,0,0,0.25));*/
+
+
+        }
+        #main {
+            width: 576px;
+            height: calc(100% - 100px);
+            background-image: linear-gradient(#ffffff 0%, #C396D5 58%, #996CAC 100%);
+            margin: 0 auto;
+            padding: 0;
+            /*display: flex;*/
+            /*justify-content: center;*/
+            /*align-items: center;*/
+            overflow-y: scroll;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div id="logo">T-issue</div>
+</header>
+
+<script>
+    const $tomain = document.querySelector("#logo");
+    $tomain.addEventListener('click',function (){
+        window.location.href = "http://www.localhost:8001/main"
+    })
+</script>
+</body>
+</html>
