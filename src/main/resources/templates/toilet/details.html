@@ -111,16 +111,13 @@
             border: none;
             background: none;
         }
-        #reviewModal {
+        #reviewModal #reviewDetail {
             background-color: #fefefe;
             margin: 15% auto;
             padding : 15px;
             border: 1px solid #888;
             width: 400px;
             height: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
             border-radius: 8px;
         }
@@ -213,17 +210,21 @@
         <section id="review">
             <div id="reviewNav">
                 <div style="font-size: 24px">리뷰</div>
-                    <button id = openReview>
+                    <button id = openReview type="button">
                         <img src="/icon/pen.png" alt="작성" width="25" height="25">
                     </button>
                     <!--작성 버튼 클릭 시 별점 및 리뷰 작성할 수 있는 모달창-->
                     <div id="reviewModal" class="modal">
-                        <p class="star">별점</p>
-                            <div>별다섯개</div>
-                        <p>리뷰 내용</p>
-                            <div class="reviewContent">
-                                <p>쾌적해서 좋아용</p>
-                            </div>
+                        <div id="reviewDetail">
+                            <form action="/request/member/insert" method="post">
+                                <div>별점</div>
+                                <br>
+                                <div>내용</div>
+                                <textarea placeholder="내용을 입력해주세요"></textarea>
+                            </form>
+                            <button type="submit" id="regist" class="btn">작성</button>
+                            <button id="cancel" class="btn">취소</button>
+                        </div>
                     </div>
             </div>
             <div id="reviewContext">
