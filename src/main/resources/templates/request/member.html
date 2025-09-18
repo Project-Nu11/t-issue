@@ -216,12 +216,12 @@
         #regist{
             position: fixed;
             top: 75%;
-            left: 45%;
+            left: 44%;
         }
         #cancel{
             position: fixed;
             top: 75%;
-            left: 50%;
+            left: 51%;
         }
     </style>
 </head>
@@ -288,7 +288,7 @@
                 <div style="position: relative;top: 15%;left: 10%">제목</div>
                 <input class="insert-rtitle" type="text" name="title" placeholder="제목을 입력해주세요">
                 <div style="position: relative;top: 20%;left: 10%">내용</div>
-                <textarea class="insert-rcontent" name="constent" id="" cols="300" rows="100" placeholder="내용을 입력해주세요"></textarea>
+                <textarea class="insert-rcontent" name="content" id="" cols="300" rows="100" placeholder="내용을 입력해주세요"></textarea>
                 <button type="submit" id="regist" class="btn">작성</button>
             </form>
             <button id="cancel" class="btn">취소</button>
@@ -358,6 +358,12 @@
     window.addEventListener('click',function(){
         $modal.style.display='none';
     })
+
+    const $requests = document.querySelectorAll(".request");
+    const $pagination = document.querySelector('.pagination')
+    if($requests.length==0){
+        $pagination.style.display='none'
+    }
 
 
 

@@ -91,7 +91,7 @@
         /*공지사항 제목(요약)*/
         .title{
             height: 50%;
-            width: 65%;
+            width: 50%;
             font-size: 22px;
             position: relative;
             left: 5%;
@@ -99,6 +99,7 @@
             overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;
+            /*border: black   1px solid;*/
 
         }
         /*공지사항 상태(요약)*/
@@ -336,7 +337,7 @@
         .date{
             position: relative;
             top: 20%;
-            right: 2%;
+            right: -5%;
             z-index: 1005;
             width: 50%;
             font-family: AggravoL;
@@ -467,7 +468,7 @@
         </div>
     </div>
 </div>
-    <div class="pagination">
+    <div class="pagination" style="display: flex">
 
         <!-- 이전 버튼 -->
         <span th:if="${startPage > 1}">
@@ -662,6 +663,13 @@
             }
         })
     })
+
+    const $requests = document.querySelectorAll(".notice");
+    const $pagination = document.querySelector('.pagination')
+    if($requests.length==0){
+        $pagination.style.display='none'
+    }
+    console.log($requests.length)
 
 
 

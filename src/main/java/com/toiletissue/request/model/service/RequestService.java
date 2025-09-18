@@ -35,4 +35,8 @@ public class RequestService {
     public int getTotalRequest(String value) {
         return requestMapper.getTotalRequest(value);
     }
+
+    public void requestInsert(RequestDTO requestDTO) {
+        requestMapper.requestInsert(requestDTO);
+    }
 }

@@ -41,9 +41,15 @@ public class RequestController {
             page = totalPages;
         }
 
+
+
         int start = (page-1)*pageSize; //페이지 시작 문의 번호
         int end = Math.min(start+pageSize,totalRequests); // 페이지 끝 문의 번호
-        List<RequestDTO> pagedRequests = requestList.subList(start,end);
+
+        List<RequestDTO> pagedRequests = new ArrayList<>();
+        if(!requestList.isEmpty()){
+            pagedRequests = requestList.subList(start,end);
+        }
 
         System.out.println("page = " + page);
         System.out.println("totalPages = " + totalPages);
@@ -135,7 +141,10 @@ public class RequestController {
 
         int start = (page-1)*pageSize; //페이지 시작 문의 번호
         int end = Math.min(start+pageSize,totalRequests); // 페이지 끝 문의 번호
-        List<RequestDTO> pagedRequests = requestList.subList(start,end);
+        List<RequestDTO> pagedRequests = new ArrayList<>();
+        if(!requestList.isEmpty()){
+            pagedRequests = requestList.subList(start,end);
+        }
 
         System.out.println("page = " + page);
         System.out.println("totalPages = " + totalPages);
@@ -162,6 +171,13 @@ public class RequestController {
 
 
         return "/request/member";
+    }
+
+    @PostMapping("/member/insert")
+    public ModelAndView requestInsert(ModelAndView mv,@ModelAttribute RequestDTO requestDTO){
+        requestService.requestInsert(requestDTO);
+        mv.setViewName("redirect:/request/member");
+        return mv;
     }
     /*-----------------FAQ------------------------*/
     @GetMapping("/faq")

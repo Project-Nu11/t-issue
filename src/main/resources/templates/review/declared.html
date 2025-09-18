@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #revbtn{
+            background: #FAFAC2;
+        }
+        #revdec{
+            background: #FAFAC2;
+            display: flex;!important;
+        }
+        .revbtns{
+            display: flex;!important;
+        }
+        .review{
+            height: 9%;
+            margin-bottom: 1%;
+            background: white;
+            display: flex;
+            flex-direction: row;
+            /*border: black 1px solid;*/
+            align-items: center;
+            border-radius: 8px;
+        }
+        #pagetitle{
+            font-size: 40px;
+            position: fixed;
+            top: 15%;
+            left: 20%;
+        }
+        *{
+            cursor: pointer;
+        }
+        #content-layout{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        #reviewList,#details{
+            width: 500px;
+            height: 400px;
+        }
+        #reviewlist{
+            width: 30%;
+            height: 60%;
+            position: absolute;
+            left: 19%;
+            top: 22%;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            overflow-y: hidden;
+            scrollbar-width: none;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+<div th:include="/manager/backgroundandbanner.html"></div>
+<div th:include="/manager/sidebar-rev.html"></div>
+<div id="mainmenu">
+    <div id="pagetitle">신고 리뷰 관리</div>
+    <div id="reviewlist">
+        <div class="review" th:each="review : ${reviewList}">
+            <div class="detailbtn">▶</div> <!--detailbtn은 여러개있을 수 있고 그에 따른 인덱스 있음-->
+            <div class="content" th:text="${review.stationName}"></div><!--상세페이지 내용 확인-->
+            <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
+            <div class="memberId" th:text="${review.memberId}"></div><!--날짜 확인용-->
+<!--            <div class="no" th:text="${request.no}" style="display: none"></div> &lt;!&ndash;번호 확인용...&ndash;&gt;-->
+<!--            <div class="id" th:text="${request.id}" style="display: none"></div> &lt;!&ndash;id 확인용...&ndash;&gt;-->
+<!--            <div class="answer" th:text="${request.answer}" style="display: none"></div>-->
+<!--            <div class="reject" th:text="${request.reject}" style="display: none"></div>-->
+            <div class="empty"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

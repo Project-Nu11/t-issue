@@ -19,4 +19,6 @@ public interface RequestMapper {
     List<RequestDTO> selectPaging(String value, int offset,int size);
 
     int getTotalRequest(String value);
+
+    void requestInsert(RequestDTO requestDTO);
 }
