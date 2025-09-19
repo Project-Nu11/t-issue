@@ -7,4 +7,8 @@ import java.util.List;
 @Mapper
 public interface ReviewMapper {
     List<ReviewDTO> selectAllReview();
+
+    int insertReview(ReviewDTO reviewDTO);
+
+    List<ReviewDTO> selectReviewListByStation(String stationName);
 }

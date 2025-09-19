@@ -3,7 +3,9 @@ package com.toiletissue.toilet.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toiletissue.notice.model.dto.NoticeDTO;
 import com.toiletissue.review.model.dto.ReviewDTO;
+import com.toiletissue.review.model.service.ReviewService;
 import com.toiletissue.toilet.model.dto.ToiletDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,11 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.Principal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -27,6 +30,9 @@ public class ToiletController {
 
     @Value("${api.data.serviceKey}")
     private String serviceKey;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping("/stationList")
     public String stationList(Model model,
@@ -135,8 +141,8 @@ public class ToiletController {
 
     @GetMapping("/details")
     public String toiletDetails(
-            @RequestParam String stationName,
-            @RequestParam String toiletName,
+            @RequestParam(value = "stationName", required = false) String stationName,
+            @RequestParam(value = "toiletName", required = false) String toiletName,
             Model model) {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -157,24 +163,44 @@ public class ToiletController {
                 .findFirst()
                 .orElse(null);
 
+        List<ReviewDTO> reviewList = reviewService.selectReviewListByStation(stationName);
+        model.addAttribute("reviewList", reviewList != null ? reviewList : Collections.emptyList());
+
+//        ReviewDTO review = new ReviewDTO();
+//        model.addAttribute("review", review);
+
         model.addAttribute("toilet", toilet);
         model.addAttribute("stationName", stationName);
+        model.addAttribute("toiletName", toiletName);
 
         return "toilet/details";
     }
 
+    @PostMapping("details/insert")
+//    public String insertReview(ReviewDTO reviewDTO, Principal principal) {
+//
+//        reviewDTO.setMemberId(principal.getName());
+//
+//        reviewService.insertReview(reviewDTO);
+//
+//        String encodedStation = URLEncoder.encode(reviewDTO.getStationName(), StandardCharsets.UTF_8);
+//
+//        System.out.println("redirect stationName = " + reviewDTO.getStationName());
+//        System.out.println("encoded stationName = " + encodedStation);
+//
+//        return "redirect:/toilet/details?stationName=" + encodedStation; }
+    public ModelAndView insertReview(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO) {
+
+        System.out.println(reviewDTO);
+        reviewService.insertReview(reviewDTO);
+        System.out.println(reviewDTO);
+        mv.setViewName("redirect:/toilet/details");
+
+        return mv;
+    }
+
+
     @GetMapping("/toilet-sos")
     public void toiletSOS() {}
-
-//    @PostMapping("/details/insert")
-//    public ModelAndView insertReview(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO){
-//
-//        System.out.println(reviewDTO);
-//        reviewService.insertReview(reviewDTO);
-//        System.out.println(reviewDTO);
-//        mv.setViewName("redirect:/details");
-//
-//        return mv;
-//    }
 
 }
