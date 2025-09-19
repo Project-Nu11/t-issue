@@ -24,7 +24,7 @@
             margin-right: 29px;
             margin-top: 5px;
         }
-        .title {
+        .column {
             width: 100px ;
             height: 50px;
             text-align: center;
@@ -97,16 +97,16 @@
             list-style: none;
             padding: 15px;
         }
-        #review {
-            margin-left: 29px;
-        }
+        /*#review {*/
+        /*    margin-left: 29px;*/
+        /*}*/
         #reviewNav {
             margin-top: 20px;
             display: flex;
         }
-        #reviewContext {
-            margin-top: 20px;
-        }
+        /*#reviewContext {*/
+        /*    margin-top: 20px;*/
+        /*}*/
         #review button {
             border: none;
             background: none;
@@ -134,15 +134,15 @@
     <section>
         <table id="details">
             <tr>
-                <th class="title">주소</th>
+                <th class="column">주소</th>
                 <th class="context" th:text="${toilet.address}"></th>
             </tr>
             <tr>
-                <th class="title">위치</th>
+                <th class="column">위치</th>
                 <th class="context" th:text="${toilet.location}"></th>
             </tr>
             <tr>
-                <th class="title">개방시간</th>
+                <th class="column">개방시간</th>
                 <th class="context">05:00 ~ 24:00</th>
             </tr>
         </table>
@@ -207,45 +207,78 @@
             </div>
         </div>
 
-        <section id="review">
+        <section style="margin-left: 29px">
             <div id="reviewNav">
                 <div style="font-size: 24px">리뷰</div>
                     <button id = openReview type="button">
                         <img src="/icon/pen.png" alt="작성" width="25" height="25">
                     </button>
-                    <!--작성 버튼 클릭 시 별점 및 리뷰 작성할 수 있는 모달창-->
-                    <div id="reviewModal" class="modal">
-                        <div id="reviewDetail">
-                            <form action="/request/member/insert" method="post">
-                                <div>별점</div>
-                                <br>
-                                <div>내용</div>
-                                <textarea placeholder="내용을 입력해주세요"></textarea>
-                            </form>
-                            <button type="submit" id="regist" class="btn">작성</button>
-                            <button id="cancel" class="btn">취소</button>
-                        </div>
-                    </div>
             </div>
-            <div id="reviewContext">
-                <div>
-                    리뷰1(작성자, 내용, 일자, 신고버튼)
-                </div>
-                <div>
-                    리뷰2(작성자, 내용, 일자, 신고버튼)
-                </div>
-                <div>
-                    리뷰3(작성자, 내용, 일자, 신고버튼)
-                </div>
-                <div>
-                    리뷰4(작성자, 내용, 일자, 신고버튼)
-                </div>
-                <div>
-                    리뷰5(작성자, 내용, 일자, 신고버튼)
+                <div class="review" th:each="review : ${reviewList}">
+                    <div class="no" th:text="${review.no}"></div>
+                    <div class="memberId" th:text="${review.memberId}"></div>
+                    <div class="score" th:text="${review.score}"></div>
+                    <div class="content" th:text="${review.content}"></div>
+                    <div class="stationName" th:text="${review.stationName}"></div>
+                    <div class="toiletLocation" th:text="${review.toiletLocation}"></div>
+                    <div class="date" th:text="${review.date}"></div>
                 </div>
 
-            </div>
+<!--            // 리뷰 상세 조회-->
+<!--            <div class="details">-->
+
+<!--                <div>사용자 아이디</div>-->
+
+<!--                <div class="layout">-->
+<!--                    <div>별점</div>-->
+<!--                    <div id="dtitle"></div><br>-->
+<!--                    <div>내용</div>-->
+<!--                    <div id="dcontent"></div><br>-->
+<!--                    <div id="ddatelayout">-->
+<!--                        <div>날짜</div>-->
+<!--                        <div id="ddate"></div>-->
+<!--                    </div>-->
+<!--                    <div id="dno" style="display: none"></div>-->
+<!--                    <div class="btns">-->
+<!--                        <button class="deletebtn">삭제</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </div>-->
+
         </section>
+        <!--리뷰 작성 모달-->
+        <div id="reviewModal" class="modal">
+            <div id="insertReview">
+<!--                <form action="/toilet/details/insert" method="post">-->
+<!--                    <div><input type="hidden" name="memberId" value="hong123"></div>-->
+<!--                    <div><input type="hidden" name="stationName" th:value="${stationName}"></div>-->
+<!--                    <div><input type="hidden" name="toiletLocation" th:value="${toilet.toiletLocation}"></div>-->
+<!--                    <div><label for="ititle">제목</label></div>-->
+<!--                    <div><input type="text" placeholder="제목을 입력하세요." id="ititle" name="title"></div>-->
+<!--                    <br>-->
+<!--                    <div><label for="icontent">내용</label></div>-->
+<!--                    <div><textarea name="content" id="icontent" placeholder="내용을 입력하세요(최대 300자)" maxlength="300"></textarea></div>-->
+<!--                    <div class="contentlen"><span class="contentlength">0</span>/300</div>-->
+<!--                    <div class="btns">-->
+<!--                        <button class="registbtn">작성</button>-->
+<!--                        <button class="cancelbtn" type="button">취소</button>-->
+<!--                    </div>-->
+                <!--밑엔 아님-->
+<!--                    <div><label>별점</label></div>-->
+<!--                        <input type="number" name="score"/>-->
+<!--                    <div><label>내용</label></div>-->
+<!--                    <textarea name="content"></textarea>-->
+<!--                        <input type="hidden" name="memberId" value="hong123">-->
+<!--                        <input type="hidden" name="stationName" th:value="${stationName}">-->
+<!--                        <input type="hidden" name="toiletLocation" value="${toilet.toiletLocation}">-->
+<!--                    <div class="btns">-->
+<!--                        <button type="submit" id="regist" class="registBtn">작성</button>-->
+<!--                        <button type="button" id="cancel" class="cancleBtn">취소</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+            </div>
+        </div>
     </section>
 </div>
 <script>

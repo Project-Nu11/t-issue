@@ -29,18 +29,23 @@
             top: 29px;
             left: 29px;
         }
+        #searchWrapper {
+            position: absolute;
+            bottom: 20px;
+            left: 29px;
+            z-index: 10;
+        }
 
         #mainButton {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%); /* 가운데 정렬 */
+            right: 29px;
             display: flex;
-            width: 518px;
-            justify-content: space-between;
+            gap: 146px;
             z-index: 10;
         }
 
+        #searchWrapper button,
         #mainButton button {
             width: 75px;
             height: 75px;
@@ -52,6 +57,32 @@
             cursor: pointer;
         }
 
+        #searchBar {
+            width: 576px;
+            height: 60px;
+            background-color: rgba(152, 144, 144, 0.56);
+            display: none;
+            /*padding: 8px 10px;*/
+            z-index: 10;
+            position: absolute;
+        }
+        #searchBar input {
+            border: none;
+            width: 450px;
+            height: 40px;
+            background-color: white;
+            margin-top:10px;
+            margin-left: 10px;
+            /*padding: 8px;*/
+        }
+        .hidden {
+            display: none !important;
+        }
+        #endSearch {
+            border: none;
+            background: none;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -60,21 +91,32 @@
 
 <div id="map">
 
-    <button class="map-btn" onclick="location.href='timer'" id="timer">
-        <div><img src="/icon/time_11806078.png" width="40" height="40"></div>
-    </button>
-
-    <div id="mainButton">
-        <button onclick="location.href='toilet/toilet-search'">
-            <div><img src="/icon/free-icon-magnifier-2311526.png" width="40" height="40"></div>
+    <div class="hideSearch">
+        <button class="map-btn" onclick="location.href='timer'" id="timer">
+            <img src="/icon/time_11806078.png" width="40" height="40">
         </button>
+    </div>
+
+    <div id="searchWrapper" class="hideSearch">
+        <button id="searchBtn">
+            <img src="/icon/free-icon-magnifier-2311526.png" width="40" height="40">
+        </button>
+    </div>
+
+    <div id="mainButton" class="hideSearch">
         <button onclick="location.href='toilet/toilet-sos'">
             <div><img src="/icon/free-icon-siren-2785693.png" width="40" height="40"></div>
         </button>
         <button onclick="location.href='toilet/stationList'">
             <div><img src="/icon/more_9441835.png" width="40" height="40"></div>
         </button>
+    </div>
 
+    <div id="searchBar">
+        <input type="submit" placeholder="검색">
+        <button id="endSearch">
+            <div><img src="/icon/cancel_11212407.png" alt="취소" width="40" height="40"></div>
+        </button>
     </div>
 
 </div>
@@ -117,6 +159,23 @@
 
         map.setCenter(locPosition);
     }
+
+    const searchBtn = document.getElementById("searchBtn");
+    const searchBar = document.getElementById("searchBar");
+    const endSearch = document.getElementById("endSearch");
+
+    searchBtn.addEventListener("click", () => {
+        document.querySelectorAll(".hideSearch").forEach(el=> {
+                el.classList.add("hidden");
+        });
+        searchBar.style.display="block";
+    });
+
+    endSearch.addEventListener("click", () => {
+        document.querySelectorAll(".hideSearch").forEach(el=>el.classList.remove("hidden"));
+        searchBar.style.display="none";
+    });
+
 </script>
 </body>
 </html>
