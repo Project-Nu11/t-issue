@@ -9,10 +9,11 @@ public class ReviewDTO {
     private String stationName;
     private String toiletLocation;
     private String date;
+    private int decNum;
 
     public ReviewDTO(){}
 
-    public ReviewDTO(String content, int score, int no, String memberId, String stationName, String toiletLocation, String date) {
+    public ReviewDTO(String content, int score, int no, String memberId, String stationName, String toiletLocation, String date, int decNum) {
         this.content = content;
         this.score = score;
         this.no = no;
@@ -20,6 +21,7 @@ public class ReviewDTO {
         this.stationName = stationName;
         this.toiletLocation = toiletLocation;
         this.date = date;
+        this.decNum = decNum;
     }
 
     public String getContent() {
@@ -78,6 +80,14 @@ public class ReviewDTO {
         this.date = date;
     }
 
+    public int getDecNum() {
+        return decNum;
+    }
+
+    public void setDecNum(int decNum) {
+        this.decNum = decNum;
+    }
+
     @Override
     public String toString() {
         return "ReviewDTO{" +
@@ -88,6 +98,7 @@ public class ReviewDTO {
                 ", stationName='" + stationName + '\'' +
                 ", toiletLocation='" + toiletLocation + '\'' +
                 ", date='" + date + '\'' +
+                ", decNum=" + decNum +
                 '}';
     }
 }

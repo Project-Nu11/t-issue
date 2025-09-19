@@ -9,15 +9,465 @@
         }
         #revsearch{
             background: #FAFAC2;
+            display: flex;!important;
         }
         .revbtns{
             display: flex;!important;
         }
+        .review{
+            height: 9%;
+            margin-bottom: 1%;
+            background: white;
+            display: flex;
+            flex-direction: row;
+            /*border: black 1px solid;*/
+            align-items: center;
+            border-radius: 8px;
+        }
+        #pagetitle{
+            font-size: 40px;
+            position: fixed;
+            top: 15%;
+            left: 20%;
+        }
+        #search{
+            position: fixed;
+            top:15%;
+            left: 65%;
+        }
+        *{
+            cursor: pointer;
+        }
+        #content-layout{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        #reviewList,#details{
+            width: 500px;
+            height: 400px;
+        }
+        #reviewlist{
+            width: 30%;
+            height: 60%;
+            position: absolute;
+            left: 19%;
+            top: 22%;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            overflow-y: hidden;
+            scrollbar-width: none;
+            overflow-x: hidden;
+        }
+        .stationName{
+            width: 50%;
+            position: relative;
+            top: 20%;
+            font-size: 20px;
+            background-color: #FAFAC2;
+        }
+        .toiletLocation{
+            position: relative;
+            right: %;
+            top:20%;
+            font-size: 20px;
+        }
+        .detailbtn{
+            position: relative;
+            left: 95%;
+            font-size: 20px;
+        }
+        .date{
+            position: relative;
+            bottom: 20%;
+            right: 50%;
+            font-size: 10px;
+            font-family: AggravoL;
+            /*background-color: #2f1a48;*/
+            width: 12%;
+        }
+        .memberId{
+            position: relative;
+            right: 49%;
+            bottom: 20%;
+            font-size: 10px;
+            font-family: AggravoL;
+        }
+        .toiletName{
+            /*background-color: #FAFAC2;*/
+            width: 50%;
+            font-size: 20px;
+            position: relative;
+            top: 20%;
+        }
+        .details{
+            width: 30%;
+            height: 60%;
+            position: fixed;
+            left: 51%;
+            top: 22%;
+            background: white;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            display: none;
+            /*justify-content: center;*!*/
+            flex-direction: column;
+            align-items: center;
+            border-radius: 8px;
+        }
+        .view-details{
+            width: 30%;
+            height: 60%;
+            position: fixed;
+            left: 51%;
+            top: 22%;
+            background: white;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            display: flex;
+            /*justify-content: center;*!*/
+            flex-direction: column;
+            align-items: center;
+            border-radius: 8px;
+        }
+        .details-layout{
+            padding: 5%;
+            font-family: AggravoM;
+            width: 90%;
+            height: 90%;
+            /*border: black 5px solid;*/
+        }
+        #toiletName{
+            /*background-color: cyan;*/
+        }
+        #content{
+            background-color: #d9d9d9;
+            width: 100%;
+            height: 45%;
+        }
+        #date-layout{
+            /*background-color: #d9d9d9;*/
+        }
+        #memberId-layout{
+            /*background-color: #FAFAC2;*/
+            width: 50%;
+            height: 15%;
+            position: relative;
+
+
+        }
+
+        #decNum-layout{
+            /*background-color: greenyellow;*/
+            width: 50%;
+            height: 15%;
+            position: relative;
+            bottom: 15%;
+            left: 50%;
+
+        }
+
+        .penalty,.dec-cancel{
+            font-family: AggravoM;
+            font-size: 20px;
+            width: 100px;
+            height: 30px;
+            background: white;
+            border: #d9d9d9 solid 4px;
+            border-radius: 8px;
+            text-align: center;
+            align-content: center;
+        }
+        .btns{
+            position: fixed;
+            left: 68%;
+            top: 75%;
+            width: 100%;
+            height: 200%;
+            display: flex;
+            gap: 0.5%;
+        }
+        /*신고 취소 확인 모달 배경*/
+        .cancel-back{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,50%);
+            z-index: 1100;
+            display: none;
+        }
+        /*신고 취소 확인 모달 창*/
+        #dec-cancel-modal{
+            width: 25%;
+            height: 30%;
+            background: white;
+            position: fixed;
+            top: 35%;
+            left: 37.5%;
+            z-index: 1004;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /*신고 취소 완료 모달창*/
+        .cancelsuccess{
+            width: 25%;
+            height: 30%;
+            background: white;
+            position: fixed;
+            top: 35%;
+            left: 37.5%;
+            z-index: 1005;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .cancelbtns{
+            width: 30%;
+            height: 10%;
+            display: flex;
+            gap: 5%;
+            position: relative;
+            /*border: black solid 1px;*/
+            justify-content: space-between;
+            top: 70%;
+        }
+        #canN,#canY{
+            border: none;
+            width: 50px;
+            height: 30px;
+        }
+        .pagination{
+            width: 15%;
+            position: fixed;
+            top: 90%;
+            left: 45%;
+            /*border: black solid 1px;*/
+            display: flex;
+            justify-content: center;
+            gap: 10%;
+        }
+        .pagination a{
+            text-decoration: none;
+            color: black;
+            font-size: 30px;
+        }
+        .pagination a.active{
+            color: #d9d9d9;
+        }
+        @keyframes selected {
+            from{
+                transform: rotate(0deg);
+            }
+            to{
+                transform: rotate(90deg)
+            }
+        }
+        .selected{
+            /*animation: selected 0.1s linear;*/
+            transform: rotate(90deg);
+        }
+        {
+            background-color: #FAFAC2;
+            font-family: AggravoL;
+            font-size: 15px;
+            position: relative;
+            bottom: 30%;
+        }
+
     </style>
 </head>
 <body>
 <div th:include="/manager/backgroundandbanner.html"></div>
 <div th:include="/manager/sidebar-rev.html"></div>
-<div id="mainmenu">선택리뷰 메인입니다.</div>
+<div id="mainmenu">
+    <div id="pagetitle">선택 리뷰 관리</div>
+    <form action="/review/search" method="get" id="search">
+        <select name="criteria" id="criteria">
+            <option value="" th:selected="${value == '%%'}" selected>검색 기준</option>
+            <option value="station_name" id="sn" th:selected="${criteria} == 'station_name'">역명</option>
+            <option value="r.member_id" id="mi" th:selected="${criteria} == 'r.member_id'">사용자ID</option>
+        </select>
+        <input type="text" id="inputbox" name="search" placeholder="검색기준을 입력해주세요">
+        <button type="submit">검색</button>
+    </form>
+    <div id="reviewlist">
+        <div class="review" th:each="review : ${reviewList2}">
+            <div class="detailbtn">▶</div> <!--detailbtn은 여러개있을 수 있고 그에 따른 인덱스 있음-->
+            <div class="toiletName" th:text="${review.stationName} +' ' +${review.toiletLocation}"></div>
+            <div class="stationName" th:text="${review.stationName}" hidden></div><!--역명확인용-->
+            <div class="toiletLocation" th:text="${review.toiletLocation}" hidden></div><!--화장실위치확인용-->
+            <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
+            <div class="memberId" th:text="'ID : '+${review.memberId}"></div><!--리뷰작성자id 확인용-->
+            <div class="no" th:text="${review.no}" style="display: none"></div> <!--번호 확인용...-->
+            <div class="content" th:text="${review.content}" style="display: none"></div> <!--리뷰내용 확인용...-->
+            <div class="decNum" th:text="${review.decNum}" style="display: none"></div> <!--신고횟수 확인용...-->
+
+            <div class="empty"></div>
+        </div>
+    </div>
+    <!--신고 리뷰 상세정보-->
+    <div class="details">
+        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >신고 리뷰</div>
+        <div class="details-layout">
+            <div style="font-family: AggravoB;font-size: 20px;">이용 화장실</div>
+            <div id="toiletName" style="font-family: AggravoB;font-size: 20px;"> 이용 화장실 이름</div>
+            <div style="font-family: AggravoM;font-size: 20px;">내용</div>
+            <div id="content" style="font-family: AggravoL;font-size: 20px;"> 리뷰 내용</div>
+            <div id="date-layout">
+                <div style="font-family: AggravoM;font-size: 20px;">날짜</div>
+                <div id="date" style="font-family: AggravoL;font-size: 20px;">리뷰 날짜</div>
+            </div>
+            <div id="memberId-layout">
+                <div style="font-family: AggravoM;font-size: 20px;">작성자ID</div>
+                <div id="id" style="font-family: AggravoL;font-size: 20px;">사용자 id</div>
+            </div>
+            <div id="decNum-layout">
+                <div style="font-family: AggravoM;font-size: 20px;">신고 횟수</div>
+                <div id="decNum" style="font-family: AggravoL;font-size: 20px;">신고횟수</div>
+            </div>
+            <div class="btns">
+                <button class="penalty">벌점 부과</button>
+                <button class="dec-cancel">신고 취소</button>
+            </div>
+        </div>
+    </div>
+    <!--신고 취소-->
+    <div class="cancel-back"><!--배경-->
+        <div id="dec-cancel-modal">
+            <div style="position: relative;top:30%">해당 리뷰의 신고를 취소하시겠습니까?</div>
+            <div class="cancelbtns">
+                <form action="/review/declared/cancel" method="post">
+                    <input type="hidden" name="no" id="cancelNo">
+                    <button id="canY" type="submit">예</button>
+                </form>
+                <button id="canN">아니오</button>
+                <div class="cancelsuccess">
+                    리뷰 신고가 취소되었습니다.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--페이징처리-->
+<div class="pagination" style="display: flex">
+
+    <!-- 이전 버튼 -->
+    <span th:if="${startPage2 > 1}">
+        <a th:href="@{/review/search(page2=${startPage2 - 1})}">◀</a>
+    </span>
+
+    <!-- 페이지 번호 버튼 -->
+    <span th:each="i : ${#numbers.sequence(startPage2, endPage2)}">
+        <a th:href="@{/review/search(page2=${i},criteria=${criteria},search=${search})}"
+           th:text="${i}"
+           th:classappend="${i == page2} ? 'active' : ''"></a>
+    </span>
+
+    <!-- 다음 버튼 -->
+    <span th:if="${endPage2 < totalPages2}">
+        <a th:href="@{/review/search(page2=${endPage2 + 1})}">▶</a>
+    </span>
+
+</div>
+
+<script>
+
+    const $reviews = document.querySelectorAll('.review')
+    const $detailBtn = document.querySelectorAll('.detailbtn');
+    const $detailToiletName = document.querySelector('#toiletName')
+    const $detailContent = document.querySelector('#content')
+    const $detailDate = document.querySelector('#date')
+    const $detailId = document.querySelector('#id')
+    const $detailDecNum = document.querySelector('#decNum')
+    const $detail = document.querySelector(".details")
+    const $decCancelBtn = document.querySelector(".dec-cancel") // 신고 취소 버튼
+    const $decCancelModal = document.querySelector(".cancel-back") // 신고 취소 확인 모달
+    const $decCancelCancelBtn = document.querySelector("#canN") // 신고 취소 취소 버튼
+    const $decCancelAgreeBtn = document.querySelector("#canY") // 신고 취소 동의 벝은
+    const $decCancelSuccess = document.querySelector(".cancelsuccess") // 신고 취소 완료 버튼
+    const $decCancelReviewNo = document.querySelector("#cancelNo") // 신고할 리뷰의 번호
+
+
+    $decCancelBtn.addEventListener('click',function (){
+        $decCancelModal.style.display = 'flex'
+    })
+    $decCancelCancelBtn.addEventListener('click',function (){
+        $decCancelModal.style.display='none';
+    })
+    $decCancelAgreeBtn.addEventListener('click',function (){
+        // $decCancelModal.style.display='none'
+        $decCancelSuccess.style.display='flex'
+    })
+
+    $decCancelSuccess.addEventListener('click',function (){
+        $decCancelModal.style.display='none'
+        $decCancelSuccess.style.display='none'
+    })
+    // const $review = document.querySelectorAll(".review") // 리뷰 요약 창
+
+    let openedIndex = null;
+    // 상세버튼 눌렀을 때 모달창 띄우기
+    $detailBtn.forEach((btn,i)=>{
+        btn.addEventListener('click',function (){
+
+
+            $reviews.forEach((a)=>{
+                a.style.background='#ffffff'
+            })
+
+            const $review = btn.closest('.review');/*closest() : 가장 가까운 태그로 초기화*/
+            const content = $review.querySelector('.content')?.textContent||'';
+            const date = $review.querySelector('.date')?.textContent||'';
+            const id = $review.querySelector('.memberId')?.textContent||'';
+            const decNum = $review.querySelector('.decNum')?.textContent||'';
+            const toiletLocation = $review.querySelector('.toiletLocation')?.textContent||'';
+            const stationName = $review.querySelector('.stationName')?.textContent||'';
+            const no =  $review.querySelector('.no')?.textContent;
+            console.log(stationName+" "+toiletLocation)
+            console.log(id)
+            console.log(decNum)
+
+
+            // 버튼에 해당하는 공지사항 제목,내용 모달창에 띄우기 (비동기)
+            $detailToiletName.textContent=stationName+" "+toiletLocation
+            $detailContent.textContent=content;
+            $detailDate.textContent=date;
+            $detailId.textContent=id;
+            $detailDecNum.textContent=decNum;
+            $decCancelReviewNo.value=no;
+            console.log($decCancelReviewNo.value)
+
+            $review.style.background='#f9f9d3'
+
+            if($detail.style.display==='flex' && openedIndex === i){
+                $detail.style.display='none'
+                $review.style.background='#ffffff'
+                openedIndex = null;
+                return;
+            }
+
+            $detail.style.display='flex'
+            openedIndex = i;
+            console.log("index:"+openedIndex)
+        })
+
+        const $critreia = document.querySelector('#criteria')
+        const $inputBox = document.querySelector('#inputbox')
+
+        $critreia.addEventListener('change',function(){
+            const selectedValue = this.value;
+
+            $inputBox.value='';
+
+            if(selectedValue === 'member_id'){
+                $inputBox.placeholder='사용자ID를 입력해주세요'
+            } else if(selectedValue === 'station_name'){
+                $inputBox.placeholder='역명을 입력해주세요'
+            } else{
+                $inputBox.placeholder='검색기준을 입력해주세요'
+            }
+        })
+
+    })
+</script>
 </body>
 </html>

@@ -13,8 +13,16 @@ public class ReviewService {
     @Autowired
     private ReviewMapper reviewMapper;
 
-    public List<ReviewDTO> selectAllReview() {
-        return reviewMapper.selectAllReview();
+    public List<ReviewDTO> selectDeclaredReview() {
+        return reviewMapper.selectDeclaredReview();
+    }
+
+    public void cancelDeclaration(ReviewDTO reviewDTO) {
+        reviewMapper.cancelDeclaration(reviewDTO);
+    }
+
+    public List<ReviewDTO> selectAllReview(String criteria, String search) {
+        return reviewMapper.selectAllReview(criteria,search);
     }
 
     public int insertReview(ReviewDTO reviewDTO) {

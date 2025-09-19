@@ -40,9 +40,6 @@ public class RequestController {
         } else if(page > totalPages){
             page = totalPages;
         }
-
-
-
         int start = (page-1)*pageSize; //페이지 시작 문의 번호
         int end = Math.min(start+pageSize,totalRequests); // 페이지 끝 문의 번호
 
