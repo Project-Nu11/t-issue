@@ -99,7 +99,7 @@ public class MemberController {
         return "member/find";
     }
 
-    @PostMapping("/id")
+    @PostMapping("/find/id")
     @ResponseBody
     public ResponseEntity<?> findId(@RequestParam String memberName,
                                     @RequestParam String email) {
@@ -109,7 +109,7 @@ public class MemberController {
         result.put("foundId", foundId);
         return ResponseEntity.ok(result);
     }
-    @PostMapping("/pwd")
+    @PostMapping("/find/pwd")
     @ResponseBody
     public ResponseEntity<?> resetPwd(@RequestParam String memberId,
                                       @RequestParam String memberName,
@@ -128,7 +128,7 @@ public class MemberController {
 //        String loginId = authentication.getName();                 // 로그인한 아이디
 //        model.addAttribute("loginId", loginId);
 //
-//        // 필요하면 상세 정보
+//        // 상세 정보
 //        com.toiletissue.member.model.dto.MemberDTO me = memberService.findById(loginId);
 //        model.addAttribute("member", me);
 //

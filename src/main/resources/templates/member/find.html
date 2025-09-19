@@ -2,25 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title> 아이디, 비밀번로 찾기 </title>
+    <title> 아이디, 비밀번호 찾기 </title>
     <style>
         * {
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        #main {
-            max-width: 520px;
-            margin: 32px auto;
-            padding: 24px;
+            font-family: 'SBAggro';
         }
         .title {
+            margin: 10px 0 20px;
             font-size: 22px;
-            margin: 0 0 20px;
+            font-weight: 700;
         }
         .tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
         .tab-btn {
             flex: 1;
@@ -52,7 +48,7 @@
         }
         .btn-row {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             justify-content: flex-end;
         }
         .btn {
@@ -77,6 +73,28 @@
         .hidden {
             display: none;
         }
+        /* 모달 */
+        .modal-overlay{
+            display:none; position:fixed; inset:0;
+            background:rgba(0,0,0,.5);
+            align-items:center; justify-content:center;
+            z-index:9999;
+        }
+        .modal{
+            background:#fff;
+            padding:20px;
+            border-radius:8px;
+            max-width:420px;
+            width:90%;
+            box-shadow:0 12px 32px rgba(0,0,0,.3);
+        }
+        .modal h3{
+            margin-top:0;
+        }
+        #modal-msg{
+            white-space: pre-line;
+        }
+        body.modal-open{ overflow:hidden; }
     </style>
 </head>
 <body>
@@ -90,7 +108,7 @@
         <button type="button" class="tab-btn" data-tab="pwd">비밀번호 찾기</button>
     </div>
     <!-- 아이디 찾기 -->
-    <form id="form-id">
+    <form id="form-id" th:action="@{/member/find/id}" method="post">
         <div>
             <label for="memberName">이름</label>
             <input class="input" type="text" id="memberName" name="memberName" required autocomplete="off">
@@ -103,7 +121,7 @@
     </form>
 
     <!-- 비밀번호 찾기 -->
-    <form id="form-pwd" class="hidden">
+    <form id="form-pwd" th:action="@{/member/find/pwd}" method="post">
         <div>
             <label for="memberId">아이디</label>
             <input class="input" type="text" id="memberId" name="memberId"
@@ -145,7 +163,10 @@
         var formPwd = document.getElementById('form-pwd');
 
         function setTab(tab) {
-            tabBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.tab === tab); });
+            tabBtns.forEach(function (b) {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
+
             if (tab === 'pwd') {
                 formId.classList.add('hidden');
                 formPwd.classList.remove('hidden');
@@ -156,7 +177,11 @@
             }
         }
 
-        tabBtns.forEach(function (b) { b.addEventListener('click', function () { setTab(this.dataset.tab); }); });
+        tabBtns.forEach(function (b) {
+            b.addEventListener('click', function () {
+                setTab(this.dataset.tab);
+            });
+        });
 
         var hash = (location.hash || '').replace('#', '');
         setTab(hash === 'pwd' ? 'pwd' : 'id');
@@ -175,8 +200,10 @@
     // 아이디 찾기 AJAX
     document.getElementById('form-id').addEventListener('submit', function(e){
         e.preventDefault();
+        var url = this.getAttribute('action');
         var formData = new FormData(this);
-        fetch('/member/find/id', { method:'POST', body: formData })
+        fetch('/member/find/id', {
+            method:'POST', body: formData })
             .then(r => r.json())
             .then(data => {
                 if(data.success){
@@ -190,8 +217,10 @@
     // 비밀번호 찾기 AJAX
     document.getElementById('form-pwd').addEventListener('submit', function(e){
         e.preventDefault();
+        var url = this.getAttribute('action');
         var formData = new FormData(this);
-        fetch('/member/find/pwd', { method:'POST', body: formData })
+        fetch('/member/find/pwd', {
+            method:'POST', body: formData })
             .then(r => r.json())
             .then(data => {
                 if(data.success){

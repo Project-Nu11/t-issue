@@ -1,22 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>마이페이지</title>
+    <style>
+        body {
+            margin:0;
+        }
+        .wrap {
+            max-width: 420px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #f4e9ff 0%, #b787d9 100%);
+            padding: 24px 16px;
+        }
+        h1 {
+            margin: 0 0 24px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            justify-items: center;
+        }
+        .circle {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow: 0 4px 16px rgba(0,0,0,.12);
+            text-decoration:none;
+            color:#111;
+            font-size:14px;
+            text-align:center;
+            padding:10px;
+        }
+        .circle span {
+            display:block;
+            line-height:1.2;
+        }
+    </style>
 </head>
 <body>
-<div th:include="/common/header.html"></div>
+<div th:replace="~{/common/header :: header}"></div>
 
-<div style="color:#fff; padding:24px; font-size:20px;">
-    <h2 style="margin:0 0 12px;">마이페이지</h2>
-    <p>로그인 아이디: <strong th:text="${member.memberId}"></strong></p>
-    <p>이름: <span th:text="${member.memberName}"></span></p>
-    <p>이메일: <span th:text="${member.email}"></span></p>
+<div class="wrap">
+    <h1>T-issue</h1>
+
+    <div class="grid">
+        <!--개인정보 조회 -->
+        <a class="circle" th:href="@{/member/select}">
+            <span>개인정보<br>조회</span>
+        </a>
+
+        <!-- 나머지 아이콘 일단 자리만 -->
+        <a class="circle" href="javascript:void(0)"><span>문의</span></a>
+        <a class="circle" href="javascript:void(0)"><span>리뷰/조회</span></a>
+        <a class="circle" href="javascript:void(0)"><span>발급</span></a>
+        <a class="circle" href="javascript:void(0)"><span>언어설정</span></a>
+        <a class="circle" href="javascript:void(0)"><span>기타</span></a>
+    </div>
 </div>
-
-<form th:action="@{/member/logout}" method="post" style="display:inline-block; margin-top:12px;">
-<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
-    <button type="submit" class="btn logout-btn">로그아웃</button>
-</form>
 </body>
 </html>
