@@ -3,4 +3,32 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.toiletissue.member.model.dao.MypageMapper">
+
+    <resultMap id="member" type="com.toiletissue.member.model.dto.MemberDTO">
+        <id property="memberId"         column="member_id"/>
+        <result property="memberPwd"    column="member_pwd"/>
+        <result property="memberName"   column="member_name"/>
+        <result property="email"        column="email"/>
+        <result property="memberBdate"  column="member_bdate"/>
+        <result property="memberGender" column="member_gender"/>
+        <result property="role"         column="role"/>
+        <result property="endStatus"    column="end_status"/>
+        <result property="endDate"      column="end_date"/>
+    </resultMap>
+
+    <select id="findById" resultMap="member">
+        SELECT
+        member_id,
+        member_pwd,
+        member_name,
+        email,
+        member_bdate,
+        member_gender,
+        role,
+        end_status,
+        end_date
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
+
 </mapper>
