@@ -33,11 +33,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/member/login", "/member/fail", "/member/register","/member/register/check-id",
-                                "/member/register/consent","/member/find/**",
+                                "/member/register/consent","/member/find","/member/id", "/member/pwd",
                                  "/error", "/toilet/subway",
                                 "/css/**","/js/**","/images/**","/webjars/**"
                         ).permitAll()
-                        .requestMatchers("/member/list","/member/select","/member/mypage").hasAuthority("ROLE_USER")
+                        .requestMatchers("/member/list","/member/select","/member/mypage","/mypage/**").hasAuthority("ROLE_USER")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

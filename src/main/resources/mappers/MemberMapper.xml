@@ -7,15 +7,15 @@
 
     <!-- 매핑 규칙 -->
     <resultMap id="member" type="com.toiletissue.member.model.dto.MemberDTO">
-        <id property="memberId" column="member_id"/>
-        <result property="memberPwd" column="member_pwd"/>
-        <result property="memberName" column="member_name"/>
-        <result property="email" column="email"/>
-        <result property="memberBdate" column="member_bdate"/>
+        <id property="memberId"         column="member_id"/>
+        <result property="memberPwd"    column="member_pwd"/>
+        <result property="memberName"   column="member_name"/>
+        <result property="email"        column="email"/>
+        <result property="memberBdate"  column="member_bdate"/>
         <result property="memberGender" column="member_gender"/>
-        <result property="role" column="role"/>
-        <result property="endStatus" column="end_status"/>
-        <result property="endDate" column="end_date"/>
+        <result property="role"         column="role"/>
+        <result property="endStatus"    column="end_status"/>
+        <result property="endDate"      column="end_date"/>
     </resultMap>
 
     <!-- 회원가입 -->
