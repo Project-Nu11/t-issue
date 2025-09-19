@@ -11,23 +11,46 @@
         <result property="stationName" column="station_name"/>
         <result property="toiletLocation" column="toilet_location"/>
         <result property="date" column="review_date"/>
+        <result property="decNum" column="dec_num"/>
+    </resultMap>
+
+    <resultMap id="declaration" type="com.toiletissue.declaration.model.dto.DeclarationDTO">
 
     </resultMap>
 
+    <select id="selectDeclaredReview" resultMap="review">
+        select
+        r.review_no,
+        r.review_content,
+        r.review_score,
+        r.member_id,
+        r.station_name,
+        r.toilet_location,
+        r.review_date,
+        count(r.review_no) as `dec_num`
+        from review r
+        join declaration c on r.review_no = c.review_no
+        group by review_no
+        having dec_num>=2;
+    </select>
+
     <select id="selectAllReview" resultMap="review">
         select
-               review_no,
-               review_content,
-               review_score,
-               member_id,
-               station_name,
-               toilet_location,
-               review_date
-          from review
-        where review_no in (select
-        review_no
-        from declaration
-        group by review_no
-        having count(*) >2);
+        r.review_no,
+        r.review_content,
+        r.review_score,
+        r.member_id,
+        r.station_name,
+        r.toilet_location,
+        r.review_date,
+        count(d.review_no) as `dec_num`
+        from review r
+        left join declaration d on r.review_no = d.review_no
+        where ${criteria} like '${search}'
+        group by r.review_no;
     </select>
+
+    <delete id="cancelDeclaration">
+        delete from declaration where review_no = #{no}
+    </delete>
 </mapper>

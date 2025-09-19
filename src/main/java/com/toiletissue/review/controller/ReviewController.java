@@ -1,14 +1,16 @@
 package com.toiletissue.review.controller;
 
+import com.toiletissue.request.model.dto.RequestDTO;
 import com.toiletissue.review.model.dto.ReviewDTO;
 import com.toiletissue.review.model.service.ReviewService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -20,15 +22,128 @@ public class ReviewController {
 
     @GetMapping("/declared")
     public String reviewDeclared(
-            Model model){
-        List<ReviewDTO> reviewList = reviewService.selectAllReview();
+            Model model,
+            @RequestParam(value = "page", defaultValue = "1") int page)
+            {
 
-        model.addAttribute("reviewList",reviewList);
+
+        List<ReviewDTO> reviewList = reviewService.selectDeclaredReview();
+
+
+        int totalRequests = reviewList.size(); // 총 문의 수
+        int pageSize = 10; // 한 페이지당 문의 수
+        int totalPages = (int)(Math.ceil((double)totalRequests/pageSize)); // 총 페이지 수
+
+        if(page <= 0){
+            page = 1;
+        } else if(page > totalPages){
+            page = totalPages;
+        }
+        int start = (page-1)*pageSize; //페이지 시작 문의 번호
+        int end = Math.min(start+pageSize,totalRequests); // 페이지 끝 문의 번호
+
+        List<ReviewDTO> pagedReviews = new ArrayList<>();
+        if(!reviewList.isEmpty()){
+            pagedReviews = reviewList.subList(start,end);
+        }
+
+        System.out.println("page = " + page);
+        System.out.println("totalPages = " + totalPages);
+        System.out.println("end = " + end);
+        System.out.println("start = " + start);
+        for(ReviewDTO rev : pagedReviews){
+            System.out.println("페이지에 보여주세요 declared review"+rev);
+        }
+        int buttonCount = 10; // 한 번에 보여질 페이지 버튼 수
+        int startPage = ((page - 1) / buttonCount) * buttonCount + 1;
+        int endPage = Math.min(startPage + buttonCount - 1, totalPages);
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+
+
+
+        model.addAttribute("reviewList",pagedReviews);
+//        model.addAttribute("value",value);
+        model.addAttribute("page",page);
+        model.addAttribute("totalPages",totalPages);
 
         return "/review/declared";
     }
 
     @GetMapping("/search")
-    public void reviewSearch(){}
+    public String reviewSearch(
+            Model model,
+            @RequestParam(value = "page2", defaultValue = "1") int page,
+            @RequestParam(value="criteria", defaultValue = "r.review_no") String criteria,
+            @RequestParam(value="search",defaultValue = "%%") String search)
+    {
+
+
+        List<ReviewDTO> reviewList2 = reviewService.selectAllReview(criteria,search);
+
+
+        int totalRequests = reviewList2.size(); // 총 문의 수
+        int pageSize = 10; // 한 페이지당 문의 수
+        int totalPages = (int)(Math.ceil((double)totalRequests/pageSize)); // 총 페이지 수
+
+        if(page <= 0){
+            page = 1;
+        } else if(page > totalPages){
+            page = totalPages;
+        }
+        int start = (page-1)*pageSize; //페이지 시작 문의 번호
+        int end = Math.min(start+pageSize,totalRequests); // 페이지 끝 문의 번호
+
+        List<ReviewDTO> pagedReviews2 = new ArrayList<>();
+        if(!reviewList2.isEmpty()){
+            pagedReviews2 = reviewList2.subList(start,end);
+        }
+        for(ReviewDTO rev : pagedReviews2){
+            System.out.println("1페이지에 보여주세요 all review"+rev);
+        }
+        System.out.println("page = " + page);
+        System.out.println("totalPages = " + totalPages);
+        System.out.println("end = " + end);
+        System.out.println("start = " + start);
+        for(ReviewDTO rev : pagedReviews2){
+            System.out.println("페이지에 보여주세요 all review"+rev);
+        }
+        int buttonCount = 10; // 한 번에 보여질 페이지 버튼 수
+        int startPage = ((page - 1) / buttonCount) * buttonCount + 1;
+        int endPage = Math.min(startPage + buttonCount - 1, totalPages);
+
+        model.addAttribute("startPage2", startPage);
+        model.addAttribute("endPage2", endPage);
+
+
+
+
+        model.addAttribute("reviewList2",pagedReviews2);
+//        model.addAttribute("value",value);
+        model.addAttribute("page2",page);
+        model.addAttribute("totalPages2",totalPages);
+        model.addAttribute("criteria",criteria);
+        model.addAttribute("search",search);
+
+        return "/review/search";
+    }
+
+    @PostMapping("/declared/cancel")
+    public ModelAndView cancelDeclaration(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO){
+
+        reviewService.cancelDeclaration(reviewDTO);
+
+        mv.setViewName("redirect:/review/declared");
+
+
+        return mv;
+    }
+
+
+
+//    @GetMapping("/search")
+//    public void reviewSearch(){}
 
 }
