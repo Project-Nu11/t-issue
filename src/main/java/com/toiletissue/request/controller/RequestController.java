@@ -26,6 +26,7 @@ public class RequestController {
 
         List<RequestDTO> requestList = requestService.selectAllRequest(value);
 
+
         for(RequestDTO req : requestList){
             System.out.println(req);
         }

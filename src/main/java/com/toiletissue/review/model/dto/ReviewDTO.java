@@ -11,6 +11,8 @@ public class ReviewDTO {
     private String date;
     private int decNum;
 
+    private int penalty;
+
     public ReviewDTO(){}
 
     public ReviewDTO(String content, int score, int no, String memberId, String stationName, String toiletLocation, String date, int decNum) {

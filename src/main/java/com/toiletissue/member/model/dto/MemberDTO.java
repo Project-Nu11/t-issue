@@ -10,11 +10,12 @@ public class MemberDTO {
     private String memberGender;
     private String role;          // 기본: ROLE_USER
     private boolean endStatus;    // 0=활동, 1=탈퇴
-    private String endDate;       // DB DATE → String 처리
+    private String endDate;// DB DATE → String 처리
+    private int penalty;
 
     public MemberDTO() {}
 
-    public MemberDTO(String memberId, String memberPwd, String memberName, String email, String memberBdate, String memberGender, String role, boolean endStatus, String endDate) {
+    public MemberDTO(String memberId, String memberPwd, String memberName, String email, String memberBdate, String memberGender, String role, boolean endStatus, String endDate, int penalty) {
         this.memberId = memberId;
         this.memberPwd = memberPwd;
         this.memberName = memberName;
@@ -24,6 +25,7 @@ public class MemberDTO {
         this.role = role;
         this.endStatus = endStatus;
         this.endDate = endDate;
+        this.penalty = penalty;
     }
 
     public String getMemberId() {
@@ -98,7 +100,15 @@ public class MemberDTO {
         this.endDate = endDate;
     }
 
-//    @Override
+    public int getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(int penalty) {
+        this.penalty = penalty;
+    }
+
+    //    @Override
 //    public String toString() {
 //        return "MemberDTO{" +
 //                "memberId='" + memberId + '\'' +

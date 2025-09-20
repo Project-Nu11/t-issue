@@ -47,4 +47,13 @@ public class ReviewService {
         }
         return reviewList;
     }
+
+
+    public void penalizeReview(int no) {
+        reviewMapper.penalizeReview(no);
+    }
+
+    public void penalizeMember(String id) {
+        reviewMapper.penalizeMember(id);
+    }
 }

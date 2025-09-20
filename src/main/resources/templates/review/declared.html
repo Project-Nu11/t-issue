@@ -62,7 +62,7 @@
         }
         .toiletLocation{
             position: relative;
-            right: %;
+            right: 0%;
             top:20%;
             font-size: 20px;
         }
@@ -178,7 +178,33 @@
             height: 200%;
             display: flex;
             gap: 0.5%;
+            z-index: 1004;
         }
+        /*벌점부과 배경*/
+        .penalty-back{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,50%);
+            z-index: 1100;
+            display: none;
+        }
+        /*벌점부과 확인 모달 창*/
+        #dec-penalty-back{
+            width: 25%;
+            height: 30%;
+            /*border: 3px black solid;*/
+            background: white;
+            position: fixed;
+            top: 35%;
+            left: 37.5%;
+            z-index: 1004;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+
         /*신고 취소 확인 모달 배경*/
         .cancel-back{
             width: 100%;
@@ -214,17 +240,17 @@
             align-items: center;
             justify-content: center;
         }
-        .cancelbtns{
+        .cancelbtns,.penaltybtns{
             width: 30%;
             height: 10%;
             display: flex;
             gap: 5%;
             position: relative;
-            /*border: black solid 1px;*/
+            border: black solid 1px;
             justify-content: space-between;
             top: 70%;
         }
-        #canN,#canY{
+        #canN,#canY,#penN,#penY{
             border: none;
             width: 50px;
             height: 30px;
@@ -289,11 +315,11 @@
             <div class="stationName" th:text="${review.stationName}" hidden></div><!--역명확인용-->
             <div class="toiletLocation" th:text="${review.toiletLocation}" hidden></div><!--화장실위치확인용-->
             <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
-            <div class="memberId" th:text="'ID : '+${review.memberId}"></div><!--리뷰작성자id 확인용-->
+            <div class="memberId" th:text="${review.memberId}"></div><!--리뷰작성자id 확인용-->
             <div class="no" th:text="${review.no}" style="display: none"></div> <!--번호 확인용...-->
             <div class="content" th:text="${review.content}" style="display: none"></div> <!--리뷰내용 확인용...-->
             <div class="decNum" th:text="${review.decNum}" style="display: none"></div> <!--신고횟수 확인용...-->
-
+<!--            <div class="penalty" th:text="${review.}" style="display: none"></div> &lt;!&ndash;벌점 확인용...&ndash;&gt;-->
             <div class="empty"></div>
         </div>
     </div>
@@ -318,11 +344,31 @@
                 <div id="decNum" style="font-family: AggravoL;font-size: 20px;">신고횟수</div>
             </div>
             <div class="btns">
-                <button class="penalty">벌점 부과</button>
+                    <button class="penalty">벌점 부과</button>
                 <button class="dec-cancel">신고 취소</button>
             </div>
         </div>
     </div>
+
+    <!--벌점 부과-->
+    <div class="penalty-back">
+        <div id="dec-penalty-back">
+            <div style="position: relative;top:30%">
+<!--                <div id="memberId"></div>의 벌점은 <div id="penalty"></div> 점 입니다.-->
+                <div>벌점을 추가하고 리뷰를 삭제하시겠습니까?</div>
+            </div>
+            <div class="penaltybtns">
+                <form action="/review/penalty" method="post">
+                    <input type="hidden" name="no" id="penaltyNo" >
+                    <input type="hidden" name="id" id="penaltyId">
+                    <button id="penY" type="submit">예</button>
+                </form>
+                <button id="penN">아니오</button>
+            </div>
+        </div>
+    </div>
+
+
     <!--신고 취소-->
     <div class="cancel-back"><!--배경-->
         <div id="dec-cancel-modal">
@@ -364,6 +410,20 @@
 </div>
 
 <script>
+
+    const $penaltyId = document.querySelector('#penaltyId')
+    const $penaltyNo = document.querySelector('#penaltyNo')
+
+    const $penalty = document.querySelector(".penalty")
+    const $penaltyModal = document.querySelector(".penalty-back")
+    const $penN = document.querySelector('#penN')
+    $penalty.addEventListener('click',function (){
+        $penaltyModal.style.display='flex'
+    })
+    $penN.addEventListener('click',function (){
+        $penaltyModal.style.display='none'
+        console.log('아니오')
+    })
 
     const $reviews = document.querySelectorAll('.review')
     const $detailBtn = document.querySelectorAll('.detailbtn');
@@ -417,8 +477,12 @@
             const stationName = $review.querySelector('.stationName')?.textContent||'';
             const no =  $review.querySelector('.no')?.textContent;
             console.log(stationName+" "+toiletLocation)
-            console.log(id)
-            console.log(decNum)
+            console.log("id"+ id)
+            console.log('no : '+no)
+
+            // penalty form 에 id, no 넣기
+            $penaltyId.value=id
+            $penaltyNo.value=no
 
 
             // 버튼에 해당하는 공지사항 제목,내용 모달창에 띄우기 (비동기)
@@ -444,20 +508,20 @@
             console.log("index:"+openedIndex)
         })
 
-        const $critreia = document.querySelector('#criteria')
-        const $inputBox = document.querySelector('#inputbox')
-
-        $critreia.addEventListener('change',function(){
-            const selectedValue = this.value;
-
-            if(selectedValue === 'member_id'){
-                $inputBox.placeholder='사용자ID를 입력해주세요'
-            } else if(selectedValue === 'station_name'){
-                $inputBox.placeholder='역명을 입력해주세요'
-            } else{
-                $inputBox.placeholder='검색기준을 입력해주세요'
-            }
-        })
+        // const $criteria = document.querySelector('#criteria')
+        // const $inputBox = document.querySelector('#inputbox')
+        //
+        // $criteria.addEventListener('change',function(){
+        //     const selectedValue = this.value;
+        //
+        //     if(selectedValue === 'member_id'){
+        //         $inputBox.placeholder='사용자ID를 입력해주세요'
+        //     } else if(selectedValue === 'station_name'){
+        //         $inputBox.placeholder='역명을 입력해주세요'
+        //     } else{
+        //         $inputBox.placeholder='검색기준을 입력해주세요'
+        //     }
+        // })
 
     })
 </script>
