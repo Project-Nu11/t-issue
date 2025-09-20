@@ -117,10 +117,7 @@
             /*text-overflow:ellipsis;*/
             /*white-space: nowrap;*/
         }
-        /*공지사항 날짜(요약에 안보이게)*/
-        .date{
 
-        }
         /*공백*/
         .empty{
             height: %;
@@ -161,12 +158,13 @@
         /*수정 삭제 등록 취소 버튼 레이아웃*/
         .btns{
             position: fixed;
-            left: 69%;
+            left: 70%;
             top: 75%;
-            width: 100%;
+            width: 9%;
             height: 100%;
             display: flex;
             gap: 1%;
+            justify-content: space-between;
         }
         /*수정 삭제 등록 취소 버튼 디자인*/
         .updatebtn,.deletebtn,.registbtn,.cancelbtn,.updatecancelbtn,.updateregistbtn{
@@ -264,18 +262,17 @@
         .delbtns{
             width: 30%;
             height: 10%;
-            display: flex;
+            /*display: flex;*/
             gap: 5%;
             position: relative;
-            /*border: black solid 1px;*/
-            justify-content: space-between;
+            border: black solid 1px;
+            /*justify-content: space-between;*/
             top: 70%;
         }
         #delY,#delN{
             border: none;
             width: 50px;
             height: 30px;
-
         }
 
         /*공지사항 수정 모달 레아아웃(none)*/
@@ -432,14 +429,28 @@
     <div class="deleteback"><!--배경-->
         <div id="deletemodal">
             <div style="position: relative;top:30%">답변을 거절하시겠습니까?</div>
+
+
+<!--            <div class="delbtns">-->
+<!--                <form action="/request/manager/reject" method="post">-->
+<!--                    <input type="hidden" name="no" id="deleteNo">-->
+<!--                    <input type="text" name="reject" style="width: 100%">-->
+<!--                    <button id="delY" type="submit">예</button>-->
+<!--                </form>-->
+<!--                <button id="delN" style="position: relative ;">아니오</button>-->
+<!--            </div>-->
+
             <div class="delbtns">
                 <form action="/request/manager/reject" method="post">
                     <input type="hidden" name="no" id="deleteNo">
-                    <input type="text" name="reject">
+                    <input type="text" name="reject" style="width: 10%;position: fixed;bottom: 45%;left: 45%">
                     <button id="delY" type="submit">예</button>
+                    <button id="delN" type="button">아니오</button>
                 </form>
-                <button id="delN">아니오</button>
+
             </div>
+
+
         </div>
         <div class="deletesuccess">
             답변이 거절되었습니다.
