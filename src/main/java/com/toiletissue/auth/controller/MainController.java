@@ -13,13 +13,13 @@ public class MainController {
     public void main() {
     }
 
-//    @Value("${api.kakao.key}")
-//    private String kakaoKey;
-//
-//    @GetMapping("/main")
-//    public String mainPage(Model model) {
-//        model.addAttribute("kakaoKey", kakaoKey);
-//        return "main";
-//    }
+    @Value("${api.kakao.key}")
+    private String kakaoKey;
+
+    @GetMapping("/main")
+    public String mainPage(Model model) {
+        model.addAttribute("kakaoKey", kakaoKey);
+        return "main";
+    }
 
 }

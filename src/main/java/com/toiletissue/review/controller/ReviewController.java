@@ -141,6 +141,17 @@ public class ReviewController {
         return mv;
     }
 
+    @PostMapping("/penalty")
+    public ModelAndView penalizeReview(
+            ModelAndView mv,
+            @RequestParam("no")int no,
+            @RequestParam("id")String id){
+
+        reviewService.penalizeReview(no);
+        reviewService.penalizeMember(id);
+        mv.setViewName("redirect:/review/declared");
+        return mv;
+    }
 
 
 //    @GetMapping("/search")
