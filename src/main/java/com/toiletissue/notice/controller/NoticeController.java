@@ -28,6 +28,15 @@ public class NoticeController {
 
         return "notice/manager";
     }
+    @GetMapping("/user")
+    public String noticeUser(Model model){
+
+        List<NoticeDTO> noticeList = noticeService.selectAllNotice();
+
+        model.addAttribute("noticeList",noticeList);
+
+        return "notice/user";
+    }
 
 //    @GetMapping("/insert")
     ////    public void insertNotice(){}
