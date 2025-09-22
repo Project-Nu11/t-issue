@@ -1,6 +1,8 @@
 package com.toiletissue.toilet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toiletissue.member.model.dto.MemberDTO;
+import com.toiletissue.member.model.service.MemberService;
 import com.toiletissue.notice.model.dto.NoticeDTO;
 import com.toiletissue.review.model.dto.ReviewDTO;
 import com.toiletissue.review.model.service.ReviewService;
@@ -34,9 +36,12 @@ public class ToiletController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private MemberService memberService;
+
     @GetMapping("/stationList")
     public String stationList(Model model,
-                                    @RequestParam(value = "page", defaultValue = "1") int page) {
+                              @RequestParam(value = "page", defaultValue = "1") int page) {
 
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
@@ -139,12 +144,99 @@ public class ToiletController {
         return "toilet/station";
     }
 
+    @PostMapping("/details")
+    public String submitReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
+
+        System.out.println("post에서받은 stationName : " + reviewDTO.getStationName());
+        // 리뷰 저장
+        reviewService.insertReview(reviewDTO);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        Map<String, Object> body = response.getBody();
+
+        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
+        ObjectMapper mapper = new ObjectMapper();
+
+        // stationName 기준으로 ToiletDTO 찾기
+        ToiletDTO toilet = dataList.stream()
+                .map(m -> mapper.convertValue(m, ToiletDTO.class))
+                .filter(t -> t.getName().equals(reviewDTO.getStationName()))
+                .findFirst()
+                .orElse(null);
+
+        // toiletName 생성
+        String toiletName = "";
+        if (toilet != null) {
+            toiletName = toilet.getName() + "역 " + toilet.getGround() + " " + toilet.getFloor() + " " + toilet.getGateInOut() + " 화장실";
+        }
+
+        redirectAttributes.addAttribute("stationName", reviewDTO.getStationName());
+        redirectAttributes.addAttribute("toiletName", toiletName);
+        return "redirect:/details";
+    }
+
+//    @GetMapping("/details")
+//    public String toiletDetails(
+//            @RequestParam(value = "stationName", required = false) String stationName,
+//            @RequestParam(value = "toiletName", required = false) String toiletName,
+//            Model model, Principal principal) {
+//
+//        System.out.println("==== /details 호출 ====");
+//        System.out.println("받은 stationName: " + stationName);
+//        System.out.println("받은 toiletName: " + toiletName);
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
+//
+//        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+//        Map<String, Object> body = response.getBody();
+//
+//        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        // stationName과 toiletName으로 필터링
+//        ToiletDTO toilet = dataList.stream()
+//                .map(m -> mapper.convertValue(m, ToiletDTO.class))
+//                .filter(t -> (t.getName().equals(stationName) &&
+//                        (t.getName() + "역 " + t.getGround() + " " + t.getFloor() + " " + t.getGateInOut() + " 화장실")
+//                                .equals(toiletName)))
+//                .findFirst()
+//                .orElse(null);
+//
+//        System.out.println("찾은 toilet: " + toilet);
+//
+//        if (toilet == null) {
+//            toilet = new ToiletDTO();
+//        }
+//
+//        List<ReviewDTO> reviewList = reviewService.selectReviewListByStation(stationName);
+//        model.addAttribute("reviewList", reviewList != null ? reviewList : Collections.emptyList());
+//
+//        if (principal != null) { // 로그인 상태일 때만
+//            MemberDTO member = memberService.findById(principal.getName());
+//            model.addAttribute("member", member);
+//        }
+//
+//        model.addAttribute("toilet", toilet);
+//        model.addAttribute("stationName", stationName);
+//        model.addAttribute("toiletName", toiletName);
+//
+//        return "toilet/details";
+//    }
+
     @GetMapping("/details")
     public String toiletDetails(
             @RequestParam(value = "stationName", required = false) String stationName,
             @RequestParam(value = "toiletName", required = false) String toiletName,
-            Model model) {
+            Model model, Principal principal) {
 
+        System.out.println("==== get /details 호출 ====");
+        System.out.println("받은 stationName: " + stationName);
+        System.out.println("받은 toiletName: " + toiletName);
+
+        // api 호출
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
 
@@ -157,50 +249,65 @@ public class ToiletController {
         // stationName과 toiletName으로 필터링
         ToiletDTO toilet = dataList.stream()
                 .map(m -> mapper.convertValue(m, ToiletDTO.class))
-                .filter(t -> (t.getName().equals(stationName) &&
-                        (t.getName() + "역 " + t.getGround() + " " + t.getFloor() + " " + t.getGateInOut() + " 화장실")
-                                .equals(toiletName)))
+                .filter(t -> {
+                    String composedName = t.getName() + "역 " + t.getGround() + " " + t.getFloor() + " " + t.getGateInOut() + " 화장실";
+                    boolean matches = t.getName().equals(stationName) && composedName.equals(toiletName);
+                    if (matches) {
+                        System.out.println("일치하는 화장실 찾음: " + composedName);
+                    }
+                    return matches;
+                })
                 .findFirst()
                 .orElse(null);
 
+        if (toilet == null) {
+            System.out.println("일치하는 화장실 없음");
+            toilet = new ToiletDTO();
+        }
+
+        // 리뷰
         List<ReviewDTO> reviewList = reviewService.selectReviewListByStation(stationName);
         model.addAttribute("reviewList", reviewList != null ? reviewList : Collections.emptyList());
 
-//        ReviewDTO review = new ReviewDTO();
-//        model.addAttribute("review", review);
+        // 로그인 회우ㅝㄴ 정보
+        if (principal != null) { // 로그인 상태일 때만
+            MemberDTO member = memberService.findById(principal.getName());
+            model.addAttribute("member", member);
+        }
+
+        System.out.println("=== Toilet 객체 확인 ===");
+        System.out.println("toilet.getName(): " + (toilet != null ? toilet.getName() : "toilet is null"));
+        System.out.println("toilet.getGround(): " + (toilet != null ? toilet.getGround() : "toilet is null"));
+        System.out.println("toilet.getFloor(): " + (toilet != null ? toilet.getFloor() : "toilet is null"));
+        System.out.println("toilet.getGateInOut(): " + (toilet != null ? toilet.getGateInOut() : "toilet is null"));
+//        System.out.println("stationName: " + stationName);
+//        System.out.println("toiletName: " + toiletName);
 
         model.addAttribute("toilet", toilet);
         model.addAttribute("stationName", stationName);
         model.addAttribute("toiletName", toiletName);
 
+        System.out.println("끝");
+
         return "toilet/details";
     }
 
-    @PostMapping("details/insert")
-//    public String insertReview(ReviewDTO reviewDTO, Principal principal) {
-//
-//        reviewDTO.setMemberId(principal.getName());
-//
-//        reviewService.insertReview(reviewDTO);
-//
-//        String encodedStation = URLEncoder.encode(reviewDTO.getStationName(), StandardCharsets.UTF_8);
-//
-//        System.out.println("redirect stationName = " + reviewDTO.getStationName());
-//        System.out.println("encoded stationName = " + encodedStation);
-//
-//        return "redirect:/toilet/details?stationName=" + encodedStation; }
-    public ModelAndView insertReview(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO) {
 
-        System.out.println(reviewDTO);
-        reviewService.insertReview(reviewDTO);
-        System.out.println(reviewDTO);
-        mv.setViewName("redirect:/toilet/details");
 
-        return mv;
-    }
 
 
     @GetMapping("/toilet-sos")
     public void toiletSOS() {}
 
 }
+
+//    @PostMapping("/details")
+//    public ModelAndView insertReview(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO) {
+//
+//        System.out.println(reviewDTO);
+//        reviewService.insertReview(reviewDTO);
+//        System.out.println(reviewDTO);
+//        mv.setViewName("redirect:/toilet/details");
+//
+//        return mv;
+//    }

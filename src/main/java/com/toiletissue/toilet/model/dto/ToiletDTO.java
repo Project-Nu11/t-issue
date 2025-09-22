@@ -14,7 +14,7 @@ public class ToiletDTO {
     private String gateInOut;
 
     @JsonProperty("경도")
-    private String longitude;
+    private Double longitude;
 
     @JsonProperty("관리기관명")
     private String management;
@@ -65,7 +65,7 @@ public class ToiletDTO {
     private String emergencyBellYn;
 
     @JsonProperty("상세위치")
-    private String location;
+    private String toiletLocation;
 
     @JsonProperty("소재지도로명주소")
     private String address;
@@ -98,7 +98,7 @@ public class ToiletDTO {
     private String lines;
 
     @JsonProperty("위도")
-    private String latitude;
+    private Double latitude;
 
     @JsonProperty("전화번호")
     private String phone;
@@ -112,9 +112,9 @@ public class ToiletDTO {
     @JsonProperty("화장실입구cctv설치유무")
     private String cctvYn;
 
-    private ToiletDTO() {}
+    public ToiletDTO() {}
 
-    public ToiletDTO(String exit, String openingTime, String gateInOut, String longitude, String management, String division, String diaperDeckYnDmt, String diaperDeckYnMt, String diaperDeckYnDwt, String diaperDeckYnWt, String unisexToiletYn, Integer menToilet, String menUrinal, Integer boyToilet, Integer boyUrinal, Integer disabledMenToilet, Integer disabledMenUrinal, String dbDate, String remodeling, String emergencyBellYn, String location, String address, String streetAddress, Integer womenToilet, Integer girlToilet, Integer disabledWomenToilet, String name, Integer floor, Integer serialNumber, String wasteDisposalMethod, String lines, String latitude, String phone, String ground, String locationType, String cctvYn) {
+    public ToiletDTO(String exit, String openingTime, String gateInOut, Double longitude, String management, String division, String diaperDeckYnDmt, String diaperDeckYnMt, String diaperDeckYnDwt, String diaperDeckYnWt, String unisexToiletYn, Integer menToilet, String menUrinal, Integer boyToilet, Integer boyUrinal, Integer disabledMenToilet, Integer disabledMenUrinal, String dbDate, String remodeling, String emergencyBellYn, String toiletLocation, String address, String streetAddress, Integer womenToilet, Integer girlToilet, Integer disabledWomenToilet, String name, Integer floor, Integer serialNumber, String wasteDisposalMethod, String lines, Double latitude, String phone, String ground, String locationType, String cctvYn) {
         this.exit = exit;
         this.openingTime = openingTime;
         this.gateInOut = gateInOut;
@@ -135,7 +135,7 @@ public class ToiletDTO {
         this.dbDate = dbDate;
         this.remodeling = remodeling;
         this.emergencyBellYn = emergencyBellYn;
-        this.location = location;
+        this.toiletLocation = toiletLocation;
         this.address = address;
         this.streetAddress = streetAddress;
         this.womenToilet = womenToilet;
@@ -177,11 +177,11 @@ public class ToiletDTO {
         this.gateInOut = gateInOut;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
@@ -313,12 +313,12 @@ public class ToiletDTO {
         this.emergencyBellYn = emergencyBellYn;
     }
 
-    public String getLocation() {
-        return location;
+    public String getToiletLocation() {
+        return toiletLocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setToiletLocation(String toiletLocation) {
+        this.toiletLocation = toiletLocation;
     }
 
     public String getAddress() {
@@ -401,11 +401,11 @@ public class ToiletDTO {
         this.lines = lines;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
@@ -447,7 +447,7 @@ public class ToiletDTO {
                 "exit='" + exit + '\'' +
                 ", openingTime='" + openingTime + '\'' +
                 ", gateInOut='" + gateInOut + '\'' +
-                ", longitude='" + longitude + '\'' +
+                ", longitude=" + longitude +
                 ", management='" + management + '\'' +
                 ", division='" + division + '\'' +
                 ", diaperDeckYnDmt='" + diaperDeckYnDmt + '\'' +
@@ -464,7 +464,7 @@ public class ToiletDTO {
                 ", dbDate='" + dbDate + '\'' +
                 ", remodeling='" + remodeling + '\'' +
                 ", emergencyBellYn='" + emergencyBellYn + '\'' +
-                ", location='" + location + '\'' +
+                ", toiletLocation='" + toiletLocation + '\'' +
                 ", address='" + address + '\'' +
                 ", streetAddress='" + streetAddress + '\'' +
                 ", womenToilet=" + womenToilet +
@@ -475,7 +475,7 @@ public class ToiletDTO {
                 ", serialNumber=" + serialNumber +
                 ", wasteDisposalMethod='" + wasteDisposalMethod + '\'' +
                 ", lines='" + lines + '\'' +
-                ", latitude='" + latitude + '\'' +
+                ", latitude=" + latitude +
                 ", phone='" + phone + '\'' +
                 ", ground='" + ground + '\'' +
                 ", locationType='" + locationType + '\'' +

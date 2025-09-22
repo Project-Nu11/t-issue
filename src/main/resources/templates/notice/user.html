@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #noticelist{
+            width: 518px;
+            height: 767px;
+            margin-left: 29px;
+            position: absolute;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            overflow-y: scroll;
+            scrollbar-width: none;
+            overflow-x: hidden;
+        }
+        .content {
+            font-size: 20px;
+        }
+        /*리스트 레이아웃(한 개당)*/
+        .notice{
+            height: 217px;
+            background-color: white;
+            margin-bottom: 34px
+
+        }
+        .title,.content {
+            /*background: white;*/
+            z-index: 1000;
+        }
+        /*공지사항 제목(요약)*/
+        .title{
+            height: 10%;
+            font-size: 20px;
+            position: relative;
+            padding:3%;
+            font-family: AggravoM;
+
+        }
+        /*공지사항 내용(요약)*/
+        .content{
+            height: 40%;
+            padding: 3%;
+            width: 70%;
+            font-size: 20px;
+            font-weight: 400;
+            font-family: AggravoL;
+            overflow: hidden;
+            /*text-overflow:ellipsis;*/
+            white-space: nowrap;
+        }
+        .date {
+            padding: 3%;
+        }
+        /*공백*/
+        .empty{
+            height: 10%;
+            background: rgba(0,0,0,0%);
+        }
+    </style>
+</head>
+<body>
+<div th:include="/common/errorheader.html"></div>
+<div id="main">
+
+    <p style="font-size: 48px;margin-left: 29px;margin-top: 50px;margin-bottom: 30px">공지사항</p>
+
+    <div id="noticelist">
+        <div class="notice" th:each="notice,n : ${noticeList}" style="border-radius: 8px">
+            <div class="title" th:text="${notice.title}" style="border-top-left-radius: 8px;border-top-right-radius: 8px"></div>
+            <div class="content" th:text="${notice.content}" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px"></div>
+            <div class="date" th:text="${notice.date}"></div>
+            <div class="no" th:text="${notice.no}" style="color: rgba(0,0,0,0)"></div>
+            <div class="date"></div>
+            <div class="empty" ></div>
+        </div>
+    </div>
+
+    <!--    &lt;!&ndash;공지사항 상세 정보&ndash;&gt;-->
+    <!--    <div class="details">-->
+    <!--        <div class="layout">-->
+    <!--            <div style="font-family: AggravoB;font-size: 20px;">제목</div>-->
+    <!--            <div id="dtitle" style="font-family: AggravoB;font-size: 20px;"></div>-->
+    <!--            <br>-->
+    <!--            <div style="font-family: AggravoM;font-size: 20px;">내용</div>-->
+    <!--            <div id="dcontent" style="font-family: AggravoL;font-size: 20px;"></div>-->
+    <!--            <br>-->
+    <!--            <div id="ddatelayout">-->
+    <!--                <div style="font-family: AggravoM;font-size: 20px;">날짜</div>-->
+    <!--                <div id="ddate" style="font-family: AggravoL;font-size: 20px;"></div>-->
+    <!--            </div>-->
+    <!--            <div id="dno" style="display: none"></div>-->
+    <!--            <div>-->
+    <!--                <button class="closeBtn">확인</button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+</div>
+</body>
+</html>
