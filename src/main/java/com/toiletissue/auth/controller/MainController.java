@@ -23,6 +23,7 @@ public class MainController {
     public void main() {
     }
 
+
     @Value("${api.kakao.key}")
     private String kakaoKey;
 
@@ -63,5 +64,6 @@ public class MainController {
         model.addAttribute("kakaoKey", kakaoKey);
         return "main";
     }
+
 
 }
