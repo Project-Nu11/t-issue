@@ -94,6 +94,15 @@
          where member_id = #{id}
     </update>
 
+    <delete id="deleteReview">
+        delete from review where review_no = #{no}
+    </delete>
+
+    <select id="selectReviewById" resultMap="reviewResultMap">
+        select * from review where member_id = #{id}
+    </select>
+
+
 <!--    <select id="selectAllReview" resultMap="review">-->
 <!--        select-->
 <!--               review_no,-->

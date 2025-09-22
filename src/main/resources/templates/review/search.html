@@ -164,7 +164,7 @@
 
         }
 
-        .penalty,.dec-cancel{
+        .delete,.dec-cancel{
             font-family: AggravoM;
             font-size: 20px;
             width: 100px;
@@ -177,7 +177,7 @@
         }
         .btns{
             position: fixed;
-            left: 68%;
+            left: 73%;
             top: 75%;
             width: 100%;
             height: 200%;
@@ -278,7 +278,9 @@
 <div th:include="/manager/backgroundandbanner.html"></div>
 <div th:include="/manager/sidebar-rev.html"></div>
 <div id="mainmenu">
-    <div id="pagetitle">선택 리뷰 관리</div>
+    <div id="pagetitle">선택 리뷰 관리</div>  <!--타이틀-->
+
+
     <form action="/review/search" method="get" id="search">
         <select name="criteria" id="criteria">
             <option value="" th:selected="${value == '%%'}" selected>검색 기준</option>
@@ -288,7 +290,9 @@
         <input type="text" id="inputbox" name="search" placeholder="검색기준을 입력해주세요">
         <button type="submit">검색</button>
     </form>
-    <div id="reviewlist">
+
+
+    <div id="reviewlist"> <!--요약리스트-->
         <div class="review" th:each="review : ${reviewList2}">
             <div class="detailbtn">▶</div> <!--detailbtn은 여러개있을 수 있고 그에 따른 인덱스 있음-->
             <div class="toiletName" th:text="${review.stationName} +' ' +${review.toiletLocation}"></div>
@@ -299,16 +303,15 @@
             <div class="no" th:text="${review.no}" style="display: none"></div> <!--번호 확인용...-->
             <div class="content" th:text="${review.content}" style="display: none"></div> <!--리뷰내용 확인용...-->
             <div class="decNum" th:text="${review.decNum}" style="display: none"></div> <!--신고횟수 확인용...-->
-
             <div class="empty"></div>
         </div>
     </div>
     <!--신고 리뷰 상세정보-->
-    <div class="details">
-        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >신고 리뷰</div>
+    <div class="details"> <!--상세정보 모달-->
+        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >리뷰 상세</div>
         <div class="details-layout">
-            <div style="font-family: AggravoB;font-size: 20px;">이용 화장실</div>
-            <div id="toiletName" style="font-family: AggravoB;font-size: 20px;"> 이용 화장실 이름</div>
+            <div style="font-family: AggravoM;font-size: 20px;">이용 화장실</div>
+            <div id="toiletName" style="font-family: AggravoL;font-size: 20px;"> 이용 화장실 이름</div>
             <div style="font-family: AggravoM;font-size: 20px;">내용</div>
             <div id="content" style="font-family: AggravoL;font-size: 20px;"> 리뷰 내용</div>
             <div id="date-layout">
@@ -324,32 +327,30 @@
                 <div id="decNum" style="font-family: AggravoL;font-size: 20px;">신고횟수</div>
             </div>
             <div class="btns">
-                <button class="penalty">벌점 부과</button>
-                <button class="dec-cancel">신고 취소</button>
+                <button class="delete">삭제</button>
+                <button class="dec-cancel" hidden>신고 취소</button>
             </div>
         </div>
     </div>
     <!--신고 취소-->
     <div class="cancel-back"><!--배경-->
         <div id="dec-cancel-modal">
-            <div style="position: relative;top:30%">해당 리뷰의 신고를 취소하시겠습니까?</div>
+            <div style="position: relative;top:30%">해당 리뷰를 삭제하시겠습니까?</div>
             <div class="cancelbtns">
-                <form action="/review/declared/cancel" method="post">
+                <form action="/review/search/delete" method="post">
                     <input type="hidden" name="no" id="cancelNo">
                     <button id="canY" type="submit">예</button>
                 </form>
                 <button id="canN">아니오</button>
                 <div class="cancelsuccess">
-                    리뷰 신고가 취소되었습니다.
+                    리뷰가 삭제되었습니다.
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <!--페이징처리-->
 <div class="pagination" style="display: flex">
-
     <!-- 이전 버튼 -->
     <span th:if="${startPage2 > 1}">
         <a th:href="@{/review/search(page2=${startPage2 - 1})}">◀</a>
@@ -366,7 +367,6 @@
     <span th:if="${endPage2 < totalPages2}">
         <a th:href="@{/review/search(page2=${endPage2 + 1})}">▶</a>
     </span>
-
 </div>
 
 <script>
@@ -385,6 +385,14 @@
     const $decCancelAgreeBtn = document.querySelector("#canY") // 신고 취소 동의 벝은
     const $decCancelSuccess = document.querySelector(".cancelsuccess") // 신고 취소 완료 버튼
     const $decCancelReviewNo = document.querySelector("#cancelNo") // 신고할 리뷰의 번호
+    const $deleteBtn = document.querySelector(".delete") // 삭제 버튼
+    const $deleteModal = document.querySelector(".cancel-back") // 삭제 모달
+
+    // const $delNo = document.querySelector("#delNo")
+
+    $deleteBtn.addEventListener('click',function(){
+        $deleteModal.style.display='flex'
+    })
 
 
     $decCancelBtn.addEventListener('click',function (){
@@ -435,6 +443,7 @@
             $detailDecNum.textContent=decNum;
             $decCancelReviewNo.value=no;
             console.log($decCancelReviewNo.value)
+
 
             $review.style.background='#f9f9d3'
 
