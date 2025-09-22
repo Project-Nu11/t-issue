@@ -103,8 +103,11 @@
             <div class="field">
                 <label for="memberId">아이디</label>
                 <div class="input-row">
-                    <input class="input" type="text" th:field="*{memberId}" id="memberId"
-                           required minlength="4" maxlength="20" autocomplete="off"/>
+                    <input type="text" name="memberId" id="memberId"
+                           pattern="^(?=.{4,20}$)(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$"
+                           title="아이디는 영문과 숫자를 모두 포함한 4~20자여야 합니다."
+                           required autocomplete="off"
+                           oninput="this.value=this.value.replace(/[^A-Za-z0-9]/g,'');">
                             <!-- required minlength="4" : 4글자 이상 -->
                     <button class="check-btn" type="button" id="checkIdBtn">중복확인</button>
                 </div>

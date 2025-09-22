@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.toiletissue.member.model.dao.MypageMapper">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <resultMap id="member" type="com.toiletissue.member.model.dto.MemberDTO">
-        <id property="memberId"         column="member_id"/>
+<mapper namespace="com.toiletissue.mypage.model.dao.MyPageMapper">
+
+    <resultMap id="memberMap" type="com.toiletissue.member.model.dto.MemberDTO">
+        <id     property="memberId"     column="member_id"/>
         <result property="memberPwd"    column="member_pwd"/>
         <result property="memberName"   column="member_name"/>
         <result property="email"        column="email"/>
@@ -16,19 +17,32 @@
         <result property="endDate"      column="end_date"/>
     </resultMap>
 
-    <select id="findById" resultMap="member">
-        SELECT
-        member_id,
-        member_pwd,
-        member_name,
-        email,
-        member_bdate,
-        member_gender,
-        role,
-        end_status,
-        end_date
-        FROM member
-        WHERE member_id = #{memberId}
+    <select id="findById" parameterType="string" resultMap="memberMap">
+        select
+            member_id,
+            member_pwd,
+            member_name,
+            email,
+            member_bdate,
+            member_gender,
+            role,
+            end_status,
+            end_date
+        from member
+        where member_id = #{memberId}
     </select>
+
+    <update id="updatePasswordByMemberId">
+        update member
+        set member_pwd = #{encodedPwd}
+        where member_id = #{memberId}
+    </update>
+
+    <update id="softDelete">
+        update member
+        set end_status = 1,
+        end_date   = NOW()
+        where member_id = #{memberId}
+    </update>
 
 </mapper>

@@ -112,6 +112,7 @@
     </update>
 
 
+
     <!-- ========================== 관리자 mapper ================================== -->
     <select id="selectAllMember" resultMap="member">
         SELECT
@@ -152,5 +153,7 @@
         where end_status=0
           and penalty > 0
     </select>
+
+
 
 </mapper>

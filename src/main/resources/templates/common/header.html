@@ -69,21 +69,22 @@
     </style>
 </head>
 <body>
-    <header>
-        <div id="logo">T-issue</div>
-        <div>
-            <button id="noticeBtn" onclick="location.href='/notice/'">
-                <div>
-                    <img src="/icon/free-icon-feedback-11714233.png" width="45" height="45">
-                </div>
-            </button>
-            <button id="mypageBtn" onclick="location.href='/member/mypage'">
-                <div>
-                    <img src="/icon/free-icon-user-747376.png" width="45" height="45">
-                </div>
-            </button>
-        </div>
-    </header>
+
+<header>
+    <div id="logo">T-issue</div>
+    <div>
+        <button id="noticeBtn" onclick="location.href='/notice/user'">
+            <div>
+                <img src="/icon/free-icon-feedback-11714233.png" width="45" height="45">
+            </div>
+        </button>
+        <button id="mypageBtn" onclick="location.href='/member/mypage'">
+            <div>
+                <img src="/icon/free-icon-user-747376.png" width="45" height="45">
+            </div>
+        </button>
+    </div>
+</header>
 <script>
     const $tomain = document.querySelector("#logo");
     $tomain.addEventListener('click',function (){
