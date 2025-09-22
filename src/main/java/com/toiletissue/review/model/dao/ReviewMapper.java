@@ -22,4 +22,8 @@ public interface ReviewMapper {
     void penalizeReview(int no);
 
     void penalizeMember(String id);
+
+    void deleteReview(int no);
+
+    List<ReviewDTO> selectReviewById(String id);
 }

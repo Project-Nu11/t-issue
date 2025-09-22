@@ -82,10 +82,10 @@
         .detailbtn{
             position: relative;
             bottom:25%;
-            left: 93%;
+            left: 95%;
             z-index: 1001;
             height: 0%;
-            font-size: 22px;
+            font-size: 20px;
             z-index: 1100;
         }
         /*공지사항 제목(요약)*/
@@ -265,8 +265,8 @@
             /*display: flex;*/
             gap: 5%;
             position: relative;
-            border: black solid 1px;
-            /*justify-content: space-between;*/
+            /*border: black solid 4px;*/
+            justify-content: space-between;
             top: 70%;
         }
         #delY,#delN{
@@ -429,28 +429,14 @@
     <div class="deleteback"><!--배경-->
         <div id="deletemodal">
             <div style="position: relative;top:30%">답변을 거절하시겠습니까?</div>
-
-
-<!--            <div class="delbtns">-->
-<!--                <form action="/request/manager/reject" method="post">-->
-<!--                    <input type="hidden" name="no" id="deleteNo">-->
-<!--                    <input type="text" name="reject" style="width: 100%">-->
-<!--                    <button id="delY" type="submit">예</button>-->
-<!--                </form>-->
-<!--                <button id="delN" style="position: relative ;">아니오</button>-->
-<!--            </div>-->
-
-            <div class="delbtns">
+            <div class="delbtns" >
                 <form action="/request/manager/reject" method="post">
                     <input type="hidden" name="no" id="deleteNo">
-                    <input type="text" name="reject" style="width: 10%;position: fixed;bottom: 45%;left: 45%">
+                    <input type="text" name="reject" style="width: 10%;position: fixed;bottom: 45%;left: 45%" placeholder="거절 사유를 입력해주세요">
                     <button id="delY" type="submit">예</button>
-                    <button id="delN" type="button">아니오</button>
+                    <button id="delN" type="button" style="position: relative;left: 25%">아니오</button>
                 </form>
-
             </div>
-
-
         </div>
         <div class="deletesuccess">
             답변이 거절되었습니다.

@@ -60,14 +60,10 @@ public class ReviewController {
 
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-
-
-
-
-        model.addAttribute("reviewList",pagedReviews);
-//        model.addAttribute("value",value);
         model.addAttribute("page",page);
         model.addAttribute("totalPages",totalPages);
+
+        model.addAttribute("reviewList",pagedReviews);
 
         return "/review/declared";
     }
@@ -153,8 +149,14 @@ public class ReviewController {
         return mv;
     }
 
+    @PostMapping("/search/delete")
+    public ModelAndView deleteReview(ModelAndView mv,@RequestParam int no){
+        reviewService.deleteReview(no);
+        mv.setViewName("redirect:/review/search");
+        return mv;
+    }
 
-//    @GetMapping("/search")
-//    public void reviewSearch(){}
+
+
 
 }

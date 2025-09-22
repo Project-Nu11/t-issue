@@ -4,14 +4,313 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        *{
+            cursor: pointer;
+        }
         #membtn{
             background: #FAFAC2;
+        }
+        /*타이틀*/
+        #pagetitle{
+            font-size: 40px;
+            position: fixed;
+            top: 15%;
+            left: 20%;
+        }
+        /*요약리스트*/
+        #summaryList{
+            width: 30%;
+            height: 60%;
+            position: absolute;
+            left: 19%;
+            top: 22%;
+            /*border: black 1px solid; !*레이아웃 확인용*!*/
+            overflow-y: hidden;
+            scrollbar-width: none;
+            overflow-x: hidden;
+        }
+        /*요약 목록 스타일*/
+        .listComponent{
+            height: 9%;
+            margin-bottom: 1%;
+            background: white;
+            display: flex;
+            flex-direction: row;
+            /*border: black 1px solid;*/
+            align-items: center;
+            border-radius: 8px;
+        }
+        /*상세 버튼*/
+        .detailbtn{
+            position: relative;
+            left: 95%;
+            font-size: 20px;
+        }
+        /*상세 스타일*/
+        .details{
+            width: 30%;
+            height: 60%;
+            position: fixed;
+            left: 51%;
+            top: 22%;
+            background: white;
+            /*border: black 10px solid; !*레이아웃 확인용*!*/
+            display: none;
+            /*justify-content: center;*!*/
+            flex-direction: column;
+            align-items: center;
+            border-radius: 8px;
+        }
+        /*상세정보 모달 레이아웃*/
+        .details-layout{
+            padding: 5%;
+            font-family: AggravoM;
+            width: 90%;
+            height: 90%;
+            /*border: black 5px solid;*/
+        }
+        /*상세정보 내부 버튼 스타일*/
+        .restriction{
+            font-family: AggravoM;
+            font-size: 20px;
+            width: 120px;
+            height: 30px;
+            background: white;
+            border: #d9d9d9 solid 4px;
+            border-radius: 8px;
+            text-align: center;
+            align-content: center;
+        }
+
+        .pagination{
+            width: 15%;
+            position: fixed;
+            top: 90%;
+            left: 45%;
+            /*border: black solid 1px;*/
+            display: flex;
+            justify-content: center;
+            gap: 10%;
+        }
+        .pagination a{
+            text-decoration: none;
+            color: black;
+            font-size: 30px;
+        }
+        .pagination a.active{
+            color: #d9d9d9;
+        }
+        /*확인 모달 배경*/
+        .modal-back{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,50%);
+            z-index: 1100;
+            display: none;
+        }
+        /*확인 모달 창*/
+        #modal{
+            width: 25%;
+            height: 30%;
+            background: white;
+            position: fixed;
+            top: 35%;
+            left: 37.5%;
+            z-index: 1004;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modalBtn{
+            width: 30%;
+            height: 10%;
+            display: flex;
+            gap: 5%;
+            position: relative;
+            /*border: black solid 1px;*/
+            justify-content: space-between;
+            top: 70%;
+        }
+        #Y,#N{
+            border: none;
+            width: 50px;
+            height: 30px;
         }
     </style>
 </head>
 <body>
 <div th:include="/manager/backgroundandbanner.html"></div>
 <div th:include="/manager/sidebar.html"></div>
-<div id="mainmenu">회원 메인입니다.</div>
+<div id="mainmenu">
+    <div id="pagetitle">회원 관리</div> <!--타이틀-->
+
+    <div id="summaryList"> <!--요약리스트-->
+        <div class="listComponent" th:each="member : ${memberList}">
+            <div class="detailbtn">▶</div>
+            <div class="id" th:text="${member.memberId}" style="font-size: 25px;font-family: AggravoM;"></div>
+            <div class="pwd" th:text="${member.memberPwd}" hidden></div>
+            <div class="name" th:text="${member.memberName}" hidden></div>
+            <div class="email" th:text="${member.email}" hidden></div>
+            <div class="bdate" th:text="${member.memberBdate}" hidden></div>
+            <div class="gender" th:text="${member.memberGender}" hidden></div>
+            <div class="endStatus" th:text="${member.endStatus}" hidden></div>
+            <div class="endDate" th:text="${member.endDate}" hidden></div>
+            <div class="penalty" th:text="${member.penalty}" hidden></div>
+        </div>
+    </div>
+
+    <div class="details" > <!--상세정보 모달-->
+        <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;">회원 ID</div><!--상세 타이틀-->
+        <div class="details-layout">
+            <div id="name-layout" style="position: relative;">
+                <div style="font-family: AggravoM;font-size: 20px">이름</div>
+                <div id="memberName" style="font-family: AggravoL;font-size: 20px;"> 회원 이름</div>
+            </div>
+
+            <div id="bdate-layout" style=" position: relative;top: 7%">
+                <div style="font-family: AggravoM;font-size: 20px;">생년월일</div>
+                <div id="memberBdate" style="font-family: AggravoL;font-size: 20px;">회원 생년월일</div>
+            </div>
+
+            <div id="gender-layout" style="position: relative;top: 14%">
+                <div style="font-family: AggravoM;font-size: 20px;">성별</div>
+                <div id="gender" style="font-family: AggravoL;font-size: 20px;">회원 성별</div>
+            </div>
+
+            <div id="email-layout" style="position: relative;top: 21%">
+                <div style="font-family: AggravoM;font-size: 20px;">이메일</div>
+                <div id="email" style="font-family: AggravoL;font-size: 20px;">회원 이메일</div>
+
+            </div>
+
+            <div style="position: relative;top: 28%;display: flex">
+                <div id="penalty-layout" style="width: 50%;">
+                    <div style="font-family: AggravoM;font-size: 20px;">총 벌점</div>
+                    <div id="penalty" style="font-family: AggravoL;font-size: 20px;">회원 총 벌점</div>
+                </div>
+
+                <div id="sanction-layout" style="width: 50%;">
+                    <div style="font-family: AggravoM;font-size: 20px;">제재 상태</div>
+                    <div id="sanction" style="font-family: AggravoL;font-size: 20px;"></div>
+                </div>
+            </div>
+
+            <div class="btns" style="display: flex;justify-content: center;position: relative;top: 35%;">
+                    <button class="restriction">영구 제한</button>
+            </div>
+        </div>
+    </div>
+
+    <!--확인모달-->
+    <div class="modal-back"><!--배경-->
+        <div id="modal">
+            <div style="position: relative;top:30%">해당 사용자를 영구 제한 조치하시겠습니까?</div>
+            <div class="modalBtn">
+                <form action="/member/restrict" method="post">
+                    <input type="hidden" name="id" id="id">
+                    <button id="Y" type="submit">예</button>
+                </form>
+                <button id="N">아니오</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination" style="display: flex">
+        <!-- 이전 버튼 -->
+        <span th:if="${startPage > 1}">
+            <a th:href="@{/member/manager(page=${startPage - 1})}">◀</a>
+        </span>
+
+            <!-- 페이지 번호 버튼 -->
+            <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{/member/manager(page=${i})}"
+               th:text="${i}"
+               th:classappend="${i == page} ? 'active' : ''"></a>
+        </span>
+
+            <!-- 다음 버튼 -->
+            <span th:if="${endPage < totalPages}">
+            <a th:href="@{/member/manager(page=${endPage + 1})}">▶</a>
+        </span>
+    </div>
+
+</div>
+<script>
+
+    const $detailbtn = document.querySelectorAll('.detailbtn')
+    const $detailModal = document.querySelector('.details')
+    const $listComponents = document.querySelectorAll('.listComponent')
+    const $memberName = document.querySelector('#memberName')
+    const $memberBdate = document.querySelector('#memberBdate')
+    const $gender = document.querySelector('#gender')
+    const $email = document.querySelector('#email')
+    const $penalty = document.querySelector('#penalty')
+    const $restrictionBtn = document.querySelector('.restriction')
+    const $restrictingId = document.querySelector('#id')
+    const $no = document.querySelector('#N')
+
+
+    const $modal = document.querySelector('.modal-back')
+
+    $restrictionBtn.addEventListener('click',function(){
+        $modal.style.display='flex'
+    })
+    $no.addEventListener('click',function (){
+        $modal.style.display='none';
+    })
+
+
+
+    let openedIndex = null
+    $detailbtn.forEach((btn,i)=>{
+        btn.addEventListener('click',function(){
+
+            $listComponents.forEach((a)=>{
+                a.style.background='#ffffff'
+            })
+
+
+            const $listComponent = btn.closest('.listComponent')
+            const name = $listComponent.querySelector('.name')?.textContent||''
+            const bdate = $listComponent.querySelector('.bdate')?.textContent||''
+            const gender = $listComponent.querySelector('.gender')?.textContent||''
+            const email = $listComponent.querySelector('.email')?.textContent||''
+            const penalty = $listComponent.querySelector('.penalty')?.textContent||''
+            const id = $listComponent.querySelector('.id').textContent||''
+
+            $memberName.textContent=name
+            $memberBdate.textContent=bdate
+            $gender.textContent=gender
+            $email.textContent=email
+            $penalty.textContent=penalty
+
+            $restrictingId.value=id;
+
+
+            // 영구제한 할 아이디 추출
+            $restrictionBtn.addEventListener('click',function (){
+
+            })
+
+
+
+
+            $listComponent.style.background="#fdfdc2"
+
+            if(openedIndex===i && $detailModal.style.display==='flex'){
+                $detailModal.style.display='none'
+                openedIndex=null;
+                $listComponent.style.background="#ffffff"
+                return;
+            }
+
+            $detailModal.style.display='flex'
+            openedIndex = i
+            console.log(openedIndex)
+
+        })
+    })
+
+</script>
 </body>
 </html>

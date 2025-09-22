@@ -56,4 +56,12 @@ public class ReviewService {
     public void penalizeMember(String id) {
         reviewMapper.penalizeMember(id);
     }
+
+    public void deleteReview(int no) {
+        reviewMapper.deleteReview(no);
+    }
+
+    public List<ReviewDTO> selectReviewById(String id) {
+        return reviewMapper.selectReviewById(id);
+    }
 }

@@ -3,7 +3,6 @@ package com.toiletissue.member.model.dao;
 import com.toiletissue.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
@@ -33,6 +32,12 @@ public interface MemberMapper {
     // 비밀번호 업데이트 (임시 비번 반영)
     int updatePasswordByMemberId(@Param("memberId") String memberId,
                                  @Param("encodedPwd") String encodedPwd);
+
+    List<MemberDTO> selectAllMember();
+
+    void restrictMember(String id);
+
+    List<MemberDTO> selectPenalizedMember();
 
 //    MemberDTO select(int id);
 }
