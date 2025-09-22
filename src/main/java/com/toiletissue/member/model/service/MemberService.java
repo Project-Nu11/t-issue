@@ -12,12 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class MemberService implements UserDetailsService {
 
     private final MemberMapper memberMapper;
     private final PasswordEncoder passwordEncoder;
+
+    // ★ 규칙: 아이디 = 영문+숫자 포함 4~20자 / 비밀번호 = 영문+숫자 포함 8자↑
+    private static final Pattern ID_RULE  =
+            Pattern.compile("^(?=.{4,20}$)(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]+$");
+    private static final Pattern PWD_RULE =
+            Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
 
     public MemberService(MemberMapper memberMapper, PasswordEncoder passwordEncoder) {
         this.memberMapper = memberMapper;
@@ -32,6 +39,11 @@ public class MemberService implements UserDetailsService {
     /* 회원가입 */
     @Transactional
     public void register(MemberDTO member) {
+
+        // ★ 아이디 형식 검증
+        if (member.getMemberId() == null || !ID_RULE.matcher(member.getMemberId()).matches()) {
+            throw new IllegalArgumentException("아이디는 영문과 숫자를 모두 포함한 4~20자여야 합니다.");
+        }
 
         if (existsById(member.getMemberId())) {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");

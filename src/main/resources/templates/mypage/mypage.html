@@ -1,23 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>마이페이지</title>
     <style>
         body {
             margin:0;
-        }
-        .wrap {
-            max-width: 420px;
-            margin: 0 auto;
-            min-height: 100vh;
-            background: linear-gradient(180deg, #f4e9ff 0%, #b787d9 100%);
-            padding: 24px 16px;
-        }
-        h1 {
-            margin: 0 0 24px;
-            font-size: 28px;
-            font-weight: 800;
         }
         .grid {
             display: grid;
@@ -44,27 +32,35 @@
             display:block;
             line-height:1.2;
         }
+        .logout-btn {
+            margin-top: 300px;
+            margin-left: 250px;
+        }
     </style>
 </head>
 <body>
-<div th:replace="~{/common/header :: header}"></div>
-
-<div class="wrap">
-    <h1>T-issue</h1>
+<div th:include="/common/header.html"></div>
+    <div id="main">
+        <div class="content">
 
     <div class="grid">
         <!--개인정보 조회 -->
-        <a class="circle" th:href="@{/member/select}">
+        <a class="circle" th:href="@{/mypage/select}">
             <span>개인정보<br>조회</span>
         </a>
 
         <!-- 나머지 아이콘 일단 자리만 -->
         <a class="circle" href="javascript:void(0)"><span>문의</span></a>
         <a class="circle" href="javascript:void(0)"><span>리뷰/조회</span></a>
-        <a class="circle" href="javascript:void(0)"><span>발급</span></a>
+        <a class="circle" href="javascript:void(0)"><span>벌점</span></a>
         <a class="circle" href="javascript:void(0)"><span>언어설정</span></a>
-        <a class="circle" href="javascript:void(0)"><span>기타</span></a>
     </div>
+            <form th:action="@{/member/logout}" method="post" style="display:inline">
+                <!-- CSRF 쓰면 아래 hidden 추가 -->
+
+                <button type="submit" class="btn logout-btn">로그아웃</button>
+            </form>
+</div>
 </div>
 </body>
 </html>

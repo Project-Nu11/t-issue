@@ -2,9 +2,192 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>마이페이지</title>
+    <title>마이페이지 조회</title>
+    <style>
+        * { box-sizing: border-box;}
+        .title {
+            margin: 12px 0 16px;
+            font-size: 22px;
+            font-weight: 800;
+        }
+        .card  {
+            border:1px solid rgba(0,0,0,.15);
+            border-radius:10px;
+            padding:16px;
+            background:#fff;
+        }
+        .row   {
+            display:grid;
+            grid-template-columns: 90px 1fr;
+            align-items:center;
+            gap:10px;
+            margin:10px 0;
+        }
+        .label {
+            font-size:14px;
+            color:#333;
+        }
+        .ro    {
+            height:36px;
+            padding:8px 10px;
+            border:1px solid rgba(0,0,0,.2);
+            border-radius:8px;
+            background:#f7f7f8;
+            color:#111;
+        }
+        .input {
+            height:36px;
+            padding:8px 10px;
+            border:1px solid rgba(0,0,0,.2);
+            border-radius:8px;
+        }
+        .btn-row {
+            display:flex;
+            gap:10px;
+            justify-content:flex-end;
+            margin-top:14px;
+        }
+        .btn {
+            padding:8px 14px;
+            border:1px solid rgba(0,0,0,.2);
+            border-radius:8px;
+            background:#fff;
+            cursor:pointer;
+        }
+        .btn.primary {
+            background:#111;
+            color:#fff;
+        }
+        .btn.danger  {
+            border-color:rgba(220,20,60,.35);
+            color:#c00;
+        }
+        .hidden {
+            display:none;
+        }
+        .alert {
+            margin:8px 0;
+            padding:8px 10px;
+            border-radius:8px;
+            font-size:14px;
+        }
+        .alert.error {
+            background:#ffe7e7;
+            color:#b00020;
+        }
+        .alert.ok    {
+            background:#e8fff1;
+            color:#0a7c3a;
+        }
+    </style>
 </head>
 <body>
-    <h1> 마이페이지 조회 </h1>
+<div th:include="/common/header.html"></div>
+
+<div id="main">
+    <div class="content">
+        <p class="title">회원정보</p>
+
+        <!-- 메시지 -->
+        <div th:if="${error}" class="alert error" th:text="${error}"></div>
+        <div th:if="${msg}"   class="alert ok"    th:text="${msg}"></div>
+
+        <!--  -->
+        <div class="card">
+            <div class="row">
+                <div class="label">이름</div>
+                <input class="ro" type="text" th:value="${member.memberName}" disabled>
+            </div>
+            <div class="row">
+                <div class="label">아이디</div>
+                <input class="ro" type="text" th:value="${member.memberId}" disabled>
+            </div>
+            <div class="row">
+                <div class="label">이메일</div>
+                <input class="ro" type="text" th:value="${member.email}" disabled>
+            </div>
+            <div class="row">
+                <div class="label">생년월일</div>
+                <input class="ro" type="text" th:value="${member.memberBdate}" disabled>
+            </div>
+            <div class="row">
+                <div class="label">성별</div>
+                <input class="ro" type="text" th:value="${member.memberGender}">
+            </div>
+
+            <div class="btn-row">
+                <button type="button" id="editBtn" class="btn">수정</button>
+                <a th:href="@{/mypage/delete}" class="btn danger">탈퇴</a>
+            </div>
+
+            <!-- 비밀번호 변경 폼 -->
+            <form id="pwdForm" class="hidden" th:action="@{/mypage/update}" method="post" autocomplete="off">
+                <!-- CSRF 사용 시 토큰 추가 -->
+                <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> -->
+
+                <div class="row" style="margin-top:16px;">
+                    <div class="label">현재 비밀번호</div>
+                    <input class="input" type="password" id="currentPwd" name="currentPwd" required>
+                </div>
+
+                <div class="row">
+                    <div class="label">새 비밀번호</div>
+                    <input class="input" type="password" id="newPwd" name="newPwd"
+                           pattern="[A-Za-z0-9]{8,}"
+                    title="영문과 숫자를 포함해 8자 이상"
+                    required
+                    oninput="this.value=this.value.replace(/[^A-Za-z0-9]/g,'');">
+                </div>
+
+                <div class="row">
+                    <div class="label">비밀번호 확인</div>
+                    <input class="input" type="password" id="confirmPwd" name="confirmPwd" required>
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" id="cancelBtn" class="btn">취소</button>
+                    <button type="submit" class="btn primary">변경</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var editBtn   = document.getElementById('editBtn');
+    var cancelBtn = document.getElementById('cancelBtn');
+    var form      = document.getElementById('pwdForm');
+
+    editBtn.addEventListener('click', function(){
+        form.classList.remove('hidden'); editBtn.disabled = true;
+    });
+    cancelBtn.addEventListener('click', function(){
+        form.classList.add('hidden'); editBtn.disabled = false;
+        ['currentPwd','newPwd','confirmPwd'].forEach(function(id){
+            var el = document.getElementById(id); if (el) el.value = '';
+        });
+    });
+
+    // 제출 전 클라이언트 검증
+    form.addEventListener('submit', function(e){
+        // 1) 기본 브라우저 검증
+        if (!form.checkValidity()) { e.preventDefault(); form.reportValidity(); return; }
+
+        var np = document.getElementById('newPwd').value;
+        var cp = document.getElementById('confirmPwd').value;
+
+        // 2) 영문 1 + 숫자 1 이상 보장
+        if (!/[A-Za-z]/.test(np) || !/\d/.test(np)) {
+            e.preventDefault();
+            alert('새 비밀번호는 영문과 숫자를 모두 포함해야 합니다.');
+            return;
+        }
+        // 3) 동일성 검사
+        if (np !== cp) {
+            e.preventDefault();
+            alert('새 비밀번호가 일치하지 않습니다.');
+        }
+    });
+</script>
 </body>
 </html>

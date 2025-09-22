@@ -37,7 +37,7 @@ public class SecurityConfig {
                                  "/error", "/toilet/subway",
                                 "/css/**","/js/**","/images/**","/webjars/**"
                         ).permitAll()
-                        .requestMatchers("/member/list","/member/select","/member/mypage","/mypage/**").hasAuthority("ROLE_USER")
+                        .requestMatchers("/mypage/**").hasAuthority("ROLE_USER")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .usernameParameter("memberId")
                         .passwordParameter("memberPwd")
                         .defaultSuccessUrl("/main", true)
-                        .failureUrl("/member/fail?message=로그인에%20실패했습니다")
+                        .failureUrl("/member/login?code=LOGIN_FAIL")
                         .permitAll()
                 )
                 .logout(logout -> logout
