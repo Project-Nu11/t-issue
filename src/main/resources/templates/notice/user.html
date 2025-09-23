@@ -6,7 +6,7 @@
     <style>
         #noticelist{
             width: 518px;
-            height: 767px;
+            height: 630px;
             margin-left: 29px;
             position: absolute;
             /*border: black 10px solid; !*레이아웃 확인용*!*/
@@ -23,6 +23,46 @@
             background-color: white;
             margin-bottom: 34px
 
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index:1;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .detailModal {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding : 15px;
+            border: 1px solid #888;
+            width: 400px;
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            /*justify-content: center;*/
+            /*align-items: center;*/
+            border-radius: 8px;
+            /*z-index: 1004;*/
+            /*position: relative;*/
+        }
+        .modalTitle {
+            font-size: 28px;
+            padding: 3%;
+        }
+        .modalContent {
+            width: 350px;
+            height: 180px;
+            padding: 4%;
+        }
+        .modalDate{
+            padding: 3%;
         }
         .title,.content {
             /*background: white;*/
@@ -57,6 +97,11 @@
             height: 10%;
             background: rgba(0,0,0,0%);
         }
+        #closeModal {
+            width: 50px;
+            height: 30px;
+            margin-left: 350px;
+        }
     </style>
 </head>
 <body>
@@ -66,7 +111,10 @@
     <p style="font-size: 48px;margin-left: 29px;margin-top: 50px;margin-bottom: 30px">공지사항</p>
 
     <div id="noticelist">
-        <div class="notice" th:each="notice,n : ${noticeList}" style="border-radius: 8px">
+        <div class="notice" th:each="notice,n : ${noticeList}" style="border-radius: 8px"
+             th:attr="data-title=${notice.title},
+                  data-content=${notice.content},
+                  data-date=${notice.date}">
             <div class="title" th:text="${notice.title}" style="border-top-left-radius: 8px;border-top-right-radius: 8px"></div>
             <div class="content" th:text="${notice.content}" style="border-bottom-left-radius: 8px;border-bottom-right-radius: 8px"></div>
             <div class="date" th:text="${notice.date}"></div>
@@ -76,25 +124,34 @@
         </div>
     </div>
 
-    <!--    &lt;!&ndash;공지사항 상세 정보&ndash;&gt;-->
-    <!--    <div class="details">-->
-    <!--        <div class="layout">-->
-    <!--            <div style="font-family: AggravoB;font-size: 20px;">제목</div>-->
-    <!--            <div id="dtitle" style="font-family: AggravoB;font-size: 20px;"></div>-->
-    <!--            <br>-->
-    <!--            <div style="font-family: AggravoM;font-size: 20px;">내용</div>-->
-    <!--            <div id="dcontent" style="font-family: AggravoL;font-size: 20px;"></div>-->
-    <!--            <br>-->
-    <!--            <div id="ddatelayout">-->
-    <!--                <div style="font-family: AggravoM;font-size: 20px;">날짜</div>-->
-    <!--                <div id="ddate" style="font-family: AggravoL;font-size: 20px;"></div>-->
-    <!--            </div>-->
-    <!--            <div id="dno" style="display: none"></div>-->
-    <!--            <div>-->
-    <!--                <button class="closeBtn">확인</button>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+    <div id="noticeModal" class="modal" style="display: none;">
+        <div class="detailModal">
+            <div class="modalTitle">제목</div>
+            <div class="modalContent">내용</div>
+            <div class="modalDate">날짜</div>
+            <button id="closeModal">확인</button>
+        </div>
+    </div>
+
 </div>
+<script>
+    document.querySelectorAll(".notice").forEach(item => {
+        item.addEventListener("click", function() {
+            const title = this.dataset.title;
+            const content = this.dataset.content;
+            const date = this.dataset.date;
+
+            document.querySelector("#noticeModal .modalTitle").innerText = title;
+            document.querySelector("#noticeModal .modalContent").innerText = content;
+            document.querySelector("#noticeModal .modalDate").innerText = date;
+
+            document.getElementById("noticeModal").style.display = "block";
+        });
+    });
+
+    document.getElementById("closeModal").addEventListener("click", function() {
+        document.getElementById("noticeModal").style.display = "none";
+    });
+</script>
 </body>
 </html>
