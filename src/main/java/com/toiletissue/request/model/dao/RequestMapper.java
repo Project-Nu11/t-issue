@@ -21,4 +21,6 @@ public interface RequestMapper {
     int getTotalRequest(String value);
 
     void requestInsert(RequestDTO requestDTO);
+
+    List<RequestDTO> selectAllRequestById(String value, String name);
 }

@@ -39,12 +39,15 @@
       /*border: black 1px solid;*/
       align-items: center;
       border-radius: 8px;
+
     }
     /*상세 버튼*/
     .detailbtn{
       position: relative;
       left: 95%;
       font-size: 20px;
+      border: none;
+      background-color: rgba(0,0,0,0);
     }
     /*상세 스타일*/
     .details{
@@ -55,7 +58,7 @@
       top: 22%;
       background: white;
       /*border: black 10px solid; !*레이아웃 확인용*!*/
-      display: none;
+      display: flex;
       /*justify-content: center;*!*/
       flex-direction: column;
       align-items: center;
@@ -146,124 +149,72 @@
 
   <div id="summaryList"> <!--요약리스트-->
     <div class="listComponent" th:each="member : ${memberList}">
-      <div class="detailbtn">▶</div>
-      <div class="id" th:text="${member.memberId}" style="font-size: 25px;font-family: AggravoM;"></div>
-      <div class="pwd" th:text="${member.memberPwd}" hidden></div>
-      <div class="name" th:text="${member.memberName}" hidden></div>
-      <div class="email" th:text="${member.email}" hidden></div>
-      <div class="bdate" th:text="${member.memberBdate}" hidden></div>
-      <div class="gender" th:text="${member.memberGender}" hidden></div>
-      <div class="endStatus" th:text="${member.endStatus}" hidden></div>
-      <div class="endDate" th:text="${member.endDate}" hidden></div>
-      <div class="penalty" th:text="${member.penalty}" hidden></div>
+
+      <form action="/penalty/manager" style="position: relative;left: 85%">
+      <input type="hidden" name="id" id="memberId">
+        <button type="submit" class="detailbtn">▶</button>
+      </form>
+
+      <div class="id" th:text="${member.memberId}" style="font-size: 25px;font-family: AggravoM;width: 80%"></div>
+
+
     </div>
   </div>
 
   <div class="details" > <!--상세정보 모달-->
-    <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;">회원 ID</div><!--상세 타이틀-->
-    <div class="details-layout">
-      <div id="name-layout" style="position: relative;">
-        <div style="font-family: AggravoM;font-size: 20px">이름</div>
-        <div id="memberName" style="font-family: AggravoL;font-size: 20px;"> 회원 이름</div>
-      </div>
-
-      <div id="bdate-layout" style=" position: relative;top: 7%">
-        <div style="font-family: AggravoM;font-size: 20px;">생년월일</div>
-        <div id="memberBdate" style="font-family: AggravoL;font-size: 20px;">회원 생년월일</div>
-      </div>
-
-      <div id="gender-layout" style="position: relative;top: 14%">
-        <div style="font-family: AggravoM;font-size: 20px;">성별</div>
-        <div id="gender" style="font-family: AggravoL;font-size: 20px;">회원 성별</div>
-      </div>
-
-      <div id="email-layout" style="position: relative;top: 21%">
-        <div style="font-family: AggravoM;font-size: 20px;">이메일</div>
-        <div id="email" style="font-family: AggravoL;font-size: 20px;">회원 이메일</div>
-
-      </div>
-
-      <div style="position: relative;top: 28%;display: flex">
-        <div id="penalty-layout" style="width: 50%;">
-          <div style="font-family: AggravoM;font-size: 20px;">총 벌점</div>
-          <div id="penalty" style="font-family: AggravoL;font-size: 20px;">회원 총 벌점</div>
-        </div>
-
-        <div id="sanction-layout" style="width: 50%;">
-          <div style="font-family: AggravoM;font-size: 20px;">제재 상태</div>
-          <div id="sanction" style="font-family: AggravoL;font-size: 20px;"></div>
+    <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;">신고된 리뷰</div><!--상세 타이틀-->
+      <div class="declardReviewListLayout" style="width: 90%;height: 80%;overflow-y: scroll;scrollbar-width: none">
+        <div th:each="review:${reviewList}" style="width: 100%;height: 60%;border-radius: 8px;margin-bottom: 4%;background-color: #d9d9d9">
+            <div th:text="${review.stationName}+'  '+${review.toiletLocation}" style="width: 100%;position: relative;font-size: 30px;top: 10%;text-align: center"></div>
+            <div th:text="${review.content}" style="font-family: AggravoL;overflow-wrap: break-word;padding: 2%;width: 90%;background-color: white;border-radius: 8px;position: relative;left: 3%;top: 13%;height: 50%"></div>
+            <div th:text="'신고 받은 횟수 : '+${review.decNum}" style="font-family: AggravoL;position: relative;top: 18%;left: 5%"></div>
         </div>
       </div>
+    <div>
 
-      <div class="btns" style="display: flex;justify-content: center;position: relative;top: 35%;">
-        <button class="restriction">영구 제한</button>
-      </div>
     </div>
   </div>
 
   <!--확인모달-->
   <div class="modal-back"><!--배경-->
     <div id="modal">
-      <div style="position: relative;top:30%">해당 사용자를 영구 제한 조치하시겠습니까?</div>
-      <div class="modalBtn">
-        <form action="/member/restrict" method="post">
-          <input type="hidden" name="id" id="id">
-          <button id="Y" type="submit">예</button>
-        </form>
-        <button id="N">아니오</button>
-      </div>
+
     </div>
   </div>
 
-  <div class="pagination" style="display: flex">
-    <!-- 이전 버튼 -->
-    <span th:if="${startPage > 1}">
-            <a th:href="@{/member/manager(page=${startPage - 1})}">◀</a>
-        </span>
+<!--  <div class="pagination" style="display: flex">-->
+<!--    &lt;!&ndash; 이전 버튼 &ndash;&gt;-->
+<!--    <span th:if="${startPage > 1}">-->
+<!--            <a th:href="@{/member/manager(page=${startPage - 1})}">◀</a>-->
+<!--        </span>-->
 
-    <!-- 페이지 번호 버튼 -->
-    <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
-            <a th:href="@{/member/manager(page=${i})}"
-               th:text="${i}"
-               th:classappend="${i == page} ? 'active' : ''"></a>
-        </span>
+<!--    &lt;!&ndash; 페이지 번호 버튼 &ndash;&gt;-->
+<!--    <span th:each="i : ${#numbers.sequence(startPage, endPage)}">-->
+<!--            <a th:href="@{/member/manager(page=${i})}"-->
+<!--               th:text="${i}"-->
+<!--               th:classappend="${i == page} ? 'active' : ''"></a>-->
+<!--        </span>-->
 
-    <!-- 다음 버튼 -->
-    <span th:if="${endPage < totalPages}">
-            <a th:href="@{/member/manager(page=${endPage + 1})}">▶</a>
-        </span>
-  </div>
+<!--    &lt;!&ndash; 다음 버튼 &ndash;&gt;-->
+<!--    <span th:if="${endPage < totalPages}">-->
+<!--            <a th:href="@{/member/manager(page=${endPage + 1})}">▶</a>-->
+<!--        </span>-->
+<!--  </div>-->
 
 </div>
 <script>
-
   const $detailbtn = document.querySelectorAll('.detailbtn')
   const $detailModal = document.querySelector('.details')
   const $listComponents = document.querySelectorAll('.listComponent')
-  const $memberName = document.querySelector('#memberName')
-  const $memberBdate = document.querySelector('#memberBdate')
-  const $gender = document.querySelector('#gender')
-  const $email = document.querySelector('#email')
-  const $penalty = document.querySelector('#penalty')
-  const $restrictionBtn = document.querySelector('.restriction')
-  const $restrictingId = document.querySelector('#id')
-  const $no = document.querySelector('#N')
-
-
   const $modal = document.querySelector('.modal-back')
 
-  $restrictionBtn.addEventListener('click',function(){
-    $modal.style.display='flex'
-  })
-  $no.addEventListener('click',function (){
-    $modal.style.display='none';
-  })
 
 
 
   let openedIndex = null
-  $detailbtn.forEach((btn,i)=>{
-    btn.addEventListener('click',function(){
+  $detailbtn.forEach((btn,i,e)=>{
+        btn.addEventListener('click',function(e){
+          e.stopPropagation()
 
       $listComponents.forEach((a)=>{
         a.style.background='#ffffff'
@@ -271,26 +222,14 @@
 
 
       const $listComponent = btn.closest('.listComponent')
-      const name = $listComponent.querySelector('.name')?.textContent||''
-      const bdate = $listComponent.querySelector('.bdate')?.textContent||''
-      const gender = $listComponent.querySelector('.gender')?.textContent||''
-      const email = $listComponent.querySelector('.email')?.textContent||''
-      const penalty = $listComponent.querySelector('.penalty')?.textContent||''
       const id = $listComponent.querySelector('.id').textContent||''
-
-      $memberName.textContent=name
-      $memberBdate.textContent=bdate
-      $gender.textContent=gender
-      $email.textContent=email
-      $penalty.textContent=penalty
-
-      $restrictingId.value=id;
+      const inputId = $listComponent.querySelector("#memberId")
+      inputId.value=id
+      console.log("ID = "+inputId.value)
 
 
-      // 영구제한 할 아이디 추출
-      $restrictionBtn.addEventListener('click',function (){
 
-      })
+
 
 
 
@@ -309,6 +248,10 @@
       console.log(openedIndex)
 
     })
+  })
+
+  window.addEventListener('click',function (){
+    $detailModal.style.display='none'
   })
 
 </script>

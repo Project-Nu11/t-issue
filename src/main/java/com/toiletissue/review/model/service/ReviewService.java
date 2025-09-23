@@ -13,8 +13,8 @@ public class ReviewService {
     @Autowired
     private ReviewMapper reviewMapper;
 
-    public List<ReviewDTO> selectDeclaredReview() {
-        return reviewMapper.selectDeclaredReview();
+    public List<ReviewDTO> selectDeclaredReview(String status) {
+        return reviewMapper.selectDeclaredReview(status);
     }
 
     public void cancelDeclaration(ReviewDTO reviewDTO) {
@@ -63,5 +63,9 @@ public class ReviewService {
 
     public List<ReviewDTO> selectReviewById(String id) {
         return reviewMapper.selectReviewById(id);
+    }
+
+    public List<ReviewDTO> selectDeclaredReviewById(String id) {
+        return reviewMapper.selectDeclaredReviewById(id);
     }
 }

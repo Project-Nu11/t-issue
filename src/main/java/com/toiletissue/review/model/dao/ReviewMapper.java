@@ -7,7 +7,7 @@ import java.util.List;
 @Mapper
 public interface ReviewMapper {
 
-    List<ReviewDTO> selectDeclaredReview();
+    List<ReviewDTO> selectDeclaredReview(String status);
 
     void cancelDeclaration(ReviewDTO reviewDTO);
 
@@ -26,4 +26,6 @@ public interface ReviewMapper {
     void deleteReview(int no);
 
     List<ReviewDTO> selectReviewById(String id);
+
+    List<ReviewDTO> selectDeclaredReviewById(String id);
 }

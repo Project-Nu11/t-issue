@@ -85,9 +85,16 @@
             /*background-color: #2f1a48;*/
             width: 12%;
         }
-        .memberId{
+        .idis{
             position: relative;
             right: 49%;
+            bottom: 20%;
+            font-size: 10px;
+            font-family: AggravoL;
+        }
+        .memberId{
+            position: relative;
+            right: 48%;
             bottom: 20%;
             font-size: 10px;
             font-family: AggravoL;
@@ -141,6 +148,10 @@
             background-color: #d9d9d9;
             width: 100%;
             height: 45%;
+            border-radius: 8px;
+            box-shadow: inset 3px 3px 10px black;
+            padding: 10px;
+            overflow-wrap: break-word;
         }
         #date-layout{
             /*background-color: #d9d9d9;*/
@@ -272,6 +283,7 @@
             bottom: 30%;
         }
 
+
     </style>
 </head>
 <body>
@@ -299,7 +311,8 @@
             <div class="stationName" th:text="${review.stationName}" hidden></div><!--역명확인용-->
             <div class="toiletLocation" th:text="${review.toiletLocation}" hidden></div><!--화장실위치확인용-->
             <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
-            <div class="memberId" th:text="'ID : '+${review.memberId}"></div><!--리뷰작성자id 확인용-->
+            <div class="idis">ID : </div>
+            <div class="memberId" th:text="${review.memberId}"></div><!--리뷰작성자id 확인용-->
             <div class="no" th:text="${review.no}" style="display: none"></div> <!--번호 확인용...-->
             <div class="content" th:text="${review.content}" style="display: none"></div> <!--리뷰내용 확인용...-->
             <div class="decNum" th:text="${review.decNum}" style="display: none"></div> <!--신고횟수 확인용...-->
@@ -310,20 +323,20 @@
     <div class="details"> <!--상세정보 모달-->
         <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;" >리뷰 상세</div>
         <div class="details-layout">
-            <div style="font-family: AggravoM;font-size: 20px;">이용 화장실</div>
+            <div style="font-family: AggravoM;font-size: 25px;">이용 화장실</div>
             <div id="toiletName" style="font-family: AggravoL;font-size: 20px;"> 이용 화장실 이름</div>
-            <div style="font-family: AggravoM;font-size: 20px;">내용</div>
-            <div id="content" style="font-family: AggravoL;font-size: 20px;"> 리뷰 내용</div>
+            <div style="font-family: AggravoM;font-size: 25px;">내용</div>
+            <div id="content" style="font-family: AggravoL;font-size: 20px; overflow-wrap: break-word"> 리뷰 내용</div>
             <div id="date-layout">
-                <div style="font-family: AggravoM;font-size: 20px;">날짜</div>
+                <div style="font-family: AggravoM;font-size: 25px;">날짜</div>
                 <div id="date" style="font-family: AggravoL;font-size: 20px;">리뷰 날짜</div>
             </div>
             <div id="memberId-layout">
-                <div style="font-family: AggravoM;font-size: 20px;">작성자ID</div>
+                <div style="font-family: AggravoM;font-size: 25px;">작성자ID</div>
                 <div id="id" style="font-family: AggravoL;font-size: 20px;">사용자 id</div>
             </div>
             <div id="decNum-layout">
-                <div style="font-family: AggravoM;font-size: 20px;">신고 횟수</div>
+                <div style="font-family: AggravoM;font-size: 25px;">신고 횟수</div>
                 <div id="decNum" style="font-family: AggravoL;font-size: 20px;">신고횟수</div>
             </div>
             <div class="btns">

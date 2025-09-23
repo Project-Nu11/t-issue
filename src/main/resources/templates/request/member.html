@@ -95,33 +95,38 @@
         .detail-rtitle{
             width: 80%;
             position: relative;
-            left: 10%;
-            top: 5%;
-            font-family: AggravoM;
-        }
-        .detail-rcontent{
-            width: 80%;
-            height: 30%;
-            background-color: #d9d9d9;
-            position: relative;
-            left: 10%;
+            left: 5%;
             top: 10%;
             font-family: AggravoM;
         }
+        .detail-rcontent{
+            width: 90%;
+            height: 25%;
+            background-color: #d9d9d9;
+            position: relative;
+            left: 3%;
+            top: 15%;
+            font-family: AggravoM;
+            padding: 2%;
+            border-radius: 8px;
+        }
         .detail-ranswer{
-            width: 80%;
+            width: 90%;
             height: 30%;
             background-color: #d9d9d9;
             position: relative;
-            left: 10%;
-            top: 15%;
+            left: 3%;
+            top: 20%;
             font-family: AggravoM;
+            padding: 2%;
+            border-radius: 8px;
+
         }
         .detail-rdate{
-            width: 80%;
+            width: 90%;
             position: relative;
-            left: 10%;
-            top: 20%;
+            left: 5%;
+            top: 21%;
             font-family: AggravoL;
         }
         #faq{
@@ -242,6 +247,7 @@
         </select>
     </form>
     <div class="request" th:each="requests : ${requestList}">
+        <div th:text="${member.memberId}" hidden></div>
         <div id="rstatus" th:text="${requests.status}"></div>
         <div id="rtitle" th:text="${requests.title}">d</div>
         <div class="rcontent" th:text="${requests.content}" hidden></div><!--문의 내용-->
@@ -285,6 +291,7 @@
         <div class="insert-modal">
             <div style="text-align: center;position: relative;top: 5%;font-size: 30px;">문의 추가</div>
             <form action="/request/member/insert" method="post" style="height: 100%;aspect-ratio: 1">
+                <input type="hidden" th:value="${member.memberId}" name="id">
                 <div style="position: relative;top: 15%;left: 10%">제목</div>
                 <input class="insert-rtitle" type="text" name="title" placeholder="제목을 입력해주세요">
                 <div style="position: relative;top: 20%;left: 10%">내용</div>

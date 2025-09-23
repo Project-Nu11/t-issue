@@ -1,5 +1,7 @@
 package com.toiletissue.request.controller;
 
+import com.toiletissue.member.model.dto.MemberDTO;
+import com.toiletissue.member.model.service.MemberService;
 import com.toiletissue.request.model.dto.RequestDTO;
 import com.toiletissue.request.model.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +20,9 @@ public class RequestController {
 
     @Autowired
     private RequestService requestService;
+
+    @Autowired
+    private MemberService memberService;
 
     @GetMapping("/manager")
     public String requestManager(
@@ -118,9 +124,17 @@ public class RequestController {
     public String requestMember(
             Model model,
             @RequestParam(name="status",defaultValue = "%%") String value,
-            @RequestParam(value = "page", defaultValue = "1") int page){
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            Principal principal){
 
-        List<RequestDTO> requestList = requestService.selectAllRequest(value);
+        MemberDTO member = new MemberDTO();
+        if(principal != null){
+            member = memberService.findById(principal.getName());
+        }
+        model.addAttribute("member",member);
+
+
+        List<RequestDTO> requestList = requestService.selectAllRequestById(value,principal.getName());
 
         for(RequestDTO req : requestList){
             System.out.println(req);

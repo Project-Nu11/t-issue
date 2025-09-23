@@ -23,11 +23,12 @@ public class ReviewController {
     @GetMapping("/declared")
     public String reviewDeclared(
             Model model,
-            @RequestParam(value = "page", defaultValue = "1") int page)
-            {
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value="status",defaultValue = "-1") String status
+    ){
 
 
-        List<ReviewDTO> reviewList = reviewService.selectDeclaredReview();
+        List<ReviewDTO> reviewList = reviewService.selectDeclaredReview(status);
 
 
         int totalRequests = reviewList.size(); // 총 문의 수
@@ -64,6 +65,7 @@ public class ReviewController {
         model.addAttribute("totalPages",totalPages);
 
         model.addAttribute("reviewList",pagedReviews);
+        model.addAttribute("status",status);
 
         return "/review/declared";
     }
