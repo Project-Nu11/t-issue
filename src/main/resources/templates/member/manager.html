@@ -136,6 +136,16 @@
             width: 50px;
             height: 30px;
         }
+        .design{
+            background-color: #d9d9d9;
+            border-radius: 8px;
+            box-shadow:inset black 1px 1px 3px;
+            height: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -159,43 +169,43 @@
         </div>
     </div>
 
-    <div class="details" > <!--상세정보 모달-->
+    <div class="details" style="text-align: center"> <!--상세정보 모달-->
         <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;">회원 ID</div><!--상세 타이틀-->
         <div class="details-layout">
             <div id="name-layout" style="position: relative;">
-                <div style="font-family: AggravoM;font-size: 20px">이름</div>
-                <div id="memberName" style="font-family: AggravoL;font-size: 20px;"> 회원 이름</div>
+                <div style="font-family: AggravoM;font-size: 25px">이름</div>
+                <div class="design" id="memberName" style="font-family: AggravoL;font-size: 20px;"> 회원 이름</div>
             </div>
 
-            <div id="bdate-layout" style=" position: relative;top: 7%">
-                <div style="font-family: AggravoM;font-size: 20px;">생년월일</div>
-                <div id="memberBdate" style="font-family: AggravoL;font-size: 20px;">회원 생년월일</div>
+            <div id="bdate-layout" style=" position: relative;top: 5%">
+                <div style="font-family: AggravoM;font-size: 25px;">생년월일</div>
+                <div class="design" id="memberBdate" style="font-family: AggravoL;font-size: 20px;">회원 생년월일</div>
             </div>
 
-            <div id="gender-layout" style="position: relative;top: 14%">
-                <div style="font-family: AggravoM;font-size: 20px;">성별</div>
-                <div id="gender" style="font-family: AggravoL;font-size: 20px;">회원 성별</div>
+            <div id="gender-layout" style="position: relative;top: 10%">
+                <div style="font-family: AggravoM;font-size: 25px;">성별</div>
+                <div class="design" id="gender" style="font-family: AggravoL;font-size: 20px;">회원 성별</div>
             </div>
 
-            <div id="email-layout" style="position: relative;top: 21%">
-                <div style="font-family: AggravoM;font-size: 20px;">이메일</div>
-                <div id="email" style="font-family: AggravoL;font-size: 20px;">회원 이메일</div>
+            <div id="email-layout" style="position: relative;top: 15%">
+                <div style="font-family: AggravoM;font-size: 25px;">이메일</div>
+                <div class="design" id="email" style="font-family: AggravoL;font-size: 20px;">회원 이메일</div>
 
             </div>
 
-            <div style="position: relative;top: 28%;display: flex">
-                <div id="penalty-layout" style="width: 50%;">
-                    <div style="font-family: AggravoM;font-size: 20px;">총 벌점</div>
-                    <div id="penalty" style="font-family: AggravoL;font-size: 20px;">회원 총 벌점</div>
+            <div style="position: relative;top: 20%;display: flex;position: relative;">
+                <div id="penalty-layout" style="width: 45%;">
+                    <div style="font-family: AggravoM;font-size: 25px;">총 벌점</div>
+                    <div class="design" id="penalty" style="font-family: AggravoL;font-size: 20px;">회원 총 벌점</div>
                 </div>
 
-                <div id="sanction-layout" style="width: 50%;">
-                    <div style="font-family: AggravoM;font-size: 20px;">제재 상태</div>
-                    <div id="sanction" style="font-family: AggravoL;font-size: 20px;"></div>
+                <div id="sanction-layout" style="width: 45%;position: relative;left: 10%">
+                    <div style="font-family: AggravoM;font-size: 25px;">제재 상태</div>
+                    <div class="design" id="sanction" style="font-family: AggravoL;font-size: 20px;">제재상태</div>
                 </div>
             </div>
 
-            <div class="btns" style="display: flex;justify-content: center;position: relative;top: 35%;">
+            <div class="btns" style="display: flex;justify-content: center;position: relative;top: 25%;">
                     <button class="restriction">영구 제한</button>
             </div>
         </div>

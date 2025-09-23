@@ -28,11 +28,11 @@
                reject
           from request
         where req_status like #{value}
-        order by req_no desc
+        order by field(req_status,'대기중','답변 완료','답변 거절') asc,req_no desc;
 <!--          and req_no between #{start} and #{end}-->
     </select>
 
-    <select id="selectRequestsByCriteria" resultMap="request">
+    <select id="selectAllRequestById" resultMap="request">
         select
         req_no,
         member_id,
@@ -45,6 +45,7 @@
         reject
         from request
         where req_status like #{value}
+          and member_id = #{name}
         order by req_no desc
 <!--        limit 0,10-->
 
@@ -70,6 +71,6 @@
         insert into request
         (req_title,req_content,member_id,req_type,req_date)
         value
-        (#{title},#{content},'hong123','유형1',now())
+        (#{title},#{content},#{id},'유형1',now())
     </insert>
 </mapper>

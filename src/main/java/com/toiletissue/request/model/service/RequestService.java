@@ -39,4 +39,12 @@ public class RequestService {
     public void requestInsert(RequestDTO requestDTO) {
         requestMapper.requestInsert(requestDTO);
     }
+
+//    public List<RequestDTO> selectAllRequest(String value, String name) {
+
+
+    public List<RequestDTO> selectAllRequestById(String value, String name) {
+        return requestMapper.selectAllRequestById(value,name);
+
+    }
 }

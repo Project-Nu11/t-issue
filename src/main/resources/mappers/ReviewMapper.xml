@@ -12,6 +12,7 @@
         <result property="toiletLocation" column="toilet_location"/>
         <result property="date" column="review_date"/>
         <result property="decNum" column="dec_num"/>
+        <result property="penalty" column="penalty_status"/>
     </resultMap>
 
 
@@ -25,12 +26,23 @@
         r.toilet_location,
         r.review_date,
         count(r.review_no) as `dec_num`,
+        r.penalty_status,
         m.penalty
         from review r
         join declaration c on r.review_no = c.review_no
         join member m on m.member_id = r.member_id
+        <if test="status==1">
+            where penalty_status = 1
+        </if>
+        <if test="status==0">
+            where penalty_status = 0
+        </if>
+        <if test="status=='-1'">
+
+        </if>
         group by review_no
-        having dec_num>=2;
+        having dec_num>=2
+        order by r.penalty_status;
     </select>
 
     <select id="selectAllReview" resultMap="reviewResultMap">
@@ -84,8 +96,9 @@
     </select>
 
     <delete id="penalizeReview">
-        delete from declaration where review_no = #{no};
-        delete from review where review_no = #{no};
+        update review
+           set penalty_status = 1
+         where review_no = #{no};
     </delete>
 
     <update id="penalizeMember">
@@ -100,6 +113,27 @@
 
     <select id="selectReviewById" resultMap="reviewResultMap">
         select * from review where member_id = #{id}
+    </select>
+
+    <select id="selectDeclaredReviewById" resultMap="reviewResultMap">
+        select
+        r.review_no,
+        r.review_content,
+        r.review_score,
+        r.member_id,
+        r.station_name,
+        r.toilet_location,
+        r.review_date,
+        count(r.review_no) as `dec_num`,
+        r.penalty_status,
+        m.penalty
+        from review r
+        join declaration c on r.review_no = c.review_no
+        join member m on m.member_id = r.member_id
+        where r.member_id = #{id}
+        and r.penalty_status = 1
+        group by review_no
+        having dec_num>=2 ;
     </select>
 
 

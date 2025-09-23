@@ -10,12 +10,12 @@ public class ReviewDTO {
     private String toiletLocation;
     private String date;
     private int decNum;
-
     private int penalty;
+
 
     public ReviewDTO(){}
 
-    public ReviewDTO(String content, int score, int no, String memberId, String stationName, String toiletLocation, String date, int decNum) {
+    public ReviewDTO(String content, int score, int no, String memberId, String stationName, String toiletLocation, String date, int decNum, int penalty) {
         this.content = content;
         this.score = score;
         this.no = no;
@@ -24,6 +24,7 @@ public class ReviewDTO {
         this.toiletLocation = toiletLocation;
         this.date = date;
         this.decNum = decNum;
+        this.penalty = penalty;
     }
 
     public String getContent() {
@@ -88,6 +89,14 @@ public class ReviewDTO {
 
     public void setDecNum(int decNum) {
         this.decNum = decNum;
+    }
+
+    public int getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(int penalty) {
+        this.penalty = penalty;
     }
 
     @Override
