@@ -26,9 +26,10 @@ public class MyPageController {
     }
 
     // /mypage
+    //"mypage"와 "/mypage/** " 모두를 처리 / 있는거 없는거 둘다 처리....
     @GetMapping({"", "/"})
     public String mypage() {
-        return "mypage/mypage";
+        return "/mypage/mypage";
     }
 
     // /mypage/select

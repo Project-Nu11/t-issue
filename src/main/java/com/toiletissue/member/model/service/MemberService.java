@@ -70,20 +70,25 @@ public class MemberService implements UserDetailsService {
 
     /* 로그인 시 호출 (Spring Security) */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MemberDTO member = memberMapper.findById(username);
-        if (member == null) {
+        MemberDTO m = memberMapper.findById(username);
+        if (m == null) {
             throw new UsernameNotFoundException("해당 회원을 찾을 수 없습니다: " + username);
         }
 
-        // DB가 'ROLE_USER' 이라서 roles()에 넣기 위해 'ROLE_' 로
-        String roleForBuilder = (member.getRole() == null) ? "USER" : member.getRole().replace("ROLE_", "");
+        // DB에는 ROLE_USER 형태 저장 → roles()에는 접두사 없이 "USER"로 넣어야 함
+        String roleForBuilder = (m.getRole() == null || m.getRole().isBlank())
+                ? "USER"
+                : m.getRole().replaceFirst("^ROLE_", "");
+
+        boolean isDeleted = m.isEndStatus();   // end_status = 1 → true
 
         return User.builder()
-                .username(member.getMemberId())
-                .password(member.getMemberPwd())
+                .username(m.getMemberId())
+                .password(m.getMemberPwd())
                 .roles(roleForBuilder)
+                .disabled(isDeleted)           // 탈퇴 계정 로그인 차단!!!!!!
                 .build();
     }
 

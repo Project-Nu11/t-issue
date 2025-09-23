@@ -39,5 +39,4 @@ public interface MemberMapper {
 
     List<MemberDTO> selectPenalizedMember();
 
-//    MemberDTO select(int id);
 }

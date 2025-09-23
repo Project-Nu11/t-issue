@@ -129,7 +129,7 @@
                    title="아이디는 영문과 숫자를 모두 포함한 4~20자여야 합니다."
                    required autocomplete="off"
                    oninput="this.value=this.value.replace(/[^A-Za-z0-9]/g,'');">
-            <div class="hint">아이디는 영문만 허용됩니다.</div>
+            <div class="hint">아이디는 영문+ 숫자만 허용됩니다.</div>
         </div>
         <div>
             <label for="memberName2">이름</label>
@@ -148,6 +148,10 @@
     <div class="modal">
         <h3 id="modal-title">결과</h3>
         <p id="modal-msg"></p>
+
+        <!-- 추가: 비밀번호 변경 폼이 여기에 동적으로 들어옴 -->
+        <div id="modal-extra"></div>
+
         <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end;">
             <button type="button" onclick="closeModal()">닫기</button>
             <button type="button" onclick="location.href='/member/login'">로그인 페이지로 이동</button>
