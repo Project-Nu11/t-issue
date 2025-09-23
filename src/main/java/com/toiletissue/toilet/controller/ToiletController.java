@@ -174,57 +174,8 @@ public class ToiletController {
 
         redirectAttributes.addAttribute("stationName", reviewDTO.getStationName());
         redirectAttributes.addAttribute("toiletName", toiletName);
-        return "redirect:/details";
+        return "redirect:/toilet/details";
     }
-
-//    @GetMapping("/details")
-//    public String toiletDetails(
-//            @RequestParam(value = "stationName", required = false) String stationName,
-//            @RequestParam(value = "toiletName", required = false) String toiletName,
-//            Model model, Principal principal) {
-//
-//        System.out.println("==== /details 호출 ====");
-//        System.out.println("받은 stationName: " + stationName);
-//        System.out.println("받은 toiletName: " + toiletName);
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
-//
-//        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-//        Map<String, Object> body = response.getBody();
-//
-//        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        // stationName과 toiletName으로 필터링
-//        ToiletDTO toilet = dataList.stream()
-//                .map(m -> mapper.convertValue(m, ToiletDTO.class))
-//                .filter(t -> (t.getName().equals(stationName) &&
-//                        (t.getName() + "역 " + t.getGround() + " " + t.getFloor() + " " + t.getGateInOut() + " 화장실")
-//                                .equals(toiletName)))
-//                .findFirst()
-//                .orElse(null);
-//
-//        System.out.println("찾은 toilet: " + toilet);
-//
-//        if (toilet == null) {
-//            toilet = new ToiletDTO();
-//        }
-//
-//        List<ReviewDTO> reviewList = reviewService.selectReviewListByStation(stationName);
-//        model.addAttribute("reviewList", reviewList != null ? reviewList : Collections.emptyList());
-//
-//        if (principal != null) { // 로그인 상태일 때만
-//            MemberDTO member = memberService.findById(principal.getName());
-//            model.addAttribute("member", member);
-//        }
-//
-//        model.addAttribute("toilet", toilet);
-//        model.addAttribute("stationName", stationName);
-//        model.addAttribute("toiletName", toiletName);
-//
-//        return "toilet/details";
-//    }
 
     @GetMapping("/details")
     public String toiletDetails(
@@ -300,14 +251,3 @@ public class ToiletController {
     public void toiletSOS() {}
 
 }
-
-//    @PostMapping("/details")
-//    public ModelAndView insertReview(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO) {
-//
-//        System.out.println(reviewDTO);
-//        reviewService.insertReview(reviewDTO);
-//        System.out.println(reviewDTO);
-//        mv.setViewName("redirect:/toilet/details");
-//
-//        return mv;
-//    }

@@ -66,16 +66,24 @@
             z-index: 10;
             position: absolute;
         }
-        #searchBar input {
-            border: solid 1px #f9deec;
-            width: 450px;
-            height: 40px;
-            background: none;
-            border-radius: 40px;
-            /*margin-top:10px;*/
-            margin-left: 10px;
-            padding: 8px;
-        }
+        /*#searchBar input {*/
+        /*    border: solid 1px black;*/
+        /*    width: 450px;*/
+        /*    height: 40px;*/
+        /*    background: none;*/
+        /*    border-radius: 40px;*/
+        /*    !*margin-top:10px;*!*/
+        /*    margin-left: 10px;*/
+        /*    !*padding: 8px;*!*/
+        /*    margin-top: -50px;*/
+        /*}*/
+
+        /*#search {*/
+        /*    width: 420px;*/
+        /*    height: 40px;*/
+        /*    background-color: yellow;*/
+
+        /*}*/
         .hidden {
             display: none !important;
         }
@@ -113,11 +121,15 @@
         </button>
     </div>
 
-    <div id="searchBar">
-        <input type="submit" placeholder="검색">
-        <button id="endSearch">
-            <div><img src="/icon/cancel_11212407.png" alt="취소" width="40" height="40"></div>
-        </button>
+    <div id="searchBar" style="background-color: blueviolet">
+        <div id="search" style="display: inline-block">
+            <input type="text" placeholder="검색" style="position: fixed; top: 11%;width: 420px;height: 40px">
+        </div>
+        <div style="display: inline-block;background-color: blue; position: fixed; left: 70%"  >
+            <button id="endSearch">
+                <div><img src="/icon/cancel_11212407.png" alt="취소" width="40" height="40"></div>
+            </button>
+        </div>
     </div>
 
 </div>
@@ -125,7 +137,20 @@
 
 <script type="text/javascript" th:src="@{|//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoKey}|}"></script>
 <script th:inline="javascript">
-    let toilets = /*[[${toilets}]]*/ [];
+    // let toilets = /*[[${toilets}]]*/ [];
+    // let toilets = [[${toiletJson}]];
+    let toiletsRaw = /*[[${toiletJson}]]*/ '[]';
+
+    // 문자열이면 parse, 아니면 있는 그대로 사용
+    let toilets = (typeof toiletsRaw === 'string') ? JSON.parse(toiletsRaw) : toiletsRaw;
+
+    let line5Toilets = toilets.filter(t => t["운영노선명"] === "5호선");
+
+    var stationName = /*[[${stationName}]]*/ '기본역';
+
+    console.log('toilets typeof:', typeof toilets, 'isArray:', Array.isArray(toilets));
+    console.log('toilets:', toilets);
+    console.log("toilets:", toilets);
 </script>
 <script>
     console.log("toilets from server:", toilets);
@@ -137,28 +162,46 @@
     };
     var map = new kakao.maps.Map(container, options);
 
-    toilets.forEach(function(toilet) {
-        console.log("위도:", toilet.latitude, "경도:", toilet.longitude);
 
-        var markerPosition  = new kakao.maps.LatLng(
-            toilet.latitude, toilet.longitude);
+
+    line5Toilets.forEach(function(toilet) {
+        // console.log("위도:", toilet.latitude, "경도:", toilet.longitude);
+
+        // var markerPosition  = new kakao.maps.LatLng(
+        //     toilet.latitude, toilet.longitude);
+
+        var tLat = toilet["위도"];
+        var tLng = toilet["경도"];
+
+        var markerPosition = new kakao.maps.LatLng(tLat,tLng);
 
         var marker = new kakao.maps.Marker({
             position: markerPosition,
             map: map
         });
 
-        var infowindow = new kakao.maps.InfoWindow({
-            content: '<div style="padding:5px;font-size:12px;">' + toilet.name + '</div>'
+        kakao.maps.event.addListener(marker, 'click', function() {
+
+            // 페이지 이동
+            location.href = '/toilet/station?stationName=' + encodeURIComponent(toilet["역명"]);
         });
 
-        // 마커에 마우스 올리면 이름 보이게
-        kakao.maps.event.addListener(marker, 'mouseover', function() {
-            infowindow.open(map, marker);
-        });
-        kakao.maps.event.addListener(marker, 'mouseout', function() {
-            infowindow.close();
-        });
+        // var content = '<div style="width: 30px;height: 30px;font-size:11px;">'
+        //     + toilet["역명"] + '역 '
+        //     // + toilet["지상 또는 지하 구분"] + ' ' + toilet["역층"] + '층 ' + toilet["게이트 내외 구분"] + '화장실'
+        //     + '</div>'
+        //
+        // var infowindow = new kakao.maps.InfoWindow({
+        //     content: content
+        // });
+        //
+        // // 마커에 마우스 올리면 이름 보이게
+        // kakao.maps.event.addListener(marker, 'mouseover', function() {
+        //     infowindow.open(map, marker);
+        // });
+        // kakao.maps.event.addListener(marker, 'mouseout', function() {
+        //     infowindow.close();
+        // });
     });
 
     if (navigator.geolocation) {
@@ -183,22 +226,20 @@
     // 현재 내 위치 마커
     function displayMarker(locPosition) {
 
+        var imageSrc = '/icon/placeholder.png', // 이미지 경로
+            imageSize = new kakao.maps.Size(40, 40), // 아이콘 크기
+            imageOption = { offset: new kakao.maps.Point(20, 40) }; // 기준점
+
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
         var myLocationMarker = new kakao.maps.Marker({
             map: map,
-            position: locPosition
+            position: locPosition,
+            image: markerImage
         });
 
         map.setCenter(locPosition);
     }
-
-    // 화장실 마커 찍기
-    // var markerPositon = new kakao.maps.LatLng(th:text="${toilet.latitude}",th:text="${toilet.longitude}");
-
-    // var marker = new kakao.maps.Marker({
-    //     position: markerPositon
-    // });
-    //
-    // marker.setMap(map);
 
     // 검색 버튼 클릭 시
     const searchBtn = document.getElementById("searchBtn");

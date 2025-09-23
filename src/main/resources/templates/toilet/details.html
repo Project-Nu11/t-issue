@@ -121,6 +121,10 @@
             align-items: center;
             border-radius: 8px;
         }
+        .review {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -211,20 +215,23 @@
         <section style="margin-left: 29px">
             <div id="reviewNav">
                 <div style="font-size: 24px">리뷰</div>
-                <button id = openReview type="button">
+                <button id = openReview type="button" style="background: none;border: none">
                     <img src="/icon/pen.png" alt="작성" width="25" height="25">
                 </button>
 
             </div>
-            <div id="reviews">
-                <div class="review" th:each="review : ${reviewList}">
-                    <div class="no" th:text="${review.no}"></div>
-                    <div class="memberId" th:text="${review.memberId}"></div>
-                    <div class="score" th:text="${review.score}"></div>
-                    <div class="content" th:text="${review.content}"></div>
-                    <div class="stationName" th:text="${review.stationName}"></div>
-                    <div class="toiletLocation" th:text="${review.toiletLocation}"></div>
-                    <div class="date" th:text="${review.date}"></div>
+            <div id="reviews" style="margin-top: 20px">
+                <div class="review" th:each="review : ${reviewList}"
+                     th:attr="data-no=${review.no},
+                  data-station=${review.stationName},
+                  data-toilet=${review.toiletLocation}">
+<!--                    <div class="no" th:text="${review.no}"></div>-->
+<!--                    <div class="stationName" th:text="${review.stationName}"></div>-->
+<!--                    <div class="toiletLocation" th:text="${review.toiletLocation}"></div>-->
+                    <div class="memberId" style="font-size:18px;margin-bottom: 5px " th:text="${review.memberId}"></div>
+                    <div class="score"  style="font-size: 16px" th:text="${review.score}"></div>
+                    <div class="content" style="font-size: 16px" th:text="${review.content}"></div>
+                    <div class="date" style="font-size: 12px; margin-left: 300px" th:text="${review.date}"></div>
                 </div>
             </div>
             <!-- 필요 없을 것 같 -->

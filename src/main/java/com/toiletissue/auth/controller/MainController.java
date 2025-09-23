@@ -31,7 +31,7 @@ public class MainController {
     private String serviceKey;
 
     @GetMapping("/main")
-    public String mainPage(Model model) {
+    public String mainPage(Model model) throws JsonProcessingException {
 
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
@@ -57,9 +57,9 @@ public class MainController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        toilets.forEach(System.out::println);
+        String toiletJson = mapper.writeValueAsString(toilets);
 
-        model.addAttribute("toilets", toilets);
+        model.addAttribute("toiletJson", toiletJson);
 
         model.addAttribute("kakaoKey", kakaoKey);
         return "main";

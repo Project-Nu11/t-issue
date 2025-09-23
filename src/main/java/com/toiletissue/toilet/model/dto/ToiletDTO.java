@@ -14,7 +14,7 @@ public class ToiletDTO {
     private String gateInOut;
 
     @JsonProperty("경도")
-    private Double longitude;
+    private double longitude;
 
     @JsonProperty("관리기관명")
     private String management;
@@ -98,7 +98,7 @@ public class ToiletDTO {
     private String lines;
 
     @JsonProperty("위도")
-    private Double latitude;
+    private double latitude;
 
     @JsonProperty("전화번호")
     private String phone;
