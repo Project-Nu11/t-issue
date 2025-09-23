@@ -14,7 +14,8 @@
         <result property="memberBdate"  column="member_bdate"/>
         <result property="memberGender" column="member_gender"/>
         <result property="role"         column="role"/>
-        <result property="endStatus"    column="end_status"/>
+        <result property="endStatus"    column="end_status"
+                typeHandler="org.apache.ibatis.type.BooleanTypeHandler"/>
         <result property="endDate"      column="end_date"/>
         <result property="penalty"      column="penalty"/>
     </resultMap>
@@ -64,7 +65,8 @@
         member_gender,
         role,
         end_status,
-        end_date
+        end_date,
+        penalty
         FROM member
         WHERE member_id = #{memberId}
     </select>
@@ -80,7 +82,8 @@
         member_gender,
         role,
         end_status,
-        end_date
+        end_date,
+        penalty
         FROM member
     </select>
 
@@ -111,6 +114,13 @@
         WHERE member_id = #{memberId}
     </update>
 
+    <!-- 회원 탈퇴 -->
+    <update id="withdrawMember" parameterType="string">
+        UPDATE member
+        SET end_status = 1,
+        end_date   = NOW()
+        WHERE member_id = #{memberId}
+    </update>
 
 
     <!-- ========================== 관리자 mapper ================================== -->

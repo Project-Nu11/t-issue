@@ -37,7 +37,7 @@ public class SecurityConfig {
                                  "/error", "/toilet/subway",
                                 "/css/**","/js/**","/images/**","/webjars/**"
                         ).permitAll()
-                        .requestMatchers("/mypage/**").hasAuthority("ROLE_USER")
+                        .requestMatchers("/mypage/**","mypage/select").hasAuthority("ROLE_USER")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
@@ -45,7 +45,11 @@ public class SecurityConfig {
                         .loginProcessingUrl("/member/login")  // POST: 스프링 시큐리티가 처리 (컨트롤러 X)
                         .usernameParameter("memberId")
                         .passwordParameter("memberPwd")
-                        .defaultSuccessUrl("/main", true)
+                        .successHandler((req, res, auth) -> {
+                                    // 로그인 성공 → 로그인 페이지로 다시 보내서 alert 띄우기
+                                    res.sendRedirect("/member/login?success");
+                                })
+//                        .defaultSuccessUrl("/main", true)
                         .failureUrl("/member/login?code=LOGIN_FAIL")
                         .permitAll()
                 )

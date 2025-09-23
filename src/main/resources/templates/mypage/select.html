@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <title>마이페이지 조회</title>
     <style>
-        * { box-sizing: border-box;}
+        * {
+            box-sizing: border-box;
+        }
         .title {
-            margin: 12px 0 16px;
+            margin: 25px 20px 10px;
             font-size: 22px;
             font-weight: 800;
         }
@@ -16,18 +18,19 @@
             padding:16px;
             background:#fff;
         }
-        .row   {
+        .row {
             display:grid;
             grid-template-columns: 90px 1fr;
-            align-items:center;
+            align-items:flex-start;
             gap:10px;
             margin:10px 0;
         }
         .label {
             font-size:14px;
             color:#333;
+            padding-top:10px;
         }
-        .ro    {
+        .ro {
             height:36px;
             padding:8px 10px;
             border:1px solid rgba(0,0,0,.2);
@@ -40,6 +43,8 @@
             padding:8px 10px;
             border:1px solid rgba(0,0,0,.2);
             border-radius:8px;
+            width:100%;
+            box-sizing:border-box;
         }
         .btn-row {
             display:flex;
@@ -75,10 +80,73 @@
             background:#ffe7e7;
             color:#b00020;
         }
-        .alert.ok    {
+        .alert.ok {
             background:#e8fff1;
             color:#0a7c3a;
         }
+        /* 힌트 메시지 */
+        .hint {
+            display:block;
+            font-size:12px;
+            color:#666;
+            margin-top:4px;
+            line-height:1.4;
+        }
+        .hint.valid { color:green; }
+        .hint.invalid { color:red; }
+
+        .deleteback{
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,50%);
+            z-index:1100;
+            display:none;
+            position:fixed;
+            top:0; left:0;
+        }
+        .viewdeleteback{
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,50%);
+            z-index:1100;
+            display:flex;
+            position:fixed;
+            top:0;
+            left:0;
+            align-items:center;
+            justify-content:center;
+        }
+        #deletemodal{
+            width:25%;
+            height:30%;
+            background:#fff;
+            position:fixed;
+            top:35%;
+            left:37.5%;
+            z-index:1004;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            border-radius:8px;
+            padding:20px;
+            box-shadow:0 8px 20px rgba(0,0,0,.25);
+        }
+        #deletemodal p{
+            font-size:16px;
+            font-weight:700;
+            margin-bottom:18px;
+            text-align:center;
+        }
+        #deletemodal button{
+            min-width:80px;
+            height:32px;
+            border:1px solid rgba(0,0,0,.25);
+            border-radius:8px;
+            background:#fff;
+            cursor:pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -125,23 +193,25 @@
                 <!-- CSRF 사용 시 토큰 추가 -->
                 <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> -->
 
-                <div class="row" style="margin-top:16px;">
-                    <div class="label">현재 비밀번호</div>
+                <div class="row">
+                    <label for="currentPwd" class="label">현재 비밀번호</label>
                     <input class="input" type="password" id="currentPwd" name="currentPwd" required>
                 </div>
 
                 <div class="row">
-                    <div class="label">새 비밀번호</div>
-                    <input class="input" type="password" id="newPwd" name="newPwd"
-                           pattern="[A-Za-z0-9]{8,}"
-                    title="영문과 숫자를 포함해 8자 이상"
-                    required
-                    oninput="this.value=this.value.replace(/[^A-Za-z0-9]/g,'');">
+                    <label for="newPwd" class="label">새 비밀번호</label>
+                    <div>
+                        <input class="input" type="password" id="newPwd" name="newPwd" required>
+                        <span id="pwdRuleMsg" class="hint">영문과 숫자를 모두 포함한 8자 이상이어야 합니다.</span>
+                    </div>
                 </div>
 
                 <div class="row">
-                    <div class="label">비밀번호 확인</div>
-                    <input class="input" type="password" id="confirmPwd" name="confirmPwd" required>
+                    <label for="confirmPwd" class="label">비밀번호 확인</label>
+                    <div>
+                        <input class="input" type="password" id="confirmPwd" name="confirmPwd" required>
+                        <span id="pwdMatchMsg" class="hint"></span>
+                    </div>
                 </div>
 
                 <div class="btn-row">
@@ -153,41 +223,156 @@
     </div>
 </div>
 
+<!-- 비밀번호 변경 완료 모달 -->
+<div class="deleteback" id="pwdDoneBack">
+    <div id="deletemodal">
+        <p id="pwdDoneMsg">비밀번호 변경이 완료되었습니다!</p>
+        <button id="pwdDoneOk">확인</button>
+    </div>
+</div>
+
 <script>
     var editBtn   = document.getElementById('editBtn');
     var cancelBtn = document.getElementById('cancelBtn');
     var form      = document.getElementById('pwdForm');
 
+    var newPwd     = document.getElementById("newPwd");
+    var confirmPwd = document.getElementById("confirmPwd");
+    var ruleMsg    = document.getElementById("pwdRuleMsg");
+    var matchMsg   = document.getElementById("pwdMatchMsg");
+
+    // 규칙: 영문 + 숫자 포함, 8자 이상
+    const PWD_RULE = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    function checkRule() {
+        if (!newPwd.value) {
+            ruleMsg.textContent = "영문과 숫자를 모두 포함한 8자 이상이어야 합니다.";
+            ruleMsg.className = "hint";
+            return false;
+        }
+        if (PWD_RULE.test(newPwd.value)) {
+            ruleMsg.textContent = "사용 가능한 비밀번호 형식입니다.";
+            ruleMsg.className = "hint valid";
+            return true;
+        } else {
+            ruleMsg.textContent = "영문과 숫자를 모두 포함한 8자 이상이어야 합니다.";
+            ruleMsg.className = "hint invalid";
+            return false;
+        }
+    }
+
+    function checkMatch() {
+        if (!confirmPwd.value) {
+            matchMsg.textContent = "";
+            matchMsg.className = "hint";
+            return false;
+        }
+        if (newPwd.value === confirmPwd.value) {
+            matchMsg.textContent = "비밀번호가 일치합니다.";
+            matchMsg.className = "hint valid";
+            return true;
+        } else {
+            matchMsg.textContent = "비밀번호가 일치하지 않습니다.";
+            matchMsg.className = "hint invalid";
+            return false;
+        }
+    }
+
+    // 버튼
     editBtn.addEventListener('click', function(){
-        form.classList.remove('hidden'); editBtn.disabled = true;
+        form.classList.remove('hidden');
+        editBtn.disabled = true;
+        checkRule();
+        checkMatch();
     });
+
     cancelBtn.addEventListener('click', function(){
-        form.classList.add('hidden'); editBtn.disabled = false;
+        form.classList.add('hidden');
+        editBtn.disabled = false;
         ['currentPwd','newPwd','confirmPwd'].forEach(function(id){
-            var el = document.getElementById(id); if (el) el.value = '';
+            var el = document.getElementById(id);
+            if (el) el.value = '';
         });
+        ruleMsg.textContent = "영문과 숫자를 모두 포함한 8자 이상이어야 합니다.";
+        ruleMsg.className = "hint";
+        matchMsg.textContent = "";
+        matchMsg.className = "hint";
     });
 
-    // 제출 전 클라이언트 검증
-    form.addEventListener('submit', function(e){
-        // 1) 기본 브라우저 검증
-        if (!form.checkValidity()) { e.preventDefault(); form.reportValidity(); return; }
+    // 실시간 체크
+    newPwd.addEventListener("input", () => { checkRule(); checkMatch(); });
+    confirmPwd.addEventListener("input", checkMatch);
 
-        var np = document.getElementById('newPwd').value;
-        var cp = document.getElementById('confirmPwd').value;
+    const pwdDoneBack = document.getElementById('pwdDoneBack');
+    const pwdDoneMsg  = document.getElementById('pwdDoneMsg');
+    const pwdDoneOk   = document.getElementById('pwdDoneOk');
 
-        // 2) 영문 1 + 숫자 1 이상 보장
-        if (!/[A-Za-z]/.test(np) || !/\d/.test(np)) {
+    function openPwdDone(message, onOk){
+        if (message) pwdDoneMsg.textContent = message;
+        // 보여주기
+        pwdDoneBack.classList.remove('deleteback');
+        pwdDoneBack.classList.add('viewdeleteback');
+        // 확인 버튼
+        pwdDoneOk.onclick = function(){
+            // 숨기기
+            pwdDoneBack.classList.remove('viewdeleteback');
+            pwdDoneBack.classList.add('deleteback');
+            if (typeof onOk === 'function') onOk();
+        };
+    }
+
+    // 제출: 검증 → 서버요청 → 성공 모달
+    form.addEventListener("submit", async function(e){
+        const okRule  = checkRule();
+        const okMatch = checkMatch();
+        if (!okRule || !okMatch) {
             e.preventDefault();
-            alert('새 비밀번호는 영문과 숫자를 모두 포함해야 합니다.');
+            alert("비밀번호 조건을 확인해주세요.");
             return;
         }
-        // 3) 동일성 검사
-        if (np !== cp) {
-            e.preventDefault();
-            alert('새 비밀번호가 일치하지 않습니다.');
+
+        e.preventDefault(); // 기본 submit 막고 fetch 사용
+        const action = form.getAttribute('action') || form.action;
+
+        // URL-encoded로 전송
+        const params = new URLSearchParams();
+        const fd = new FormData(form);
+        fd.forEach((v,k)=>params.append(k,v));
+
+        // CSRF 헤더 (있으면 자동 사용)
+        const csrf = document.getElementById('csrfToken');
+        const headers = { 'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8' };
+        if (csrf && csrf.value) headers['X-CSRF-TOKEN'] = csrf.value;
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+            const resp = await fetch(action, { method:'POST', headers, body: params.toString() });
+
+            if (!resp.ok) {
+                openPwdDone('비밀번호 변경에 실패했습니다. 현재 비밀번호를 확인해 주세요.');
+                submitBtn.disabled = false;
+                return;
+            }
+
+            //비번 변경 성공 → 확인 누르면 로그아웃하고 메인으로
+            openPwdDone('비밀번호 변경이 완료되었습니다!', async () => {
+                try {
+
+                    await fetch('/member/logout', { method: 'POST', credentials: 'same-origin' });
+                } catch (e) {
+                    // 실패해도 무시하고 이동
+                } finally {
+                    location.href = '/main'; // 메인으로 이동 → 다시 로그인 유도
+                }
+            });
+        } catch (err) {
+            openPwdDone('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            submitBtn.disabled = false;
         }
     });
 </script>
+
 </body>
 </html>
