@@ -95,6 +95,7 @@
         select *
           from review
          where station_name = #{stationName}
+<!--           and toilet_location = #{toiletLocation}-->
          order by review_no desc
     </select>
 

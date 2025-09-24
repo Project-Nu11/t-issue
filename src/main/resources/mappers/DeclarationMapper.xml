@@ -3,4 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.toiletissue.declaration.model.dao.DeclarationMapper">
+    <insert id="insertDeclaration">
+        INSERT INTO declaration
+        (
+        review_no,
+        member_id
+        )
+        VALUES
+        (
+        #{review},
+        #{memberId}
+        )
+    </insert>
+
+    <select id="existsDeclaration" resultType="int">
+        select count(*)
+          from declaration
+         where review_no = #{reviewNo}
+           and member_id = #{memberId}
+    </select>
 </mapper>
