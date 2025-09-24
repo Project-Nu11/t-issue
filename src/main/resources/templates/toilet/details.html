@@ -37,7 +37,7 @@
             height: 50px;
             text-align: center;
             /*border: 1px solid #000000;*/
-            font-weight: normal;
+            font-family: AggravoL;
             font-size: 16px;
         }
         #icons {
@@ -96,6 +96,7 @@
         li {
             list-style: none;
             padding: 15px;
+            font-family: AggravoM;
         }
         /*#review {*/
         /*    margin-left: 29px;*/
@@ -124,6 +125,12 @@
         .review {
             margin-left: 20px;
             margin-bottom: 15px;
+        }
+        .content, .score {
+            font-family: AggravoL;
+        }
+        .memberId, .date {
+            font-family: AggravoM;
         }
     </style>
 </head>
@@ -214,13 +221,13 @@
 
         <section style="margin-left: 29px">
             <div id="reviewNav">
-                <div style="font-size: 24px">리뷰</div>
-                <button id = openReview type="button" style="background: none;border: none">
+                <div style="font-size: 24px;margin-left: 30px">리뷰</div>
+                <button id = "openReview" type="button" style="background: none;border: none" >
                     <img src="/icon/pen.png" alt="작성" width="25" height="25">
                 </button>
 
             </div>
-            <div id="reviews" style="margin-top: 20px">
+            <div id="reviews" style="margin-top: 20px;margin-left: 25px">
                 <div class="review" th:each="review : ${reviewList}"
                      th:attr="data-no=${review.no},
                   data-station=${review.stationName},
@@ -229,47 +236,27 @@
 <!--                    <div class="stationName" th:text="${review.stationName}"></div>-->
 <!--                    <div class="toiletLocation" th:text="${review.toiletLocation}"></div>-->
                     <div class="memberId" style="font-size:18px;margin-bottom: 5px " th:text="${review.memberId}"></div>
-                    <div class="score"  style="font-size: 16px" th:text="${review.score}"></div>
-                    <div class="content" style="font-size: 16px" th:text="${review.content}"></div>
-                    <div class="date" style="font-size: 12px; margin-left: 300px" th:text="${review.date}"></div>
+                    <div>
+                        <div class="score"  style="font-size: 16px" th:text="${review.score}"></div>
+                    </div>
+                    <div class="content" style="font-size: 16px;" th:text="${review.content}"></div>
+                    <div class="date" style="font-size: 12px;margin-left: 300px" th:text="${review.date}"></div>
                 </div>
             </div>
-            <!-- 필요 없을 것 같 -->
-            <!--            // 리뷰 상세 조회-->
-            <!--            <div class="details">-->
-
-            <!--                <div>사용자 아이디</div>-->
-
-            <!--                <div class="layout">-->
-            <!--                    <div>별점</div>-->
-            <!--                    <div id="dtitle"></div><br>-->
-            <!--                    <div>내용</div>-->
-            <!--                    <div id="dcontent"></div><br>-->
-            <!--                    <div id="ddatelayout">-->
-            <!--                        <div>날짜</div>-->
-            <!--                        <div id="ddate"></div>-->
-            <!--                    </div>-->
-            <!--                    <div id="dno" style="display: none"></div>-->
-            <!--                    <div class="btns">-->
-            <!--                        <button class="deletebtn">삭제</button>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-
-            <!--            </div>-->
 
         </section>
         <!--리뷰 작성 모달-->
         <div id="reviewModal" class="modal">
             <div id="insertReview">
                 <form action="/toilet/details" method="post">
-                    <div><input type="text" name="memberId" th:value="${member?.memberId}" readonly></div>
-                    <div><input type="text" name="stationName" th:value="${stationName}"></div>
-                    <div><input type="text" name="toiletLocation" th:value="${toilet.toiletLocation}"></div>
+                    <div><input type="hidden" name="memberId" th:value="${member?.memberId}" readonly></div>
+                    <div><input type="hidden" name="stationName" th:value="${stationName}"></div>
+                    <div><input type="hidden" name="toiletLocation" th:value="${toilet.toiletLocation}"></div>
                     <div><label for="ititle">별점</label></div>
                     <div><input type="text" placeholder="점수를 입력하세요" id="ititle" name="score"></div>
                     <br>
                     <div><label for="icontent">내용</label></div>
-                    <div><textarea name="content" id="icontent" placeholder="내용을 입력하세요(최대 300자)" maxlength="300"></textarea></div>
+                    <div><textarea style="width: 320px;height: 180px" name="content" id="icontent" placeholder="내용을 입력하세요(최대 300자)" maxlength="300"></textarea></div>
                     <div class="contentlen"><span class="contentlength">0</span>/300</div>
                     <div class="btns">
                         <button class="registbtn" type="submit">작성</button>
@@ -280,7 +267,7 @@
         </div>
     </section>
 </div>
-<script>
+<script th:inline="javascript">
     function openModal(id) {
         document.getElementById(id).style.display = "block";
     }
@@ -296,11 +283,35 @@
     document.getElementById("openDisabledModal").onclick = () => openModal("disabledModal");
     document.getElementById("openDiaperModal").onclick = () => openModal("diaperModal");
 
-    document.getElementById("openReview").onclick = () => openModal("reviewModal");
+    document.addEventListener("DOMContentLoaded", () => {
+        let isLoggedIn = /*[[${isLoggedIn}]]*/ false;
 
-    window.onclick = (event) => {
-        ["manModal", "womanModal", "disabledModal", "diaperModal", "reviewModal"].forEach(id => closeModal(event, id));
-    };
+        const openReviewBtn = document.getElementById("openReview");
+
+        if (isLoggedIn) {
+            openReviewBtn.disabled = false;
+        }
+
+        openReviewBtn.addEventListener('click', () => {
+            if (isLoggedIn) {
+                openModal("reviewModal");
+            } else {
+                alert('로그인이 필요합니다.');
+                window.location.href='/member/login';
+            }
+        });
+
+        const cancelBtn = document.querySelector(".cancelbtn");
+
+        cancelBtn.addEventListener('click', () => {
+            document.getElementById("reviewModal").style.display = "none";
+        });
+
+        window.onclick = (event) => {
+            ["manModal", "womanModal", "disabledModal", "diaperModal", "reviewModal"].forEach(id => closeModal(event, id));
+        };
+
+    });
 </script>
 </body>
 </html>

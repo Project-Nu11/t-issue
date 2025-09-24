@@ -78,12 +78,20 @@
         /*    margin-top: -50px;*/
         /*}*/
 
-        /*#search {*/
-        /*    width: 420px;*/
-        /*    height: 40px;*/
-        /*    background-color: yellow;*/
-
-        /*}*/
+        #search input {
+            position: fixed;
+            top: 12%;
+            width: 420px;
+            height: 40px;
+            margin-left: 29px;
+            background: none;
+            border-radius: 50px;
+            border: 2px solid black;
+        }
+        input::placeholder {
+            font-size:20px;
+            padding: 3%;
+        }
         .hidden {
             display: none !important;
         }
@@ -121,11 +129,16 @@
         </button>
     </div>
 
-    <div id="searchBar" style="background-color: blueviolet">
-        <div id="search" style="display: inline-block">
-            <input type="text" placeholder="검색" style="position: fixed; top: 11%;width: 420px;height: 40px">
+    <div id="searchBar">
+        <div id="search" style="display: inline-block;background-color: rebeccapurple">
+            <form id="searchForm">
+                <button>
+                    <div style="background: none;border: none"><img src="/icon/free-icon-magnifier-2311526.png" alt="검색" width="40" height="40"></div>
+                </button>
+                <input type="search" placeholder="검색" style="background-color: yellow">
+            </form>
         </div>
-        <div style="display: inline-block;background-color: blue; position: fixed; left: 70%"  >
+        <div style="display: inline-block; background-color: blue">
             <button id="endSearch">
                 <div><img src="/icon/cancel_11212407.png" alt="취소" width="40" height="40"></div>
             </button>

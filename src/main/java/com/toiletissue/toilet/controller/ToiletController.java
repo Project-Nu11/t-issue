@@ -183,9 +183,9 @@ public class ToiletController {
             @RequestParam(value = "toiletName", required = false) String toiletName,
             Model model, Principal principal) {
 
-        System.out.println("==== get /details 호출 ====");
-        System.out.println("받은 stationName: " + stationName);
-        System.out.println("받은 toiletName: " + toiletName);
+//        System.out.println("==== get /details 호출 ====");
+//        System.out.println("받은 stationName: " + stationName);
+//        System.out.println("받은 toiletName: " + toiletName);
 
         // api 호출
         RestTemplate restTemplate = new RestTemplate();
@@ -221,16 +221,19 @@ public class ToiletController {
         model.addAttribute("reviewList", reviewList != null ? reviewList : Collections.emptyList());
 
         // 로그인 회우ㅝㄴ 정보
-        if (principal != null) { // 로그인 상태일 때만
+        boolean isLoggedIn = (principal != null);
+        model.addAttribute("isLoggedIn", principal != null);
+
+        if (isLoggedIn) { // 로그인 상태일 때만
             MemberDTO member = memberService.findById(principal.getName());
             model.addAttribute("member", member);
         }
 
-        System.out.println("=== Toilet 객체 확인 ===");
-        System.out.println("toilet.getName(): " + (toilet != null ? toilet.getName() : "toilet is null"));
-        System.out.println("toilet.getGround(): " + (toilet != null ? toilet.getGround() : "toilet is null"));
-        System.out.println("toilet.getFloor(): " + (toilet != null ? toilet.getFloor() : "toilet is null"));
-        System.out.println("toilet.getGateInOut(): " + (toilet != null ? toilet.getGateInOut() : "toilet is null"));
+//        System.out.println("=== Toilet 객체 확인 ===");
+//        System.out.println("toilet.getName(): " + (toilet != null ? toilet.getName() : "toilet is null"));
+//        System.out.println("toilet.getGround(): " + (toilet != null ? toilet.getGround() : "toilet is null"));
+//        System.out.println("toilet.getFloor(): " + (toilet != null ? toilet.getFloor() : "toilet is null"));
+//        System.out.println("toilet.getGateInOut(): " + (toilet != null ? toilet.getGateInOut() : "toilet is null"));
 //        System.out.println("stationName: " + stationName);
 //        System.out.println("toiletName: " + toiletName);
 
