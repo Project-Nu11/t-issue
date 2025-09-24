@@ -145,6 +145,7 @@
            set end_status = 1,
                end_date = now()
          where member_id = #{id}
+           and penalty >= 10
     </update>
 
     <select id="selectPenalizedMember" resultMap="member">

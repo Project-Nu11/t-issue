@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -96,18 +97,69 @@ public class RequestController {
 //    }
 
     @PostMapping("/manager/reject")
-    public ModelAndView requestReject(ModelAndView mv, @ModelAttribute RequestDTO requestDTO){
-        requestService.requestReject(requestDTO);
+    public ModelAndView requestReject(ModelAndView mv, @ModelAttribute RequestDTO requestDTO, RedirectAttributes rttr,
+                                      @RequestParam("no")int no){
+        int result = requestService.requestReject(requestDTO);
+
+        RequestDTO request = requestService.selectRequestByNo(no);
+        System.out.println("request = " + request);
+        String answer = request.getAnswer(); // 답변 내용
+        System.out.println("answer = " + answer);
+        String reject = request.getReject(); // 거절 사유
+        System.out.println("reject = " + reject);
+
+        String message = "";
+        if (result > 0){
+            message = "문의 거절을 성공하였습니다.";
+        } else {
+            message = "문의 거절을 실패하였습니다.";
+            if(reject!=null){
+                message += "\n실패 사유 : 이미 답변이 거절된 문의입니다.";
+            } else if(answer!=null){
+                message += "\n실패 사유 : 이미 답변이 등록된 문의입니다.";
+            }
+        }
+
         mv.setViewName("redirect:/request/manager");
+        rttr.addFlashAttribute("message",message);
+
         return mv;
 
     }
 
     @PostMapping("/manager/answer")
-    public ModelAndView requestAnswer(ModelAndView mv, @ModelAttribute RequestDTO requestDTO){
-        System.out.println(requestDTO);
-        requestService.requestAnswer(requestDTO);
+    public ModelAndView requestAnswer(ModelAndView mv, @ModelAttribute RequestDTO requestDTO,RedirectAttributes rttr,
+                                      @RequestParam("no")int no){
+
+        int result = requestService.requestAnswer(requestDTO);
+
+
+        RequestDTO request = requestService.selectRequestByNo(no);
+        System.out.println("request = " + request);
+        String answer = request.getAnswer(); // 답변 내용
+        System.out.println("answer = " + answer);
+        String reject = request.getReject(); // 거절 사유
+        System.out.println("reject = " + reject);
+
+        String message = "";
+        if (result > 0){
+            message = "문의 답변을 성공하였습니다.";
+        } else {
+            message = "문의 답변을 실패하였습니다.";
+            if (answer!=null){
+                message += "\n실패 사유 : 이미 답변이 등록된 문의입니다.";
+            } else if(reject!=null){
+                message += "\n실패 사유 : 이미 답변이 거절된 문의입니다.";
+            }
+        }
+        
+        
         mv.setViewName("redirect:/request/manager");
+        rttr.addFlashAttribute("message",message);
+
+
+
+
 
         return mv;
     }

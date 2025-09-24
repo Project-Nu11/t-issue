@@ -35,7 +35,7 @@ public interface MemberMapper {
 
     List<MemberDTO> selectAllMember();
 
-    void restrictMember(String id);
+    int restrictMember(String id);
 
     List<MemberDTO> selectPenalizedMember();
 

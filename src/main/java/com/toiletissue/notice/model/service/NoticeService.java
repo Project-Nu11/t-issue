@@ -5,7 +5,6 @@ import com.toiletissue.notice.model.dto.NoticeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.rmi.server.ExportException;
 import java.util.List;
 
 @Service
@@ -26,9 +25,10 @@ public class NoticeService {
         return result;
     }
 
-    public void deleteNotice(int no) {
+    public int deleteNotice(int no) {
 
-        noticeMapper.deleteNotice(no);
+
+        return  noticeMapper.deleteNotice(no);
     }
 
 
@@ -37,9 +37,9 @@ public class NoticeService {
         return noticeMapper.selectAllNotice();
     }
 
-    public void updateNotice(NoticeDTO noticeDTO) {
+    public int updateNotice(NoticeDTO noticeDTO) {
 
-        System.out.println(noticeDTO);
-        noticeMapper.updateNotice(noticeDTO);
+        return noticeMapper.updateNotice(noticeDTO);
+
     }
 }

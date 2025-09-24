@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        const message = `[[${message}]]`
+        console.log(message)
+        if(message) {
+            alert(message);
+        }
+    </script>
     <style>
         #revbtn{
             background: #FAFAC2;
@@ -18,8 +25,8 @@
             height: 9%;
             margin-bottom: 1%;
             background: white;
-            display: flex;
-            flex-direction: row;
+            /*display: flex;*/
+            /*flex-direction: row;*/
             /*border: black 1px solid;*/
             align-items: center;
             border-radius: 8px;
@@ -69,30 +76,40 @@
         .detailbtn{
             position: relative;
             left: 95%;
+            top: 29%;
             font-size: 20px;
+            z-index: 1100;
+
         }
         .date{
             position: relative;
-            bottom: 20%;
-            right: 50%;
+            bottom: 30%;
             font-size: 10px;
             font-family: AggravoL;
             /*background-color: #2f1a48;*/
-            width: 12%;
+            width: 15%;
+        }
+        .idis{
+            position: relative;
+            bottom: 30%;
+            font-size: 10px;
+            font-family: AggravoL;
+            width: 5%;
         }
         .memberId{
             position: relative;
-            right: 48%;
-            bottom: 20%;
+            right: 2%;
+            bottom: 30%;
             font-size: 10px;
             font-family: AggravoL;
         }
         .toiletName{
             /*background-color: #FAFAC2;*/
-            width: 50%;
+            width: 100%;
             font-size: 20px;
             position: relative;
-            top: 20%;
+            bottom: 20%;
+            left: 3%;
         }
         .details{
             width: 30%;
@@ -193,8 +210,32 @@
             z-index: 1100;
             display: none;
         }
+        /*이미 처리된 리뷰*/
+        .already-penalty-back{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,50%);
+            z-index: 1100;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0 ;
+        }
         /*벌점부과 확인 모달 창*/
         #dec-penalty-back{
+            width: 25%;
+            height: 30%;
+            /*border: 3px black solid;*/
+            background: white;
+            position: fixed;
+            top: 35%;
+            left: 37.5%;
+            z-index: 1004;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #already-penalty-back{
             width: 25%;
             height: 30%;
             /*border: 3px black solid;*/
@@ -255,7 +296,11 @@
             justify-content: space-between;
             top: 70%;
         }
-        #canN,#canY,#penN,#penY{
+        .aa{
+            justify-content: center;
+            /*background-color: cyan;*/
+        }
+        #canN,#canY,.penN,#penY{
             border: none;
             width: 50px;
             height: 30px;
@@ -279,13 +324,13 @@
             color: #d9d9d9;
         }
 
-        .idis{
-            position: relative;
-            right: 49%;
-            bottom: 20%;
-            font-size: 10px;
-            font-family: AggravoL;
-        }
+        /*.idis{*/
+        /*    position: relative;*/
+        /*    right: 49%;*/
+        /*    bottom: 20%;*/
+        /*    font-size: 10px;*/
+        /*    font-family: AggravoL;*/
+        /*}*/
         .selectbtn{
             position: fixed;
             top: 18%;
@@ -321,14 +366,16 @@
     <div id="reviewlist">
         <div class="review" th:each="review : ${reviewList}">
             <div class="detailbtn">▶</div> <!--detailbtn은 여러개있을 수 있고 그에 따른 인덱스 있음-->
+            <div style="height:10px;width: 100%;display: flex;position: relative;bottom: 20%;left: 3%">
+                <div class="stationName" th:text="${review.stationName}" hidden></div><!--역명확인용-->
+                <div class="toiletLocation" th:text="${review.toiletLocation}" hidden></div><!--화장실위치확인용-->
+                <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
+                <div class="idis">ID : </div>
+                <div class="memberId" th:text="${review.memberId}"></div><!--리뷰작성자id 확인용-->
+            </div>
             <div class="toiletName" th:text="${review.stationName} +' ' +${review.toiletLocation}"></div>
-            <div class="stationName" th:text="${review.stationName}" hidden></div><!--역명확인용-->
-            <div class="toiletLocation" th:text="${review.toiletLocation}" hidden></div><!--화장실위치확인용-->
-            <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
-            <div class="idis">ID : </div>
-            <div class="memberId" th:text="${review.memberId}" style="width: 1%"></div><!--리뷰작성자id 확인용-->
 <!--            <div style="position: relative;left:10%">처리 상태</div>-->
-            <div class="penaltyStatus" th:text="${review.penalty}" style="position: relative;left:10%" ></div> <!--벌점 확인용...-->
+            <div class="penaltyStatus" th:text="${review.penalty}" style="position: relative;left:80%;bottom: 80%" ></div> <!--벌점 확인용...-->
             <div class="no" th:text="${review.no}" style="display: none"></div> <!--번호 확인용...-->
             <div class="content" th:text="${review.content}" style="display: none"></div> <!--리뷰내용 확인용...-->
             <div class="decNum" th:text="${review.decNum}" style="display: none"></div> <!--신고횟수 확인용...-->
@@ -375,12 +422,23 @@
                     <input type="hidden" name="id" id="penaltyId">
                     <button id="penY" type="submit">예</button>
                 </form>
-                <button id="penN">아니오</button>
+                <button class="penN">아니오</button>
+            </div>
+            </div>
+        </div>
+
+    <!--이미 처리된 리뷰입니다.-->
+    <div class="already-penalty-back">
+        <div id="already-penalty-back">
+            <div style="position: relative;top:30%">
+                <!--                <div id="memberId"></div>의 벌점은 <div id="penalty"></div> 점 입니다.-->
+                <div>이미 처리된 리뷰입니다.</div>
+            </div>
+            <div class="penaltybtns aa">
+                <button class="penN" style="text-align: center">확인</button>
             </div>
         </div>
     </div>
-
-
     <!--신고 취소-->
     <div class="cancel-back"><!--배경-->
         <div id="dec-cancel-modal">
@@ -396,29 +454,26 @@
                 </div>
             </div>
         </div>
-
     </div>
-</div>
 <!--페이징처리-->
-<div class="pagination" style="display: flex">
+    <div class="pagination" style="display: flex">
+        <!-- 이전 버튼 -->
+        <span th:if="${startPage > 1}">
+            <a th:href="@{/review/declared(page=${startPage - 1})}">◀</a>
+        </span>
 
-    <!-- 이전 버튼 -->
-    <span th:if="${startPage > 1}">
-        <a th:href="@{/review/declared(page=${startPage - 1})}">◀</a>
-    </span>
+        <!-- 페이지 번호 버튼 -->
+        <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{/review/declared(page=${i})}"
+               th:text="${i}"
+               th:classappend="${i == page} ? 'active' : ''"></a>
+        </span>
 
-    <!-- 페이지 번호 버튼 -->
-    <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
-        <a th:href="@{/review/declared(page=${i})}"
-           th:text="${i}"
-           th:classappend="${i == page} ? 'active' : ''"></a>
-    </span>
-
-    <!-- 다음 버튼 -->
-    <span th:if="${endPage < totalPages}">
-        <a th:href="@{/review/declared(page=${endPage + 1})}">▶</a>
-    </span>
-
+        <!-- 다음 버튼 -->
+        <span th:if="${endPage < totalPages}">
+            <a th:href="@{/review/declared(page=${endPage + 1})}">▶</a>
+        </span>
+    </div>
 </div>
 
 <script>
@@ -441,14 +496,9 @@
 
     const $penalty = document.querySelector(".penalty")
     const $penaltyModal = document.querySelector(".penalty-back")
-    const $penN = document.querySelector('#penN')
-    $penalty.addEventListener('click',function (){
-        $penaltyModal.style.display='flex'
-    })
-    $penN.addEventListener('click',function (){
-        $penaltyModal.style.display='none'
-        console.log('아니오')
-    })
+    const $alreadyPenaltyModal = document.querySelector(".already-penalty-back")
+    const $penN = document.querySelectorAll('.penN')
+
 
     const $reviews = document.querySelectorAll('.review')
     const $detailBtn = document.querySelectorAll('.detailbtn');
@@ -461,26 +511,12 @@
     const $decCancelBtn = document.querySelector(".dec-cancel") // 신고 취소 버튼
     const $decCancelModal = document.querySelector(".cancel-back") // 신고 취소 확인 모달
     const $decCancelCancelBtn = document.querySelector("#canN") // 신고 취소 취소 버튼
-    const $decCancelAgreeBtn = document.querySelector("#canY") // 신고 취소 동의 벝은
-    const $decCancelSuccess = document.querySelector(".cancelsuccess") // 신고 취소 완료 버튼
+
     const $decCancelReviewNo = document.querySelector("#cancelNo") // 신고할 리뷰의 번호
 
 
-    $decCancelBtn.addEventListener('click',function (){
-        $decCancelModal.style.display = 'flex'
-    })
-    $decCancelCancelBtn.addEventListener('click',function (){
-        $decCancelModal.style.display='none';
-    })
-    $decCancelAgreeBtn.addEventListener('click',function (){
-        // $decCancelModal.style.display='none'
-        $decCancelSuccess.style.display='flex'
-    })
 
-    $decCancelSuccess.addEventListener('click',function (){
-        $decCancelModal.style.display='none'
-        $decCancelSuccess.style.display='none'
-    })
+
     // const $review = document.querySelectorAll(".review") // 리뷰 요약 창
 
     let openedIndex = null;
@@ -501,6 +537,8 @@
             const toiletLocation = $review.querySelector('.toiletLocation')?.textContent||'';
             const stationName = $review.querySelector('.stationName')?.textContent||'';
             const no =  $review.querySelector('.no')?.textContent;
+            const penalty = $review.querySelector('.penaltyStatus')?.textContent||'';
+            console.log("penaltystatus = "+penalty)
             console.log(stationName+" "+toiletLocation)
             console.log("id"+ id)
             console.log('no : '+no)
@@ -531,6 +569,50 @@
             $detail.style.display='flex'
             openedIndex = i;
             console.log("index:"+openedIndex)
+
+
+            $decCancelBtn.addEventListener('click',function (){
+                if(penalty==='처리 완료'){
+                    $alreadyPenaltyModal.style.display='flex'
+                    $decCancelModal.style.display = 'none'
+                    console.log('이미 처리 됨')
+                }if(penalty==='처리 전'){
+                    $alreadyPenaltyModal.style.display='none'
+                    $decCancelModal.style.display = 'flex'
+                }
+
+
+
+
+            })
+
+
+
+            $decCancelCancelBtn.addEventListener('click',function (){
+                $decCancelModal.style.display='none';
+            })
+
+            /*처리구분*/
+            $penalty.addEventListener('click',function (){
+                if(penalty==='처리 완료'){
+                    $penaltyModal.style.display='none'
+                    $alreadyPenaltyModal.style.display='flex'
+                    console.log('이미 처리된 리뷰입니다.')
+                }
+                if(penalty==="처리 전"){
+                    $penaltyModal.style.display='flex'
+                    $alreadyPenaltyModal.style.display='none'
+
+                }
+            })
+
+            $penN.forEach((btn)=>{
+                btn.addEventListener('click',function (){
+                    $alreadyPenaltyModal.style.display='none'
+                    $penaltyModal.style.display='none'
+                    console.log('아니오')
+                })
+            })
         })
 
         // const $criteria = document.querySelector('#criteria')
@@ -547,6 +629,8 @@
         //         $inputBox.placeholder='검색기준을 입력해주세요'
         //     }
         // })
+
+
 
     })
 </script>

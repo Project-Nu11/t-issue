@@ -12,7 +12,7 @@ public interface NoticeMapper {
 
     int insertNotice(NoticeDTO noticeDTO);
 
-    void deleteNotice(int no);
+    int deleteNotice(int no);
 
-    void updateNotice(NoticeDTO noticeDTO);
+    int updateNotice(NoticeDTO noticeDTO);
 }

@@ -146,8 +146,9 @@ public class MemberService implements UserDetailsService {
         return memberMapper.selectAllMember();
     }
 
-    public void restrictMember(String id) {
-        memberMapper.restrictMember(id);
+    public int restrictMember(String id) {
+        return memberMapper.restrictMember(id);
+
     }
 
     public List<MemberDTO> selectPenalizedMember() {

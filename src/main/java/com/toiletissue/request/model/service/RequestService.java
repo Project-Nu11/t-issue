@@ -16,12 +16,12 @@ public class RequestService {
         return requestMapper.selectAllRequest(value);
     }
 
-    public void requestReject(RequestDTO requestDTO) {
-        requestMapper.requestReject(requestDTO);
+    public int requestReject(RequestDTO requestDTO) {
+        return requestMapper.requestReject(requestDTO);
     }
 
-    public void requestAnswer(RequestDTO requestDTO) {
-        requestMapper.requestAnswer(requestDTO);
+    public int requestAnswer(RequestDTO requestDTO) {
+        return requestMapper.requestAnswer(requestDTO);
     }
 
     public List<RequestDTO> selectRequestsByCriteria() {
@@ -46,5 +46,9 @@ public class RequestService {
     public List<RequestDTO> selectAllRequestById(String value, String name) {
         return requestMapper.selectAllRequestById(value,name);
 
+    }
+
+    public RequestDTO selectRequestByNo(int no) {
+        return requestMapper.selectRequestByNo(no);
     }
 }

@@ -293,9 +293,9 @@
             <form action="/request/member/insert" method="post" style="height: 100%;aspect-ratio: 1">
                 <input type="hidden" th:value="${member.memberId}" name="id">
                 <div style="position: relative;top: 15%;left: 10%">제목</div>
-                <input class="insert-rtitle" type="text" name="title" placeholder="제목을 입력해주세요">
+                <input required class="insert-rtitle" type="text" name="title" placeholder="제목을 입력해주세요">
                 <div style="position: relative;top: 20%;left: 10%">내용</div>
-                <textarea class="insert-rcontent" name="content" id="" cols="300" rows="100" placeholder="내용을 입력해주세요"></textarea>
+                <textarea required class="insert-rcontent" name="content" id="" cols="300" rows="100" placeholder="내용을 입력해주세요"></textarea>
                 <button type="submit" id="regist" class="btn">작성</button>
             </form>
             <button id="cancel" class="btn">취소</button>
