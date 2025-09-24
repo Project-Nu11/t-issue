@@ -5,26 +5,50 @@
   <title>로그인</title>
   <style>
     @font-face {
-      font-family: 'SBAggroB';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+      font-family: 'Aggravo';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroL.woff') format('woff');
+      font-weight: 300;
       font-style: normal;
       font-display: swap;
     }
-    html,body{
-      font-family: 'SBAggroB';
+    /*@font-face {*/
+    /*  font-family: 'Aggravo';*/
+    /*  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroM.woff') format('woff');*/
+    /*  font-weight: 400;*/
+    /*  font-style: normal;*/
+    /*  font-display: swap;*/
+    /*}*/
+    @font-face {
+      font-family: 'Aggravo';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroM.woff') format('woff');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Aggravo';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    html, body{
+      font-family: 'Aggravo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     label {
       display: block;
       margin: 30px 20px 10px;
-
       font-weight: 500;
       font-size: 20px;
       color: #000;
     }
 
     input[type="text"],
-    input[type="password"] {
+    input[type="password"]{
       font-family: 'Aggravo';
       font-weight: 300;
       width: 300px;
@@ -36,19 +60,18 @@
       background: #fff;
     }
 
-    .title {
+    .title{
       margin: 25px 20px 10px;
       font-family: 'Aggravo';
       font-size: 25px;
       font-weight: 700;
     }
 
-    /* 하단 버튼 3개 */
-    .btn-row {
+    .btn-row{
       display: flex;
       gap: 12px;
       margin: 200px 30px 100px;
-      font-family: 'SBAggroB',serif;
+      font-family: 'Aggravo';
     }
 
     .btn-row button {
@@ -59,6 +82,8 @@
       border-radius: 8px;
       background: #fff;
       cursor: pointer;
+      font-family: 'Aggravo';
+      font-weight: 300;
     }
 
     /* 로그인 버튼 */
@@ -73,6 +98,7 @@
       font-size: 14px;
       font-weight: 300;
       cursor: pointer;
+      font-family: 'Aggravo';
     }
     .deleteback {
       width: 100%;
@@ -196,14 +222,14 @@
 
     try {
       const url = new URL(window.location.href);
+
       if (url.searchParams.get('success') !== null) {
-        openModal('로그인되었습니다!');
-      }
-
-      if (url.searchParams.get('code') === 'LOGIN_FAIL') {
-
-        okBtn.onclick = function () { closeModal(); };
-        openModal('아이디 또는 비밀번호가 올바르지 않습니다.');
+        // 로그인 성공 → 확인 누르면 메인으로
+        openModal('로그인되었습니다!', () => location.href = '/main');
+      } else if (url.searchParams.get('code') === 'LOGIN_FAIL') {
+        // 로그인 실패 → 확인 누르면 로그인 페이지로 (계속 시도 유도)
+        // 파라미터 제거 위해 /member/login 으로 리다이렉트
+        openModal('아이디 또는 비밀번호가 올바르지 않습니다.', () => location.href = '/member/login');
       }
     } catch (_) {}
   })();

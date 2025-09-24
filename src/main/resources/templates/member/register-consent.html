@@ -7,8 +7,10 @@
         .content {
             padding: 24px 20px;
         }
-        .title {
-            margin: 0 0 8px;
+        .title{
+            margin: 25px 20px 10px;
+            font-family: 'Aggravo';
+            font-size: 25px;
             font-weight: 700;
         }
         .card {
@@ -45,6 +47,8 @@
             border-radius: 8px;
             background: #fff;
             cursor: pointer;
+            font-family: 'Aggravo';
+            font-weight: 300;
         }
         #nextBtn {
             display: block;
@@ -57,6 +61,7 @@
             color: #000000;
             font-size: 14px;
             font-weight: 600;
+            font-family: 'Aggravo';
             cursor: pointer;
         }
         #nextBtn:disabled {
@@ -71,7 +76,7 @@
 
 <div id="main">
     <div class="content">
-        <p class="title">회원가입</p>
+        <p class="title">약관동의</p>
 
         <form th:action="@{/member/register/consent}" method="post">
             <!-- CSRF 사용 시 주석 해제 -->

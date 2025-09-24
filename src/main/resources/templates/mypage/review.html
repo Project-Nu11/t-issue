@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰조회</title>
+    <style>
+        .title{ margin:18px 16px;
+            font-family: Aggravo;
+            font-size:25px;
+            font-weight:700;
+        }
+        .wrap{
+            padding:0 15px 20px;
+        }
+        .card{
+            background:#fff;
+            border-radius:12px;
+            padding:12px 14px;
+            margin:12px 0;
+            box-shadow:0 6px 16px rgba(0,0,0,.12);
+        }
+
+        .text{
+            margin:8px 0 6px;
+            line-height:1.4;
+            font-weight: 500;
+            white-space:pre-wrap;
+            word-break:break-word;
+        }
+
+        .footer{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-top:10px;
+        }
+
+        .actions{
+            display:flex;
+            gap:10px;
+        }
+        .chip{
+            min-width:44px;
+            height:28px;
+            padding:0 10px;
+            border:1px solid rgba(0,0,0,.2);
+            border-radius:999px;
+            background:#fff;
+            cursor:pointer;
+            font-size:12px;
+            box-shadow:0 2px 8px rgba(0,0,0,.08);
+        }
+        .chip.danger{
+            color:#c00;
+            border-color:rgba(220,20,60,.35);
+        }
+
+        .pagination{
+            display:flex;
+            gap:6px;
+            justify-content:center;
+            margin:16px 0;
+        }
+        .pagination a,
+        .pagination span{
+            padding:4px 8px;
+            border-radius:6px;
+            border:1px solid rgba(0,0,0,.15);
+            text-decoration:none;
+            color:#111;
+            background:#fff;
+        }
+        .pagination .current{
+            background:#111;
+            color:#fff;
+        }
+
+        .deleteback{
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,50%);
+            position:fixed;
+            top:0; left:0;
+            display:none;
+            z-index:1100;
+            align-items:center;
+            justify-content:center;
+        }
+        .viewdeleteback{ display:flex; }
+        .modal-card{
+            width:25%;
+            min-width:320px;
+            background:#fff;
+            position:fixed;
+            top:35%; left:37.5%; z-index:1101;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            border-radius:8px;
+            padding:20px;
+            box-shadow:0 8px 20px rgba(0,0,0,.25);
+        }
+        .modal-card p{
+            font-size:16px;
+            font-weight:500;
+            margin-bottom:18px;
+            text-align:center; }
+        .modal-card .btns{
+            display:flex;
+            gap:10px;
+        }
+        .modal-card button{
+            min-width:80px;
+            height:32px;
+            border:1px solid rgba(0,0,0,.25);
+            border-radius:8px;
+            background:#fff;
+            cursor:pointer;
+        }
+        textarea, input[type="number"]{
+            font-family:'Aggravo'
+        }
+    </style>
+</head>
+<body>
+<div th:include="/common/header.html"></div>
+
+<div id="main">
+    <p class="title">리뷰조회</p>
+
+    <div class="wrap">
+        <!-- 카드 리스트 -->
+        <div class="card" th:each="r : ${list}" th:attr="data-no=${r.no}">
+            <div class="meta" th:text="${r.stationName} + ' - ' + ${r.toiletLocation}">강변역 - 2번</div>
+            <div class="text content" th:text="${r.content}">이용하고 깔끔했어요 :)</div>
+
+            <div class="footer">
+                <div class="date">
+                    <span class="score" th:text="${r.score}">3</span>
+                    <span style="margin:0 8px;">|</span>
+                    <!-- 타입 안전한 날짜 출력 위해......... -->
+                    <span th:if="${r.date instanceof T(java.util.Date)}"
+                          th:text="${#dates.format(r.date, 'yyyy-MM-dd')}">2025-09-24</span>
+                    <span th:if="${r.date instanceof T(java.time.LocalDate)}"
+                          th:text="${#temporals.format(r.date, 'yyyy-MM-dd')}">2025-09-24</span>
+                    <span th:unless="${(r.date instanceof T(java.util.Date)) or (r.date instanceof T(java.time.LocalDate))}"
+                          th:text="${r.date}">2025-09-24</span>
+                </div>
+
+                <div class="actions">
+                    <button class="chip edit">수정</button>
+                    <button class="chip danger del">삭제</button>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${total == 0}" style="padding:12px; color:#555;">작성한 리뷰가 없습니다.</div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination" th:if="${totalPages > 1}">
+            <a th:if="${page > 1}" th:href="@{|/mypage/review?page=${page-1}|}">이전</a>
+            <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+               th:href="@{|/mypage/review?page=${i}|}"
+               th:text="${i}"
+               th:classappend="${i==page} ? 'current'"></a>
+            <a th:if="${page < totalPages}" th:href="@{|/mypage/review?page=${page+1}|}">다음</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 모달들 ===== -->
+<div class="deleteback" id="modalBack"></div>
+
+<!-- 확인/경고 모달 -->
+<div id="confirmModal" class="modal-card" style="display:none;">
+    <p id="confirmMsg">메시지</p>
+    <div class="btns">
+        <button id="confirmOk">예</button>
+        <button id="confirmCancel">아니오</button>
+    </div>
+</div>
+
+<!-- 수정 모달 -->
+<div id="editModal" class="modal-card" style="display:none;">
+    <p style="font-weight:700; margin-bottom:12px;">리뷰 수정</p>
+    <form id="editForm" autocomplete="off">
+        <input type="hidden" name="no" id="editNo">
+        <div style="margin-bottom:10px; width:100%;">
+            <label style="display:block; font-size:12px; margin-bottom:6px;">내용</label>
+            <textarea id="editContent" name="content" rows="4"
+                      style="width:100%; padding:8px; border:1px solid rgba(0,0,0,.25); border-radius:8px;"></textarea>
+        </div>
+        <div style="margin-bottom:14px; width:100%;">
+            <label style="display:block; font-size:12px; margin-bottom:6px;">별점 (1~5)</label>
+            <input id="editScore" name="score" type="number" min="1" max="5"
+                   style="width:100%; height:34px; padding:0 10px; border:1px solid rgba(0,0,0,.25); border-radius:8px;">
+        </div>
+        <div class="btns">
+            <button type="button" id="editCancel">취소</button>
+            <button type="submit" id="editSave">저장</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    (function(){
+        // ===== util =====
+        const back     = document.getElementById('modalBack');
+        const mConfirm = document.getElementById('confirmModal');
+        const mEdit    = document.getElementById('editModal');
+
+        function showBackdrop(){ back.className = 'deleteback viewdeleteback'; }
+        function hideBackdrop(){ back.className = 'deleteback'; }
+        function closeModals(){ mConfirm.style.display='none'; mEdit.style.display='none'; hideBackdrop(); }
+
+        function openConfirm(message, onOk){
+            document.getElementById('confirmMsg').textContent = message || '';
+            mEdit.style.display = 'none';
+            mConfirm.style.display = 'flex';
+            showBackdrop();
+            const ok = document.getElementById('confirmOk');
+            const cancel = document.getElementById('confirmCancel');
+            ok.textContent = '예';
+            cancel.style.display = 'inline-flex';
+            ok.onclick = async ()=>{ try{ await onOk?.(); } finally{ closeModals(); } };
+            cancel.onclick = closeModals;
+        }
+
+        function openAlert(message, onOk){
+            document.getElementById('confirmMsg').textContent = message || '';
+            mEdit.style.display = 'none';
+            mConfirm.style.display = 'flex';
+            showBackdrop();
+            const ok = document.getElementById('confirmOk');
+            const cancel = document.getElementById('confirmCancel');
+            ok.textContent = '확인';
+            cancel.style.display = 'none';
+            ok.onclick = ()=>{ closeModals(); onOk?.(); };
+            back.onclick = (e)=>{ if(e.target===back){ closeModals(); ok.onclick=null; back.onclick=null; cancel.style.display='inline-flex'; ok.textContent='예'; } };
+        }
+
+        function openEdit({no, content, score}){
+            document.getElementById('editNo').value = no;
+            document.getElementById('editContent').value = content || '';
+            document.getElementById('editScore').value = score || 5;
+            mConfirm.style.display = 'none';
+            mEdit.style.display = 'flex';
+            showBackdrop();
+        }
+
+        back.addEventListener('click', (e)=>{ if (e.target===back) closeModals(); });
+
+        // ===== 삭제 =====
+        document.querySelectorAll('.card .del').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                const card = btn.closest('.card');
+                const no   = card.getAttribute('data-no');
+                openConfirm('삭제 하시겠습니까?', async ()=>{
+                    try{
+                        const csrf = document.querySelector('input[name="_csrf"]')?.value
+                            || document.querySelector('meta[name="_csrf"]')?.content;
+                        const headers = { 'Content-Type':'application/x-www-form-urlencoded' };
+                        if (csrf) headers['X-CSRF-TOKEN'] = csrf;
+
+                        const resp = await fetch(`/mypage/reviews/${no}/delete`, {
+                            method:'POST', headers, credentials:'same-origin'
+                        });
+                        if(resp.ok) openAlert('삭제가 완료되었습니다.', ()=> location.reload());
+                        else        openAlert('삭제 중 오류가 발생했습니다.');
+                    }catch(e){
+                        openAlert('네트워크 오류가 발생했습니다.');
+                    }
+                });
+            });
+        });
+
+        // ===== 수정 =====
+        document.querySelectorAll('.card .edit').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                const card    = btn.closest('.card');
+                const no      = card.getAttribute('data-no');
+                const content = card.querySelector('.content')?.innerText || '';
+                const score   = parseInt(card.querySelector('.score')?.innerText || '5', 10);
+                openEdit({no, content, score});
+            });
+        });
+
+        // 저장(Ajax) — 팀의 업데이트 엔드포인트에 맞추기
+        const editForm   = document.getElementById('editForm');
+        const editCancel = document.getElementById('editCancel');
+        editCancel.addEventListener('click', closeModals);
+
+        editForm.addEventListener('submit', async function(e){
+            e.preventDefault();
+            const form = new FormData(editForm);
+            const no      = form.get('no');
+            const content = (form.get('content') || '').trim();
+            const score   = Number(form.get('score'));
+            if (!content) return openAlert('내용을 입력해주세요.');
+            if (Number.isNaN(score) || score < 1 || score > 5) return openAlert('별점은 1~5 사이여야 합니다.');
+
+            const csrf = document.querySelector('input[name="_csrf"]')?.value
+                || document.querySelector('meta[name="_csrf"]')?.content;
+            const headers = { 'Content-Type':'application/x-www-form-urlencoded' };
+            if (csrf) headers['X-CSRF-TOKEN'] = csrf;
+
+            // ✅ 팀 규칙에 맞게 수정하세요.
+            // 예) POST /review/update  (no, content, score)
+            const UPDATE_URL = '/review/update';
+
+            const params = new URLSearchParams();
+            params.set('no', no);
+            params.set('content', content);
+            params.set('score', String(score));
+
+            try{
+                const resp = await fetch(UPDATE_URL, {
+                    method:'POST', headers, credentials:'same-origin', body: params.toString()
+                });
+                if(resp.ok) openAlert('수정이 완료되었습니다.', ()=> location.reload());
+                else        openAlert('수정 중 오류가 발생했습니다.');
+            }catch(e){
+                openAlert('네트워크 오류가 발생했습니다.');
+            }
+        });
+    })();
+</script>
+</body>
+</html>

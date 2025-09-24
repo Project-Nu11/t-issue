@@ -2,6 +2,8 @@ package com.toiletissue.mypage.model.service;
 
 import com.toiletissue.member.model.dto.MemberDTO;
 import com.toiletissue.mypage.model.dao.MyPageMapper;
+import com.toiletissue.review.model.dao.ReviewMapper;
+import com.toiletissue.review.model.dto.ReviewDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ public class MyPageService {
 
     private final MyPageMapper myPageMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ReviewMapper reviewMapper;
 
-    public MyPageService(MyPageMapper myPageMapper, PasswordEncoder passwordEncoder) {
+    public MyPageService(MyPageMapper myPageMapper, PasswordEncoder passwordEncoder, ReviewMapper reviewMapper) {
         this.myPageMapper = myPageMapper;
         this.passwordEncoder = passwordEncoder;
+        this.reviewMapper = reviewMapper;
     }
 
     @Transactional(readOnly = true)
@@ -64,6 +68,34 @@ public class MyPageService {
         int rows = myPageMapper.softDelete(memberId);
         if (rows == 0) {
             throw new IllegalStateException("탈퇴 처리에 실패했습니다.");
+        }
+    }
+/* ================= 마이페이지 - 내 리뷰 ================= */
+    // 내 리뷰 총 개수
+    public int countMyReviews(String memberId) {
+        return reviewMapper.countReviewById(memberId);
+    }
+
+    // 내 리뷰 페이징 조회
+    public java.util.List<ReviewDTO> findMyReviews(String memberId, int page, int size) {
+        int p = Math.max(1, page);
+        int s = Math.max(1, size);
+        int offset = (p - 1) * s;
+        return reviewMapper.selectReviewByIdPaged(memberId, offset, s);
+    }
+
+    // 수정
+    public void updateMyReview(int no, String memberId, String content, int score){
+        if (score < 1 || score > 5) throw new IllegalArgumentException("score 1~5");
+        int n = reviewMapper.updateReviewByOwner(no, memberId, content, score);
+        if (n == 0) throw new IllegalStateException("본인 리뷰만 수정할 수 있습니다.");
+    }
+
+    // 본인 리뷰만 삭제
+    public void deleteMyReview(int reviewNo, String memberId) {
+        int affected = reviewMapper.deleteReviewByOwner(reviewNo, memberId);
+        if (affected == 0) {
+            throw new IllegalStateException("본인 리뷰만 삭제할 수 있습니다.");
         }
     }
 }

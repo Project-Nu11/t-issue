@@ -13,4 +13,6 @@ public interface MyPageMapper {
                                  @Param("encodedPwd") String encodedPwd);
 
     int softDelete(@Param("memberId") String memberId);
+
+
 }

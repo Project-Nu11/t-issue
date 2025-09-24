@@ -37,6 +37,28 @@
             margin-left: 250px;
             width: 100px;
         }
+        .deleteback{
+            width:100%; height:100%; background:rgba(0,0,0,50%);
+            z-index:1100; display:none; position:fixed; top:0; left:0;
+            align-items:center; justify-content:center;
+        }
+        .viewdeleteback{
+            width:100%; height:100%; background:rgba(0,0,0,50%);
+            z-index:1100; display:flex; position:fixed; top:0; left:0;
+            align-items:center; justify-content:center;
+        }
+        #deletemodal{
+            width:25%; height:30%; background:#fff;
+            position:fixed; top:35%; left:37.5%; z-index:1004;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            border-radius:8px; padding:20px; box-shadow:0 8px 20px rgba(0,0,0,.25);
+        }
+        #deletemodal p{ font-size:16px; font-weight:700; margin-bottom:18px; text-align:center; }
+        #deletemodal .btns{ display:flex; gap:10px; }
+        #deletemodal button{
+            min-width:80px; height:32px; border:1px solid rgba(0,0,0,.25);
+            border-radius:8px; background:#fff; cursor:pointer;
+        }
     </style>
 </head>
 <body>
@@ -47,12 +69,16 @@
     <div class="grid">
         <!--개인정보 조회 -->
         <a class="circle" th:href="@{/mypage/select}">
+            <div><img src="/icon/free-icon-user-747376.png" height="100" width="100"></div>
             <span>개인정보<br>조회</span>
         </a>
 
         <!-- 나머지 아이콘 일단 자리만 -->
         <a class="circle" href="javascript:void(0)"><span>문의</span></a>
-        <a class="circle" href="javascript:void(0)"><span>리뷰/조회</span></a>
+        <!-- 내 리뷰 조회 -->
+        <a class="circle" th:href="@{/mypage/review}">
+            <div><img src="/icon/free-icon-review-4047898.png" height="100" width="100"/></div>
+            <span>리뷰/조회</span></a>
         <a class="circle" href="javascript:void(0)"><span>벌점</span></a>
         <a class="circle" href="javascript:void(0)"><span>언어설정</span></a>
     </div>
@@ -63,5 +89,95 @@
             </form>
 </div>
 </div>
+
+<!-- 공통 모달 (확인/완료 두 상태를 이 한 개로 재사용) -->
+<div class="deleteback" id="modalBack" aria-hidden="true">
+    <div id="deletemodal" role="dialog" aria-modal="true" aria-labelledby="modalMsg">
+        <p id="modalMsg">메시지</p>
+        <div class="btns">
+            <button id="modalOk">예</button>
+            <button id="modalCancel">아니오</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        const logoutBtn   = document.getElementById('logoutBtn');
+        const logoutForm  = document.getElementById('logoutForm');
+
+        // 모달 요소
+        const back   = document.getElementById('modalBack');
+        const msgEl  = document.getElementById('modalMsg');
+        const okBtn  = document.getElementById('modalOk');
+        const noBtn  = document.getElementById('modalCancel');
+        const btns   = document.querySelector('#deletemodal .btns');
+
+        // 모달 열기 (mode: 'confirm' | 'alert')
+        function openModal(message, mode, onOk){
+            msgEl.textContent = message || '';
+            back.className = 'viewdeleteback';
+            back.setAttribute('aria-hidden','false');
+
+            if (mode === 'confirm'){
+                // 예/아니오
+                noBtn.style.display = 'inline-flex';
+                okBtn.textContent   = '예';
+                okBtn.onclick = async function(){
+                    await onOk?.(); // 예 눌렀을 때 콜백(로그아웃 실행)
+                };
+                noBtn.onclick = closeModal;
+            } else {
+                // alert(완료) :
+                noBtn.style.display = 'none';
+                okBtn.textContent   = '확인';
+                okBtn.onclick = function(){
+                    closeModal();
+                    onOk?.(); // 확인 후 이동
+                };
+            }
+
+            // 배경 클릭으로 닫히지 않도록 막고 싶으면 아래 주석 해제
+            // back.onclick = (e)=>{ if(e.target===back) closeModal(); };
+        }
+
+        function closeModal(){
+            back.className = 'deleteback';
+            back.setAttribute('aria-hidden','true');
+            okBtn.onclick = null;
+            noBtn.onclick = null;
+        }
+
+        // 실제 로그아웃 실행(FETCH 사용) → 성공하면 완료 알럿 → 메인 이동
+        async function doLogout(){
+            // CSRF 있으면 첨부
+            const csrfInput = logoutForm.querySelector('input[name="_csrf"]');
+            const headers = {};
+            if (csrfInput && csrfInput.value) headers['X-CSRF-TOKEN'] = csrfInput.value;
+
+            try {
+                const resp = await fetch(logoutForm.getAttribute('action') || logoutForm.action, {
+                    method: 'POST',
+                    headers,
+                    credentials: 'same-origin'
+                });
+
+                if (resp.ok){
+                    // 완료 알럿 → 확인 시 메인으로
+                    openModal('로그아웃이 완료되었습니다.', 'alert', () => location.href = '/main');
+                } else {
+                    openModal('로그아웃 중 오류가 발생했습니다. 다시 시도해 주세요.', 'alert');
+                }
+            } catch (e){
+                openModal('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'alert');
+            }
+        }
+
+        // 로그아웃 버튼 클릭 → 확인 모달
+        logoutBtn.addEventListener('click', function(){
+            openModal('로그아웃 하시겠습니까?', 'confirm', doLogout);
+        });
+    })();
+</script>
 </body>
 </html>

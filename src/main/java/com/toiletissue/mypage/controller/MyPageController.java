@@ -2,18 +2,19 @@ package com.toiletissue.mypage.controller;
 
 import com.toiletissue.member.model.dto.MemberDTO;
 import com.toiletissue.mypage.model.service.MyPageService;
+import com.toiletissue.review.model.dto.ReviewDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/mypage")
@@ -103,5 +104,52 @@ public class MyPageController {
             return "redirect:/mypage/delete";
         }
 
+    }
+
+    /*================== 마이페이지 - 내 리뷰 =================*/
+
+    // 내 리뷰 리스트
+    @GetMapping("/review")
+    public String myReviews(@AuthenticationPrincipal UserDetails user,
+                            @RequestParam(defaultValue = "1") int page,
+                            Model model) {
+        if (user == null) return "redirect:/member/login";
+        String memberId = user.getUsername(); // username = member_id 가정
+
+        int size = 10;
+        int total = myPageService.countMyReviews(memberId);
+        int totalPages = Math.max(1, (int) Math.ceil(total / (double) size));
+        int current = Math.min(Math.max(page, 1), totalPages);
+
+        java.util.List<ReviewDTO> list = myPageService.findMyReviews(memberId, current, size);
+
+        model.addAttribute("list", list);
+        model.addAttribute("page", current);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("total", total);
+        model.addAttribute("size", size);
+        return "mypage/review";
+    }
+
+    //수정
+    @PostMapping("/review/update")
+    @ResponseBody
+    public Map<String,Object> updateMyReview(@AuthenticationPrincipal UserDetails user,
+                                             @RequestParam int no,
+                                             @RequestParam String content,
+                                             @RequestParam int score){
+        if (user == null) return Map.of("ok", false, "msg", "로그인이 필요합니다.");
+        myPageService.updateMyReview(no, user.getUsername(), content, score);
+        return Map.of("ok", true);
+    }
+
+    //  삭제 (AJAX)
+    @PostMapping("/reviews/{no}/delete")
+    @ResponseBody
+    public java.util.Map<String, Object> deleteMyReview(@PathVariable int no,
+                                                        @AuthenticationPrincipal UserDetails user) {
+        if (user == null) return java.util.Map.of("ok", false, "msg", "로그인이 필요합니다.");
+        myPageService.deleteMyReview(no, user.getUsername());
+        return java.util.Map.of("ok", true);
     }
 }

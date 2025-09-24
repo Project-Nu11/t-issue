@@ -154,4 +154,45 @@
 <!--        having count(*) >2);-->
 <!--    </select>-->
 
+    <!-- 내 리뷰 총 개수 ) -->
+    <select id="countReviewById" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM review
+        WHERE member_id = #{id}
+    </select>
+
+    <!-- 내 리뷰 페이징 조회 (resultMap 재사용) -->
+    <select id="selectReviewByIdPaged" resultMap="reviewResultMap">
+        SELECT
+        r.review_no,
+        r.review_content,
+        r.review_score,
+        r.member_id,
+        r.station_name,
+        r.toilet_location,
+        r.review_date,
+        r.penalty_status
+        FROM review r
+        WHERE r.member_id = #{id}
+        ORDER BY r.review_date DESC, r.review_no DESC
+        LIMIT #{offset}, #{limit}
+        <!-- 또는 MySQL 8+ 라면: LIMIT #{limit} OFFSET #{offset} -->
+    </select>
+
+    <!-- 내 리뷰 수정-->
+    <update id="updateReviewByOwner">
+        UPDATE review
+        SET review_content = #{content},
+        review_score   = #{score}
+        WHERE review_no = #{no}
+        AND member_id = #{id}
+    </update>
+
+    <!-- 내 리뷰만 삭제  -->
+    <delete id="deleteReviewByOwner">
+        DELETE FROM review
+        WHERE review_no = #{no}
+        AND member_id = #{id}
+    </delete>
+
 </mapper>
