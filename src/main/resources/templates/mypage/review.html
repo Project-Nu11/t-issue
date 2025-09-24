@@ -157,7 +157,7 @@
 
         <div th:if="${total == 0}" style="padding:12px; color:#555;">작성한 리뷰가 없습니다.</div>
 
-        <!-- 페이지네이션 -->
+        <!-- 페이징 -->
         <div class="pagination" th:if="${totalPages > 1}">
             <a th:if="${page > 1}" th:href="@{|/mypage/review?page=${page-1}|}">이전</a>
             <a th:each="i : ${#numbers.sequence(1, totalPages)}"
@@ -205,7 +205,6 @@
 
 <script>
     (function(){
-        // ===== util =====
         const back     = document.getElementById('modalBack');
         const mConfirm = document.getElementById('confirmModal');
         const mEdit    = document.getElementById('editModal');
@@ -286,7 +285,7 @@
             });
         });
 
-        // 저장(Ajax) — 팀의 업데이트 엔드포인트에 맞추기
+        // 저장(Ajax)
         const editForm   = document.getElementById('editForm');
         const editCancel = document.getElementById('editCancel');
         editCancel.addEventListener('click', closeModals);
@@ -305,8 +304,7 @@
             const headers = { 'Content-Type':'application/x-www-form-urlencoded' };
             if (csrf) headers['X-CSRF-TOKEN'] = csrf;
 
-            // ✅ 팀 규칙에 맞게 수정하세요.
-            // 예) POST /review/update  (no, content, score)
+
             const UPDATE_URL = '/review/update';
 
             const params = new URLSearchParams();
