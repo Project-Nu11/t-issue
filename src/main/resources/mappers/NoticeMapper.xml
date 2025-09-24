@@ -37,7 +37,8 @@
         notice_title,
         notice_content,
         notice_date
-        from notice;
+        from notice
+        order by notice_no desc;
     </select>
 
     <update id="updateNotice">

@@ -92,7 +92,7 @@
         select *
           from review
          where station_name = #{stationName}
-         order by review_date desc
+         order by review_no desc
     </select>
 
     <delete id="penalizeReview">
