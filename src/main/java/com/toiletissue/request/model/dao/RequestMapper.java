@@ -2,7 +2,6 @@ package com.toiletissue.request.model.dao;
 
 import com.toiletissue.request.model.dto.RequestDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,9 +9,9 @@ import java.util.List;
 public interface RequestMapper {
     List<RequestDTO> selectAllRequest(String value);
 
-    void requestReject(RequestDTO requestDTO);
+    int requestReject(RequestDTO requestDTO);
 
-    void requestAnswer(RequestDTO requestDTO);
+    int requestAnswer(RequestDTO requestDTO);
 
     List<RequestDTO> selectRequestsByCriteria();
 
@@ -23,4 +22,6 @@ public interface RequestMapper {
     void requestInsert(RequestDTO requestDTO);
 
     List<RequestDTO> selectAllRequestById(String value, String name);
+
+    RequestDTO selectRequestByNo(int no);
 }

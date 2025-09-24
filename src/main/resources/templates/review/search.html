@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        const message = `[[${message}]]`
+        console.log(message)
+        if(message) {
+            alert(message);
+        }
+    </script>
     <style>
         #revbtn{
             background: #FAFAC2;
@@ -18,8 +25,8 @@
             height: 9%;
             margin-bottom: 1%;
             background: white;
-            display: flex;
-            flex-direction: row;
+            /*display: flex;*/
+            /*flex-direction: row;*/
             /*border: black 1px solid;*/
             align-items: center;
             border-radius: 8px;
@@ -61,50 +68,52 @@
         .stationName{
             width: 50%;
             position: relative;
-            top: 20%;
+            /*top: 30%;*/
+            left: 10%;
             font-size: 20px;
             background-color: #FAFAC2;
         }
         .toiletLocation{
             position: relative;
-            right: %;
             top:20%;
             font-size: 20px;
         }
         .detailbtn{
             position: relative;
             left: 95%;
+            top: 29%;
             font-size: 20px;
+            z-index: 1100;
         }
         .date{
             position: relative;
-            bottom: 20%;
-            right: 50%;
+            bottom: 30%;
             font-size: 10px;
             font-family: AggravoL;
             /*background-color: #2f1a48;*/
-            width: 12%;
+            width: 15%;
         }
         .idis{
             position: relative;
-            right: 49%;
-            bottom: 20%;
+            bottom: 30%;
             font-size: 10px;
             font-family: AggravoL;
+            width: 5%;
         }
         .memberId{
             position: relative;
-            right: 48%;
-            bottom: 20%;
+            right: 2%;
+            bottom: 30%;
             font-size: 10px;
             font-family: AggravoL;
         }
         .toiletName{
             /*background-color: #FAFAC2;*/
-            width: 50%;
+            width: 100%;
             font-size: 20px;
             position: relative;
-            top: 20%;
+            bottom: 20%;
+            left: 3%;
         }
         .details{
             width: 30%;
@@ -307,12 +316,14 @@
     <div id="reviewlist"> <!--요약리스트-->
         <div class="review" th:each="review : ${reviewList2}">
             <div class="detailbtn">▶</div> <!--detailbtn은 여러개있을 수 있고 그에 따른 인덱스 있음-->
+            <div style="height:10px;width: 100%;display: flex;position: relative;bottom: 20%;left: 3%">
+                <div class="stationName" th:text="${review.stationName}" hidden></div><!--역명확인용-->
+                <div class="toiletLocation" th:text="${review.toiletLocation}" hidden></div><!--화장실위치확인용-->
+                <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
+                <div class="idis">ID : </div>
+                <div class="memberId" th:text="${review.memberId}"></div><!--리뷰작성자id 확인용-->
+            </div>
             <div class="toiletName" th:text="${review.stationName} +' ' +${review.toiletLocation}"></div>
-            <div class="stationName" th:text="${review.stationName}" hidden></div><!--역명확인용-->
-            <div class="toiletLocation" th:text="${review.toiletLocation}" hidden></div><!--화장실위치확인용-->
-            <div class="date" th:text="${review.date}"></div><!--날짜 확인용-->
-            <div class="idis">ID : </div>
-            <div class="memberId" th:text="${review.memberId}"></div><!--리뷰작성자id 확인용-->
             <div class="no" th:text="${review.no}" style="display: none"></div> <!--번호 확인용...-->
             <div class="content" th:text="${review.content}" style="display: none"></div> <!--리뷰내용 확인용...-->
             <div class="decNum" th:text="${review.decNum}" style="display: none"></div> <!--신고횟수 확인용...-->

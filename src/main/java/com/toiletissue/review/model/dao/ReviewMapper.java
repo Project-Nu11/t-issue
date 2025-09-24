@@ -9,7 +9,7 @@ public interface ReviewMapper {
 
     List<ReviewDTO> selectDeclaredReview(String status);
 
-    void cancelDeclaration(ReviewDTO reviewDTO);
+    int cancelDeclaration(ReviewDTO reviewDTO);
 
     List<ReviewDTO> selectAllReview(String criteria, String search);
 
@@ -19,11 +19,11 @@ public interface ReviewMapper {
     List<ReviewDTO> selectReviewListByStation(String stationName);
     
 
-    void penalizeReview(int no);
+    int penalizeReview(int no);
 
-    void penalizeMember(String id);
+    int penalizeMember(String id);
 
-    void deleteReview(int no);
+    int deleteReview(int no);
 
     List<ReviewDTO> selectReviewById(String id);
 

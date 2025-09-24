@@ -17,8 +17,9 @@ public class ReviewService {
         return reviewMapper.selectDeclaredReview(status);
     }
 
-    public void cancelDeclaration(ReviewDTO reviewDTO) {
-        reviewMapper.cancelDeclaration(reviewDTO);
+    public int cancelDeclaration(ReviewDTO reviewDTO) {
+        return reviewMapper.cancelDeclaration(reviewDTO);
+
     }
 
     public List<ReviewDTO> selectAllReview(String criteria, String search) {
@@ -49,16 +50,17 @@ public class ReviewService {
     }
 
 
-    public void penalizeReview(int no) {
-        reviewMapper.penalizeReview(no);
+    public int penalizeReview(int no) {
+        return reviewMapper.penalizeReview(no);
     }
 
-    public void penalizeMember(String id) {
-        reviewMapper.penalizeMember(id);
+    public int penalizeMember(String id) {
+        return reviewMapper.penalizeMember(id);
     }
 
-    public void deleteReview(int no) {
-        reviewMapper.deleteReview(no);
+    public int deleteReview(int no) {
+        return reviewMapper.deleteReview(no);
+
     }
 
     public List<ReviewDTO> selectReviewById(String id) {

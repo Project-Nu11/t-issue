@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,10 +130,19 @@ public class ReviewController {
     }
 
     @PostMapping("/declared/cancel")
-    public ModelAndView cancelDeclaration(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO){
+    public ModelAndView cancelDeclaration(ModelAndView mv, @ModelAttribute ReviewDTO reviewDTO,
+                                          RedirectAttributes rttr){
 
-        reviewService.cancelDeclaration(reviewDTO);
+        int result =reviewService.cancelDeclaration(reviewDTO);
+        String message = "";
 
+        if(result>0){
+            message = "신고 취소에 성공하였습니다.";
+        } else{
+            message = "신고 취소에 실패하였습니다.";
+        }
+
+        rttr.addFlashAttribute("message",message);
         mv.setViewName("redirect:/review/declared");
 
 
@@ -143,17 +153,42 @@ public class ReviewController {
     public ModelAndView penalizeReview(
             ModelAndView mv,
             @RequestParam("no")int no,
-            @RequestParam("id")String id){
+            @RequestParam("id")String id,
+            RedirectAttributes rttr){
 
-        reviewService.penalizeReview(no);
-        reviewService.penalizeMember(id);
+        int result1 = reviewService.penalizeReview(no);
+        int result2 = reviewService.penalizeMember(id);
+
+        String message = "";
+
+        if(result1>0 && result2>0){
+            message = "벌점 부과 및 리뷰 삭제에 성공하였습니다.";
+        } else if(result1 >0){
+            message = "리뷰 삭제에 성공하였습니다.\n벌점 부과에 실패하였습니다.";
+        } else if(result2 >0){
+            message = "벌점 부과에 성공하였습니다.\n리뷰 삭제에 실패하였습니다.";
+        } else {
+            message = "벌점 부과 및 리뷰 삭제에 실패하였습니다.";
+        }
+
+        rttr.addFlashAttribute("message",message);
+
         mv.setViewName("redirect:/review/declared");
         return mv;
     }
 
     @PostMapping("/search/delete")
-    public ModelAndView deleteReview(ModelAndView mv,@RequestParam int no){
-        reviewService.deleteReview(no);
+    public ModelAndView deleteReview(ModelAndView mv,@RequestParam int no,RedirectAttributes rttr){
+        int result = reviewService.deleteReview(no);
+        String message = "";
+
+        if(result>0){
+            message = "리뷰 삭제를 성공하였습니다.";
+        }else {
+            message = "리뷰 삭제를 실패하였습니다.";
+        }
+
+        rttr.addFlashAttribute("message",message);
         mv.setViewName("redirect:/review/search");
         return mv;
     }

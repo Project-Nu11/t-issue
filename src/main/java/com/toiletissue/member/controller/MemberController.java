@@ -187,10 +187,28 @@ public class MemberController {
     }
 
     @PostMapping("/restrict")
-    public ModelAndView restrictMember(ModelAndView mv,@RequestParam String id){
+    public ModelAndView restrictMember(ModelAndView mv,@RequestParam String id,RedirectAttributes rttr){
 
-        memberService.restrictMember(id);
+        int result = memberService.restrictMember(id);
+        
+        MemberDTO member = memberService.findById(id);
+        System.out.println("member = " + member);
+        
+        String memberId = member.getMemberId();
+        System.out.println("memberId = " + memberId);
+        
+        int penalty = member.getPenalty();
+        System.out.println("penalty = " + penalty);
+        
+        
+        String message = "";
+        if(result >0){
+            message = "해당 회원을 영구 제한 조치하였습니다.";
+        } else{
+            message = "영구 제한 조치를 실패하였습니다.\n해당 회원의 벌점은 "+penalty+"점 입니다.\n(영구 제한은 벌점 10점 부터 가능합니다.)";
+        }
 
+        rttr.addFlashAttribute("message",message);
         mv.setViewName("redirect:/member/manager");
 
         return mv;

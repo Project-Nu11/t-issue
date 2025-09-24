@@ -58,11 +58,14 @@
         from review r
         left join declaration d on r.review_no = d.review_no
         where ${criteria} like '${search}'
+        and penalty_status = 0
         group by r.review_no;
     </select>
 
     <delete id="cancelDeclaration">
-        delete from declaration where review_no = #{no}
+        delete
+        from declaration
+        where review_no = #{no}
     </delete>
 
     <insert id="insertReview">
@@ -98,7 +101,8 @@
     <delete id="penalizeReview">
         update review
            set penalty_status = 1
-         where review_no = #{no};
+         where review_no = #{no}
+           and penalty_status = 0
     </delete>
 
     <update id="penalizeMember">
@@ -107,9 +111,11 @@
          where member_id = #{id}
     </update>
 
-    <delete id="deleteReview">
-        delete from review where review_no = #{no}
-    </delete>
+    <update id="deleteReview">
+        update review
+           set penalty_status = 1
+         where review_no = #{no}
+    </update>
 
     <select id="selectReviewById" resultMap="reviewResultMap">
         select * from review where member_id = #{id}

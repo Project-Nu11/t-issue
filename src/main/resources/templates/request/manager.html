@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        const message = `[[${message}]]`
+        console.log(message)
+        if(message) {
+            alert(message);
+        }
+    </script>
     <style>
         *{
             cursor: pointer;
@@ -387,7 +394,7 @@
             <div id="dtitle" style="font-family: AggravoL;font-size: 20px;"></div>
             <br>
             <div style="font-family: AggravoM;font-size: 25px;">내용</div>
-            <div id="dcontent" style="font-family: AggravoL;font-size: 20px;"></div>
+            <div id="dcontent" style="font-family: AggravoL;font-size: 20px;overflow-wrap: break-word;overflow-y: scroll;height: 5%"></div>
             <br>
             <div style="font-family: AggravoM;font-size: 25px;">답변</div>
             <div id="danswer" style="font-family: AggravoL;font-size: 20px;background-color: #d9d9d9;width: 95%;height: 40%;border-radius: 8px;box-shadow: inset black 2px 2px 10px;padding: 10px;overflow-wrap: break-word"></div>
@@ -453,7 +460,7 @@
             <form action="/request/manager/answer" method="post" style="height: 200%;">
                 <div class="answer">
                     <div style="font-family: AggravoM;font-size: 20px;"><label for="ucontent">답변</label></div>
-                    <div style="width: 100%;height:100%;"><textarea name="answer" id="utitle"  style="font-family: AggravoL; width: 100%;height:60%;resize: none;border: black solid 1px" maxlength="300"></textarea></div>
+                    <div style="width: 100%;height:100%;"><textarea required name="answer" id="utitle"  style="font-family: AggravoL; width: 100%;height:60%;resize: none;border: black solid 1px" maxlength="300"></textarea></div>
                 </div>
 <!--                <div class="contentlen"><span class="contentlength1">0</span>/300</div>-->
                 <input type="hidden" name="no" id="updateNo">

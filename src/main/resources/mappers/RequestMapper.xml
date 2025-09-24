@@ -51,20 +51,29 @@
 
     </select>
 
+
+    <select id="selectRequestByNo" resultMap="request">
+        select * from request where req_no = #{no}
+    </select>
+
     <update id="requestReject">
         update request
            set req_status = '답변 거절',
-               reject = #{reject},
-               answer = ''
+               reject = #{reject}
+<!--               answer = ''-->
          where req_no = #{no}
+           and answer is null
+           and reject is null
     </update>
 
     <update id="requestAnswer">
         update request
            set answer = #{answer},
-               req_status = '답변 완료',
-               reject = ''
+               req_status = '답변 완료'
+<!--               reject = ''-->
          where req_no = #{no}
+           and answer is null
+           and reject is null
     </update>
 
     <insert id="requestInsert">
