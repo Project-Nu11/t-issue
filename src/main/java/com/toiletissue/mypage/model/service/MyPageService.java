@@ -74,28 +74,36 @@ public class MyPageService {
     // 내 리뷰 총 개수
     public int countMyReviews(String memberId) {
         return reviewMapper.countReviewById(memberId);
-    }
+}
 
-    // 내 리뷰 페이징 조회
     public java.util.List<ReviewDTO> findMyReviews(String memberId, int page, int size) {
         int p = Math.max(1, page);
-        int s = Math.max(1, size);
+        int s = Math.max(1, size > 0 ? size : 10);
         int offset = (p - 1) * s;
         return reviewMapper.selectReviewByIdPaged(memberId, offset, s);
     }
 
-    // 수정
+    @Transactional
+    //수정
     public void updateMyReview(int no, String memberId, String content, int score){
-        if (score < 1 || score > 5) throw new IllegalArgumentException("score 1~5");
-        int n = reviewMapper.updateReviewByOwner(no, memberId, content, score);
+        if (content == null || content.trim().isEmpty())
+            throw new IllegalArgumentException("내용을 입력하세요.");
+        String trimmed = content.trim();
+        if (trimmed.length() > 255)
+            throw new IllegalArgumentException("내용은 255자 이하여야 합니다.");
+        if (score < 1 || score > 5)
+            throw new IllegalArgumentException("별점은 1~5 사이여야 합니다.");
+
+        int n = reviewMapper.updateReviewByOwner(no, memberId, trimmed, score);
         if (n == 0) throw new IllegalStateException("본인 리뷰만 수정할 수 있습니다.");
     }
 
-    // 본인 리뷰만 삭제
+    @Transactional
+    //삭제
     public void deleteMyReview(int reviewNo, String memberId) {
         int affected = reviewMapper.deleteReviewByOwner(reviewNo, memberId);
-        if (affected == 0) {
-            throw new IllegalStateException("본인 리뷰만 삭제할 수 있습니다.");
-        }
+        if (affected == 0) throw new IllegalStateException("본인 리뷰만 삭제할 수 있습니다.");
     }
+
+
 }

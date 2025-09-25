@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/member/login", "/member/fail", "/member/register","/member/register/check-id",
                                 "/member/register/consent","/member/find","/member/id", "/member/pwd",
-                                 "/error", "/toilet/subway",
+                                 "/error", "/toilet/subway","/mypage/request",
                                 "/css/**","/js/**","/images/**","/webjars/**"
                         ).permitAll()
                         .requestMatchers("/mypage/**","mypage/select").hasAuthority("ROLE_USER")
