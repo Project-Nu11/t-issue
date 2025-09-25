@@ -33,12 +33,12 @@ public class PenaltyController {
             , @Param("id") String id){
         List<MemberDTO> memberList = memberService.selectPenalizedMember();
 
-        List<ReviewDTO> reviewList = reviewService.selectDeclaredReviewById(id);
-
-
-        mv.addObject("reviewList",reviewList);
+//        List<ReviewDTO> reviewList = reviewService.selectDeclaredReviewById(id);
+//
+//
+//        mv.addObject("reviewList",reviewList);
         mv.addObject("memberList",memberList);
-//        mv.setViewName("/penalty/manager");
+        mv.setViewName("/penalty/manager");
         return mv;
     }
 
@@ -53,13 +53,14 @@ public class PenaltyController {
     }
 
 
-    @PostMapping("/manager")
-    public ModelAndView selectDeclaredReviewById(ModelAndView mv, @RequestParam("id") String id){
+    @GetMapping("/penalizedReview")
+    public String selectDeclaredReviewById(Model model, @RequestParam("id") String id){
 
         List<ReviewDTO> reviewList = reviewService.selectDeclaredReviewById(id);
 
+        model.addAttribute("reviewList",reviewList);
 
-        return mv;
+        return "penalty/manager :: reviewList";
     }
 
 

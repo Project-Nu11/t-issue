@@ -95,7 +95,7 @@
         select *
           from review
          where station_name = #{stationName}
-<!--           and toilet_location = #{toiletLocation}-->
+         and penalty_status = 0
          order by review_no desc
     </select>
 
@@ -193,5 +193,8 @@
         WHERE review_no = #{no}
         AND member_id = #{id}
     </delete>
+
+    <!--리뷰 신고-->
+
 
 </mapper>

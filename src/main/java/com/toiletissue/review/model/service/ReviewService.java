@@ -70,4 +70,8 @@ public class ReviewService {
     public List<ReviewDTO> selectDeclaredReviewById(String id) {
         return reviewMapper.selectDeclaredReviewById(id);
     }
+
+    public void declareReview(int no) {
+        reviewMapper.declareReview(no);
+    }
 }

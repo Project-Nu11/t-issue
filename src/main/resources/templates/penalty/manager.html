@@ -58,7 +58,7 @@
       top: 22%;
       background: white;
       /*border: black 10px solid; !*레이아웃 확인용*!*/
-      display: flex;
+      display: none;
       /*justify-content: center;*!*/
       flex-direction: column;
       align-items: center;
@@ -150,9 +150,9 @@
   <div id="summaryList"> <!--요약리스트-->
     <div class="listComponent" th:each="member : ${memberList}">
 
-      <form action="/penalty/manager" style="position: relative;left: 85%">
-      <input type="hidden" name="id" id="memberId">
-        <button type="submit" class="detailbtn">▶</button>
+      <form action="/penalty/penalizedReview" class="aa" method="get" style="position: relative;left: 85%;">
+      <input type="hidden" name="id" id="memberId" th:value="${member.memberId}" style="position: relative;right:%">
+        <button type="submit" class="detailbtn" style="position: relative;">▶</button>
       </form>
 
       <div class="id" th:text="${member.memberId}" style="font-size: 25px;font-family: AggravoM;width: 80%"></div>
@@ -161,18 +161,15 @@
     </div>
   </div>
 
-  <div class="details" > <!--상세정보 모달-->
+  <div class="details"> <!--상세정보 모달-->
     <div style="padding-top: 5%;font-family: AggravoB;font-size: 40px;">신고된 리뷰</div><!--상세 타이틀-->
-      <div class="declardReviewListLayout" style="width: 90%;height: 80%;overflow-y: scroll;scrollbar-width: none">
-        <div th:each="review:${reviewList}" style="width: 100%;height: 60%;border-radius: 8px;margin-bottom: 4%;background-color: #d9d9d9">
+      <div th:fragment="reviewList" class="declardReviewListLayout" style="width: 100%;height: 90%;overflow-y: scroll;scrollbar-width: none;">
+        <div th:each="review:${reviewList}" style="width: 90%;height: 70%;border-radius: 8px;margin-bottom: 4%;background-color: #d9d9d9;position: relative;left: 5%">
             <div th:text="${review.stationName}+'  '+${review.toiletLocation}" style="width: 100%;position: relative;font-size: 30px;top: 10%;text-align: center"></div>
             <div th:text="${review.content}" style="font-family: AggravoL;overflow-wrap: break-word;padding: 2%;width: 90%;background-color: white;border-radius: 8px;position: relative;left: 3%;top: 13%;height: 50%"></div>
             <div th:text="'신고 받은 횟수 : '+${review.decNum}" style="font-family: AggravoL;position: relative;top: 18%;left: 5%"></div>
         </div>
       </div>
-    <div>
-
-    </div>
   </div>
 
   <!--확인모달-->
@@ -203,6 +200,25 @@
 
 </div>
 <script>
+
+  document.querySelectorAll('.aa').forEach((form) => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const id = this.querySelector('input[name="id"]').value; // 예: form 안에 hidden input 있다고 가정
+
+      fetch(`/penalty/penalizedReview?id=${encodeURIComponent(id)}`)
+              .then(res => res.text())
+              .then(html => {
+                document.querySelector('.declardReviewListLayout').innerHTML = html;
+              })
+              .catch(err => console.error(err));
+    });
+  });
+
+  // document.querySelector('.aa').addEventListener('submit',function (e){
+  //   e.preventDefault();
+  // })
   const $detailbtn = document.querySelectorAll('.detailbtn')
   const $detailModal = document.querySelector('.details')
   const $listComponents = document.querySelectorAll('.listComponent')
@@ -222,10 +238,10 @@
 
 
       const $listComponent = btn.closest('.listComponent')
-      const id = $listComponent.querySelector('.id').textContent||''
-      const inputId = $listComponent.querySelector("#memberId")
-      inputId.value=id
-      console.log("ID = "+inputId.value)
+      // const id = $listComponent.querySelector('.id').textContent||''
+      // const inputId = $listComponent.querySelector("#memberId")
+      // inputId.value=id
+      // console.log("ID = "+inputId.value)
 
 
 
@@ -250,9 +266,9 @@
     })
   })
 
-  window.addEventListener('click',function (){
-    $detailModal.style.display='none'
-  })
+  // window.addEventListener('click',function (){
+  //   $detailModal.style.display='none'
+  // })
 
 </script>
 </body>

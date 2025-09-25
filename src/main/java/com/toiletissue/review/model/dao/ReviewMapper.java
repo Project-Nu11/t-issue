@@ -49,4 +49,6 @@ public interface ReviewMapper {
     /* 내 리뷰 삭제 (본인 것만) */
     int deleteReviewByOwner(@Param("no") int no,
                             @Param("id") String id);
+
+    void declareReview(int no);
 }

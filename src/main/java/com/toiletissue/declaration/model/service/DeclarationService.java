@@ -7,18 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeclarationService {
 
-    private final DeclarationMapper declarationMapper;
 
     @Autowired
-    public DeclarationService(DeclarationMapper declarationMapper) {
-        this.declarationMapper = declarationMapper;
-    }
+    private DeclarationMapper declarationMapper;
 
-    public void insertDeclaration(int reviewNo, String memberId) {
-        declarationMapper.insertDeclaration(reviewNo, memberId);
-    }
+    public int declareReview(int no, String id) {
+        return declarationMapper.declareReview(no,id);
 
-    public boolean existsDeclaration(int reviewNo, String memberId) {
-        return declarationMapper.existsDeclaration(reviewNo, memberId) > 0;
+
     }
 }

@@ -1,6 +1,8 @@
 package com.toiletissue.toilet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toiletissue.declaration.model.dto.DeclarationDTO;
+import com.toiletissue.declaration.model.service.DeclarationService;
 import com.toiletissue.member.model.dto.MemberDTO;
 import com.toiletissue.member.model.service.MemberService;
 import com.toiletissue.notice.model.dto.NoticeDTO;
@@ -9,6 +11,7 @@ import com.toiletissue.review.model.service.ReviewService;
 import com.toiletissue.toilet.model.dto.ToiletDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +30,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/toilet")
 public class ToiletController {
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/manager")
     public void toiletManager() {}
 
@@ -39,6 +45,10 @@ public class ToiletController {
     @Autowired
     private MemberService memberService;
 
+
+    @Autowired
+    private DeclarationService declarationService;
+
     public char getInitial(char ch) {
         if (ch < 0xAC00 || ch > 0xD7A3) return ch; // 한글이 아니면 그대로 반환
 
@@ -47,6 +57,7 @@ public class ToiletController {
         int chosungIndex = base / 588;
         return CHO[chosungIndex];
     }
+
 
     @GetMapping("/stationList")
     public String stationList(Model model,
@@ -320,8 +331,42 @@ public class ToiletController {
         return "toilet/details";
     }
 
+    @PostMapping("/details/declaration")
+    public String declareReview (ReviewDTO reviewDTO,Model model, @RequestParam("no") int no,Principal principal,RedirectAttributes rttr){
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        Map<String, Object> body = response.getBody();
+
+        List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
+        ObjectMapper mapper = new ObjectMapper();
+
+        // stationName 기준으로 ToiletDTO 찾기
+        ToiletDTO toilet = dataList.stream()
+                .map(m -> mapper.convertValue(m, ToiletDTO.class))
+                .filter(t -> t.getName().equals(reviewDTO.getStationName()))
+                .findFirst()
+                .orElse(null);
 
 
+        try{
+            int result = declarationService.declareReview(no,principal.getName());
+        } catch(Exception e){
+            rttr.addFlashAttribute("message","이미 신고한 리뷰입니다.");
+            return "redirect:/toilet/details";
+        }
+
+        String toiletName = "";
+        if (toilet != null) {
+            toiletName = toilet.getName() + "역 " + toilet.getGround() + " " + toilet.getFloor() + " " + toilet.getGateInOut() + " 화장실";
+        }
+
+        rttr.addAttribute("stationName", reviewDTO.getStationName());
+        rttr.addAttribute("toiletName", toiletName);
+        model.addAttribute("id",principal.getName());
+        return "redirect:/toilet/details";
+    }
 
 
     @GetMapping("/toilet-sos")

@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        const message = `[[${message}]]`
+        console.log(message)
+        if(message) {
+            alert(message);
+        }
+    </script>
     <style>
         .top-nav {
             display: flex;
@@ -132,22 +139,43 @@
         .memberId, .date {
             font-family: AggravoM;
         }
-        .declareBtn {
-            margin-left: 350px;
-            margin-top: -55px;
-            background: none;
-            border: none;
+
+        .star,.dec{
+            cursor: pointer;
         }
-        #declareModal #insertDeclare {
+        .dec-modal{
+            display: none;
+            position: fixed;
+            z-index:1;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .dec-modal1{
             background-color: #fefefe;
             margin: 15% auto;
             padding : 15px;
             border: 1px solid #888;
             width: 400px;
-            height: 280px;
+            height: 320px;
             align-items: center;
             border-radius: 8px;
         }
+        .dec{
+            position: relative;
+            left: 80%;
+            bottom: 80%;
+        }
+        .decY,.decN{
+            width: 50px;
+            height: 30px;
+            border: none;
+        }
+
     </style>
 </head>
 <body>
@@ -260,9 +288,26 @@
                         <div class="score"  style="font-size: 16px" th:text="${review.score}"></div>
                     </div>
                     <div class="content" style="font-size: 16px;" th:text="${review.content}"></div>
+                    <div class="dec">신고</div>
+                    <div th:text="${review.no}" class="reno" hidden></div>
                     <div class="date" style="font-size: 12px;margin-left: 300px" th:text="${review.date}"></div>
                 </div>
             </div>
+
+            <div class="dec-modal">
+                <div class="dec-modal1" style="display: flex;flex-direction: column">
+                    <div style="position: relative;top: 30%">해당 리뷰를 신고하시겠습니까?</div>
+                    <div style="display: flex;gap: 5px;position: relative;top: 50%">
+                        <form action="/toilet/details/declaration" method="post" >
+                            <input type="hidden" id="decNo" name="no">
+                            <button type="submit" style="position: relative;" class="decY" >예</button>
+                        </form>
+                        <button type="button" class="decN">아니오</button>
+                    </div>
+                </div>
+            </div>
+
+
 
         </section>
         <!--리뷰 작성 모달-->
@@ -273,7 +318,14 @@
                     <div><input type="hidden" name="stationName" th:value="${stationName}"></div>
                     <div><input type="hidden" name="toiletLocation" th:value="${toilet.toiletLocation}"></div>
                     <div><label for="ititle">별점</label></div>
-                    <div><input type="text" placeholder="점수를 입력하세요" id="ititle" name="score"></div>
+                    <div id="score" style="display: flex;font-size: 25px;">
+                        <div class="star">★</div>
+                        <div class="star">★</div>
+                        <div class="star">★</div>
+                        <div class="star">★</div>
+                        <div class="star">★</div>
+                    </div>
+                    <div><input type="hidden" placeholder="점수를 입력하세요" id="ititle" name="score"></div>
                     <br>
                     <div><label for="icontent">내용</label></div>
                     <div><textarea style="width: 320px;height: 180px" name="content" id="icontent" placeholder="내용을 입력하세요(최대 300자)" maxlength="300"></textarea></div>
@@ -305,9 +357,74 @@
     </section>
 </div>
 <script th:inline="javascript">
-    document.getElementById("reviewForm").addEventListener("submit", function (e) {
-        console.log("Form submit");
+
+
+    const $stars = document.querySelectorAll('.star') // 별들
+    const $ititle = document.getElementById('ititle') // 별점
+
+    let star = null;
+    let score = 0;
+
+    $stars.forEach((starElement, i) => {
+        starElement.addEventListener('click', () => {
+            if (star === i) {
+                // 같은 별 다시 클릭하면 해제
+                for (let j = 0; j <= star; j++) {
+                    $stars[j].style.color = 'black';
+                }
+                star = null;
+                score = 0;
+                $ititle.value = '';
+                console.log("별 해제됨");
+                return;
+            }
+
+            // 모든 별 색 초기화
+            for (let j = 0; j < $stars.length; j++) {
+                $stars[j].style.color = 'black';
+            }
+
+            // 선택한 별까지 노란색으로 변경
+            for (let j = 0; j <= i; j++) {
+                $stars[j].style.color = 'yellow';
+            }
+
+            // 선택 상태 갱신
+            star = i;
+            score = i + 1;
+            $ititle.value = score;
+            console.log("선택된 별 : " + star);
+            console.log("점수 : " + score);
+        });
     });
+
+    const $decModal = document.querySelector('.dec-modal') // 신고 모달창
+    const $dec = document.querySelectorAll('.dec') // 신고 버튼
+    const $decN = document.querySelector('.decN') // 신고 취소 버튼
+    const $decNo = document.querySelector('#decNo')
+
+    $dec.forEach((a)=>{
+        a.addEventListener('click',function(){
+            $decModal.style.display='flex'
+
+            const $review = a.closest('.review')
+            const $reno = $review.querySelector('.reno').textContent
+            console.log($reno)
+            $decNo.value=$reno
+
+
+        })
+    })
+    $decN.addEventListener('click',function(){
+        $decModal.style.display='none'
+    })
+
+
+
+
+
+
+
     function openModal(id) {
         document.getElementById(id).style.display = "block";
     }
