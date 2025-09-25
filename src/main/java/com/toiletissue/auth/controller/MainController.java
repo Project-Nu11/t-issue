@@ -30,7 +30,7 @@ public class MainController {
     @Value("${api.data.serviceKey}")
     private String serviceKey;
 
-    @GetMapping("/main")
+    @GetMapping({"/main","/"})
     public String mainPage(Model model) throws JsonProcessingException {
 
         RestTemplate restTemplate = new RestTemplate();

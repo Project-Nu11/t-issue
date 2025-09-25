@@ -85,11 +85,13 @@
             height: 40px;
             margin-left: 29px;
             background: none;
+            font-size: 18px;
             border-radius: 50px;
             border: 2px solid black;
         }
         input::placeholder {
             font-size:20px;
+            color: white;
             padding: 3%;
         }
         .hidden {
@@ -130,15 +132,15 @@
     </div>
 
     <div id="searchBar">
-        <div id="search" style="display: inline-block;background-color: rebeccapurple">
-            <div style="background: none; border: none">
-                <button><img src="/icon/free-icon-magnifier-2311526.png" alt="검색" width="40" height="40"></button>
+        <div id="search">
+            <div >
+                <button style="margin-left: 10px;background: none; border: none;position: relative;top: 10px" onclick="location.href='toilet/toilet-sos'"><img src="/icon/free-icon-magnifier-2311526.png" alt="검색" width="40" height="40"></button>
             </div>
-            <input type="search" placeholder="검색어를 입력해주세요" style="background-color: yellow">
+            <input style="background: rgba(0,0,0,0.56);color: white;margin-left: 70px;position: relative;bottom: 35px" type="search" placeholder="검색어를 입력해주세요">
         </div>
-        <div style="display: inline-block; background-color: blue">
-            <button id="endSearch">
-                <div><img src="/icon/cancel_11212407.png" alt="취소" width="40" height="40"></div>
+        <div style="margin-left: 505px;position: relative;bottom: 85px">
+            <button id="endSearch" >
+                <img src="/icon/cancel_11212407.png" alt="취소" width="40" height="40">
             </button>
         </div>
     </div>

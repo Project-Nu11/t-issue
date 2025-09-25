@@ -27,14 +27,7 @@ public class DeclarationController {
     public String insertDeclaration(@RequestParam("reviewNo") int reviewNo,
                                     @RequestParam("memberId") String memberId,
                                     RedirectAttributes redirectAttributes) {
-        if (declarationService.existsDeclaration(reviewNo, memberId)) {
-            redirectAttributes.addFlashAttribute("msg", "이미 신고한 리뷰입니다.");
-            return "redirect:/main";
 
-        }
-        declarationService.insertDeclaration(reviewNo, memberId);
-
-        redirectAttributes.addFlashAttribute("msg", "신고가 완료되었습니다.");
         return "redirect:/main";
     }
 }
