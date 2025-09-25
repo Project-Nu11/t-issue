@@ -71,7 +71,7 @@ public class ReviewService {
         return reviewMapper.selectDeclaredReviewById(id);
     }
 
-    public void declareReview(int no) {
-        reviewMapper.declareReview(no);
+    public void declareReview(int no, String name) {
+        reviewMapper.declareReview(no,name);
     }
 }
