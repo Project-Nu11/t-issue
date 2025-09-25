@@ -91,10 +91,11 @@
         )
     </insert>
 
-    <select id="selectReviewListByStation" resultMap="reviewResultMap">
+    <select id="selectReviewListByStationAndLocation" resultMap="reviewResultMap">
         select *
           from review
          where station_name = #{stationName}
+         and toilet_location = #{toiletLocation}
          and penalty_status = 0
          order by review_no desc
     </select>

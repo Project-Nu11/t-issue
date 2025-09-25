@@ -17,7 +17,7 @@ public interface ReviewMapper {
    
     int insertReview(ReviewDTO reviewDTO);
 
-    List<ReviewDTO> selectReviewListByStation(String stationName);
+    List<ReviewDTO> selectReviewListByStationAndLocation(String stationName, String toiletLocation);
     
 
     int penalizeReview(int no);

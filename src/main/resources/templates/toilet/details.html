@@ -301,6 +301,8 @@
                     <div style="display: flex;gap: 5px;position: relative;top: 50%">
                         <form action="/toilet/details/declaration" method="post" >
                             <input type="hidden" id="decNo" name="no">
+                            <input type="hidden" name="stationName" th:value="${stationName}">
+                            <input type="hidden" name="toiletLocation" th:value="${toilet.toiletLocation}">
                             <button type="submit" style="position: relative;" class="decY" >예</button>
                         </form>
                         <button type="button" class="decN">아니오</button>
