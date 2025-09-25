@@ -50,5 +50,5 @@ public interface ReviewMapper {
     int deleteReviewByOwner(@Param("no") int no,
                             @Param("id") String id);
 
-    void declareReview(int no);
+    void declareReview(int no, String name);
 }
