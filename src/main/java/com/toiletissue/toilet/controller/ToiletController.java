@@ -39,9 +39,19 @@ public class ToiletController {
     @Autowired
     private MemberService memberService;
 
+    public char getInitial(char ch) {
+        if (ch < 0xAC00 || ch > 0xD7A3) return ch; // 한글이 아니면 그대로 반환
+
+        char[] CHO = {'ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'};
+        int base = ch - 0xAC00;
+        int chosungIndex = base / 588;
+        return CHO[chosungIndex];
+    }
+
     @GetMapping("/stationList")
     public String stationList(Model model,
-                              @RequestParam(value = "page", defaultValue = "1") int page) {
+                              @RequestParam(value = "page", defaultValue = "1") int page,
+                              @RequestParam(value = "initial", required = false) String initial) {
 
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
@@ -52,6 +62,7 @@ public class ToiletController {
         List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("data");
 
         ObjectMapper mapper = new ObjectMapper();
+
         List<ToiletDTO> allToilets = dataList.stream()
                 .map(m -> mapper.convertValue(m, ToiletDTO.class))
                 .collect(Collectors.toList());
@@ -61,52 +72,116 @@ public class ToiletController {
                 .filter(t->"5호선".equals(t.getLines()))
                 .collect(Collectors.toList());
 
-        // 필터링 후 역이름으로 리스트
-        List<String> stationNames = line5Toilets.stream()
+//        // 초성 필터링
+//        if (initial != null && !initial.isEmpty()) {
+//            List<String> initials = Arrays.asList(initial.split(","));
+//            line5Toilets = line5Toilets.stream()
+//                    .filter(t -> t.getName() != null && initials.contains(String.valueOf(getInitial(t.getName().charAt(0)))))
+//                    .collect(Collectors.toList());
+//        }
+//        // 필터링 후 역이름으로 리스트
+//        List<String> stationNames = line5Toilets.stream()
+//                .map(ToiletDTO::getName)
+//                .distinct()
+//                .collect(Collectors.toList());
+//
+//        // 페이징
+//        int pageSize = 8;
+//        int totalStations = stationNames.size();
+//        int totalPages = (int) Math.ceil((double) totalStations/pageSize);
+//
+//        if (totalPages == 0) totalPages = 1;
+//
+//        if (page < 1) page = 1;
+//        if (page > totalPages) page = totalPages;
+//
+//        int start = (page -1)*pageSize;
+//        int end = Math.min(start+pageSize, totalStations);
+//
+//        List<String> pagedStations = (start < totalStations) ? stationNames.subList(start, end) : new ArrayList<>();
+//
+//        // 번호 510부터 시작, 전체 기준으로 계산
+//        int startNumber = 510;
+//        List<Map<String, String>> stationsWithNumber = new ArrayList<>();
+//        for (int i = 0; i < pagedStations.size(); i++) {
+//            Map<String, String> map = new HashMap<>();
+//            map.put("name", pagedStations.get(i));
+//
+//            String numberStr;
+//
+//            int globalIndex = start + i; // 전체 역에서의 인덱스
+//            if (globalIndex >= totalStations - 7) {
+//                numberStr = "P" + (549 + (globalIndex - (totalStations - 7)));
+//            } else if (globalIndex <= 26) { // 510~536
+//                numberStr = String.valueOf(startNumber + globalIndex);
+//            } else { // 나머지 역 538~
+//                numberStr = String.valueOf(538 + (globalIndex - 27));
+//            }
+//
+//            map.put("number", String.valueOf(numberStr));
+//            stationsWithNumber.add(map);
+//        }
+
+        // 전체 5호선 역 이름 (중복 제거, 순서 유지)
+        List<String> allStationNames = line5Toilets.stream()
                 .map(ToiletDTO::getName)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
+
+        // 번호 매핑 (전체 역 기준)
+        Map<String, String> stationNumberMap = new HashMap<>();
+        int startNumber = 510;
+        for (int i = 0; i < allStationNames.size(); i++) {
+            String name = allStationNames.get(i);
+            String numberStr;
+
+            if (i >= allStationNames.size() - 7) {
+                numberStr = "P" + (549 + (i - (allStationNames.size() - 7)));
+            } else if (i <= 26) {
+                numberStr = String.valueOf(startNumber + i);
+            } else {
+                numberStr = String.valueOf(538 + (i - 27));
+            }
+            stationNumberMap.put(name, numberStr);
+        }
+
+        // 초성 필터링
+        List<String> filteredStations = allStationNames;
+        if (initial != null && !initial.isEmpty()) {
+            List<String> initials = Arrays.asList(initial.split(","));
+            filteredStations = allStationNames.stream()
+                    .filter(name -> initials.contains(String.valueOf(getInitial(name.charAt(0)))))
+                    .toList();
+        }
 
         // 페이징
         int pageSize = 8;
-        int totalStations = stationNames.size();
-        int totalPages = (int) Math.ceil((double) totalStations/pageSize);
+        int totalStations = filteredStations.size();
+        int totalPages = (int) Math.ceil((double) totalStations / pageSize);
 
         if (totalPages == 0) totalPages = 1;
-
         if (page < 1) page = 1;
         if (page > totalPages) page = totalPages;
 
-        int start = (page -1)*pageSize;
-        int end = Math.min(start+pageSize, totalStations);
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, totalStations);
 
-        List<String> pagedStations = (start < totalStations) ? stationNames.subList(start, end) : new ArrayList<>();
+        List<String> pagedStations = (start < totalStations) ? filteredStations.subList(start, end) : new ArrayList<>();
 
-        // 번호 510부터 시작, 전체 기준으로 계산
-        int startNumber = 510;
+        // 이름 + 번호 묶기
         List<Map<String, String>> stationsWithNumber = new ArrayList<>();
-        for (int i = 0; i < pagedStations.size(); i++) {
+        for (String station : pagedStations) {
             Map<String, String> map = new HashMap<>();
-            map.put("name", pagedStations.get(i));
-
-            String numberStr;
-
-            int globalIndex = start + i; // 전체 역에서의 인덱스
-            if (globalIndex >= totalStations - 7) {
-                numberStr = "P" + (549 + (globalIndex - (totalStations - 7)));
-            } else if (globalIndex <= 26) { // 510~536
-                numberStr = String.valueOf(startNumber + globalIndex);
-            } else { // 나머지 역 538~
-                numberStr = String.valueOf(538 + (globalIndex - 27));
-            }
-
-            map.put("number", String.valueOf(numberStr));
+            map.put("name", station);
+            map.put("number", stationNumberMap.get(station)); // ★ 전체 기준 번호 사용
             stationsWithNumber.add(map);
         }
 
         model.addAttribute("stations", stationsWithNumber);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+
+        model.addAttribute("selectedInitial", initial);
 
         return "toilet/stationList";
     }
@@ -147,7 +222,8 @@ public class ToiletController {
     @PostMapping("/details")
     public String submitReview(ReviewDTO reviewDTO, RedirectAttributes redirectAttributes) {
 
-        System.out.println("post에서받은 stationName : " + reviewDTO.getStationName());
+        System.out.println("post에서 받은 stationName : " + reviewDTO.getStationName());
+        System.out.println("post에서 받은 toiletLocation: " + reviewDTO.getToiletLocation());
         // 리뷰 저장
         reviewService.insertReview(reviewDTO);
 
@@ -174,6 +250,7 @@ public class ToiletController {
 
         redirectAttributes.addAttribute("stationName", reviewDTO.getStationName());
         redirectAttributes.addAttribute("toiletName", toiletName);
+        redirectAttributes.addAttribute("toiletLocation", reviewDTO.getToiletLocation());
         return "redirect:/toilet/details";
     }
 
@@ -181,6 +258,7 @@ public class ToiletController {
     public String toiletDetails(
             @RequestParam(value = "stationName", required = false) String stationName,
             @RequestParam(value = "toiletName", required = false) String toiletName,
+//            @RequestParam(value = "toiletLocation", required = false) String toiletLocation,
             Model model, Principal principal) {
 
 //        System.out.println("==== get /details 호출 ====");
@@ -229,17 +307,13 @@ public class ToiletController {
             model.addAttribute("member", member);
         }
 
-//        System.out.println("=== Toilet 객체 확인 ===");
-//        System.out.println("toilet.getName(): " + (toilet != null ? toilet.getName() : "toilet is null"));
-//        System.out.println("toilet.getGround(): " + (toilet != null ? toilet.getGround() : "toilet is null"));
-//        System.out.println("toilet.getFloor(): " + (toilet != null ? toilet.getFloor() : "toilet is null"));
-//        System.out.println("toilet.getGateInOut(): " + (toilet != null ? toilet.getGateInOut() : "toilet is null"));
-//        System.out.println("stationName: " + stationName);
-//        System.out.println("toiletName: " + toiletName);
-
         model.addAttribute("toilet", toilet);
         model.addAttribute("stationName", stationName);
         model.addAttribute("toiletName", toiletName);
+//        model.addAttribute("toiletLocation", toiletLocation);
+
+        System.out.println("stationName: " + stationName);
+//        System.out.println("toiletLocation: " + toiletLocation);
 
         System.out.println("끝");
 
