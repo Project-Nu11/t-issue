@@ -32,7 +32,7 @@
       height: 49px;
       border: none;
       background-color: white;
-      font-family: Aggravo;
+      font-family: AggravoL;
       font-size: 15px;
     }
     ul li {
@@ -72,6 +72,10 @@
     .paging a.active{
       color: #d9d9d9;
     }
+    button.active {
+      background-color: yellow;
+      font-weight: bold;
+    }
 
   </style>
 </head>
@@ -79,26 +83,26 @@
 <div th:include="/common/header.html"></div>
 <div id="main">
   <section class="top-nav">
-    <div id="lineFive">5호선 지하철 화장실</div>
+    <div id="lineFive" onclick="location.href='/toilet/stationList'">5호선 지하철 화장실</div>
 <!--    <div class="cancel">-->
 <!--      <img src="/icon/cancel_11212407.png" width="40" height="40">-->
 <!--    </div>-->
   </section>
   <section class="letter">
-    <button>ㄱ,ㄲ</button>
-    <button>ㄴ</button>
-    <button>ㄷ,ㄸ</button>
-    <button>ㄹ</button>
-    <button>ㅁ</button>
-    <button>ㅂ,ㅃ</button>
-    <button>ㅅ,ㅆ</button>
-    <button>ㅇ</button>
-    <button>ㅈ,ㅉ</button>
-    <button>ㅊ</button>
-    <button>ㅋ</button>
-    <button>ㅌ</button>
-    <button>ㅍ</button>
-    <button>ㅎ</button>
+    <button th:classappend="${selectedInitial == 'ㄱ,ㄲ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㄱ,ㄲ\''">ㄱ,ㄲ</button>
+    <button th:classappend="${selectedInitial == 'ㄴ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㄴ\''">ㄴ</button>
+    <button th:classappend="${selectedInitial == 'ㄷ,ㄸ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㄷ,ㄸ\''">ㄷ,ㄸ</button>
+    <button th:classappend="${selectedInitial == 'ㄹ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㄹ\''">ㄹ</button>
+    <button th:classappend="${selectedInitial == 'ㅁ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅁ\''">ㅁ</button>
+    <button th:classappend="${selectedInitial == 'ㅂ,ㅃ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅂ,ㅃ\''">ㅂ,ㅃ</button>
+    <button th:classappend="${selectedInitial == 'ㅅ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅅ,ㅆ\''">ㅅ,ㅆ</button>
+    <button th:classappend="${selectedInitial == 'ㅇ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅇ\''">ㅇ</button>
+    <button th:classappend="${selectedInitial == 'ㅈ,ㅉ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅈ,ㅉ\''">ㅈ,ㅉ</button>
+    <button th:classappend="${selectedInitial == 'ㅊ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅊ\''">ㅊ</button>
+    <button th:classappend="${selectedInitial == 'ㅋ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅋ\''">ㅋ</button>
+    <button th:classappend="${selectedInitial == 'ㅌ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅌ\''">ㅌ</button>
+    <button th:classappend="${selectedInitial == 'ㅍ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅍ\''">ㅍ</button>
+    <button th:classappend="${selectedInitial == 'ㅎ'} ? 'active' : ''" th:onclick="'location.href=\'/toilet/stationList?initial=ㅎ\''">ㅎ</button>
   </section>
   <section id="subwayList">
 
@@ -116,7 +120,7 @@
 
   <div class="paging">
     <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-        <a class="pagingBtn" th:href="@{/toilet/stationList(page=${i})}" th:text="${i}"
+        <a class="pagingBtn" th:href="@{/toilet/stationList(page=${i}, initial=${selectedInitial})}" th:text="${i}"
            th:classappend="${i == currentPage} ? 'active' : ''"></a>
     </span>
   </div>

@@ -3,126 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <title>리뷰조회</title>
-    <style>
-        .title{ margin:18px 16px;
-            font-family: Aggravo;
-            font-size:25px;
-            font-weight:700;
-        }
-        .wrap{
-            padding:0 15px 20px;
-        }
-        .card{
-            background:#fff;
-            border-radius:12px;
-            padding:12px 14px;
-            margin:12px 0;
-            box-shadow:0 6px 16px rgba(0,0,0,.12);
-        }
+   <style>
+       /* 전역 권장 (있으면 중복 X) */
+       * { box-sizing: border-box; }
 
-        .text{
-            margin:8px 0 6px;
-            line-height:1.4;
-            font-weight: 500;
-            white-space:pre-wrap;
-            word-break:break-word;
-        }
+       /* 타이틀 */
+       .title{
+           font-size: 48px;
+           font-weight: bold;
+           margin: 29px 0 0 29px;
+       }
 
-        .footer{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            margin-top:10px;
-        }
+       /* 리스트 래퍼 */
+       .wrap{
+           padding: 0 15px 20px;
+       }
 
-        .actions{
-            display:flex;
-            gap:10px;
-        }
-        .chip{
-            min-width:44px;
-            height:28px;
-            padding:0 10px;
-            border:1px solid rgba(0,0,0,.2);
-            border-radius:999px;
-            background:#fff;
-            cursor:pointer;
-            font-size:12px;
-            box-shadow:0 2px 8px rgba(0,0,0,.08);
-        }
-        .chip.danger{
-            color:#c00;
-            border-color:rgba(220,20,60,.35);
-        }
+       /* 카드 */
+       .card{
+           background:#fff;
+           border-radius:12px;
+           padding:12px 14px;
+           margin:12px 0;
+           box-shadow:0 6px 16px rgba(0,0,0,.12);
+       }
 
-        .pagination{
-            display:flex;
-            gap:6px;
-            justify-content:center;
-            margin:16px 0;
-        }
-        .pagination a,
-        .pagination span{
-            padding:4px 8px;
-            border-radius:6px;
-            border:1px solid rgba(0,0,0,.15);
-            text-decoration:none;
-            color:#111;
-            background:#fff;
-        }
-        .pagination .current{
-            background:#111;
-            color:#fff;
-        }
+       /* 내용 */
+       .text{
+           margin:8px 0 6px;
+           line-height:1.4;
+           font-weight: 500;
+           white-space: pre-wrap;
+           word-break: break-word;
+       }
 
-        .deleteback{
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,50%);
-            position:fixed;
-            top:0; left:0;
-            display:none;
-            z-index:1100;
-            align-items:center;
-            justify-content:center;
-        }
-        .viewdeleteback{ display:flex; }
-        .modal-card{
-            width:25%;
-            min-width:320px;
-            background:#fff;
-            position:fixed;
-            top:35%; left:37.5%; z-index:1101;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            border-radius:8px;
-            padding:20px;
-            box-shadow:0 8px 20px rgba(0,0,0,.25);
-        }
-        .modal-card p{
-            font-size:16px;
-            font-weight:500;
-            margin-bottom:18px;
-            text-align:center; }
-        .modal-card .btns{
-            display:flex;
-            gap:10px;
-        }
-        .modal-card button{
-            min-width:80px;
-            height:32px;
-            border:1px solid rgba(0,0,0,.25);
-            border-radius:8px;
-            background:#fff;
-            cursor:pointer;
-        }
-        textarea, input[type="number"]{
-            font-family:'Aggravo'
-        }
-    </style>
+       /* 하단 영역: 날짜/점수 + 버튼들 */
+       .footer{
+           display:flex;
+           align-items:center;
+           justify-content:space-between;
+           gap: 10px;              /* 간격 보강 */
+           margin-top:10px;
+           flex-wrap: wrap;        /* 좁을 때 줄바꿈으로 겹침 방지 */
+       }
+       .footer .date{
+           display:flex; align-items:center; gap:8px;
+       }
+
+       /* 액션 버튼 */
+       .actions{
+           display:flex;
+           gap:10px;
+
+       }
+       .chip{
+           min-width:44px;
+           height:28px;
+           padding:0 10px;
+           border:1px solid rgba(0,0,0,.2);
+           border-radius:999px;
+           background:#fff;
+           cursor:pointer;
+           font-size:12px;
+           box-shadow:0 2px 8px rgba(0,0,0,.08);
+           font-family: 'AggravoM','Aggravo', system-ui, -apple-system, Arial, sans-serif;
+           font-weight: 500;
+       }
+       .chip.danger{
+           color:#c00;
+           border-color:rgba(220,20,60,.35);
+       }
+
+       /* 페이지네이션 */
+       .pagination{
+           display:flex;
+           gap:6px;
+           justify-content:center;
+           margin:16px 0;
+       }
+       .pagination a,
+       .pagination span{
+           padding:4px 8px;
+           border-radius:6px;
+           border:1px solid rgba(0,0,0,.15);
+           text-decoration:none;
+           color:#111;
+           background:#fff;
+       }
+       .pagination .current{
+           background:#111;
+           color:#fff;
+       }
+
+       /* ===== 팀 공통 모달 규칙 ===== */
+       .deleteback{
+           width:100%;
+           height:100%;
+           background: rgba(0,0,0,0.5);
+           position:fixed;
+           top:0; left:0;
+           display:none;
+           z-index:1100;
+           align-items:center;
+           justify-content:center;
+       }
+       .viewdeleteback{ display:flex; }
+
+       /* 공용 모달 카드 */
+       .modal-card{
+           background:#fff;
+           border-radius:8px;
+           padding:20px;
+           box-shadow:0 8px 20px rgba(0,0,0,.25);
+           z-index:1101;
+
+           position: fixed;
+           top: 50%; left: 50%;
+           transform: translate(-50%, -50%);
+
+           width: 25%;
+           min-width: 320px;
+           max-width: calc(100vw - 40px);
+           display: none;
+           flex-direction:column;
+           align-items:center;
+           justify-content:center;
+       }
+       .modal-card p{
+           font-size:16px;
+           font-weight:500;
+           margin-bottom:18px;
+           text-align:center;
+       }
+       .modal-card .btns{
+           display:flex;
+           gap:10px;
+       }
+       .modal-card button{
+           min-width:80px;
+           height:32px;
+           border:1px solid rgba(0,0,0,.25);
+           border-radius:8px;
+           background:#fff;
+           cursor:pointer;
+       }
+       /* 모달 전체가 공통 폰트를 물려받도록 */
+       .modal-card { font-family: inherit; }
+
+       /* 버튼 폰트 강제 적용 + 세로 중앙 정렬 */
+       .modal-card button{
+           font-family: inherit;
+           display: inline-flex;
+           align-items: center;
+           justify-content: center;
+           height: 32px;
+           line-height: 1;
+           padding: 0 12px;
+       }
+
+       /* 폰트  */
+       textarea,
+       input[type="number"]{
+           font-family:'Aggravo', system-ui, -apple-system, Arial, sans-serif;
+       }
+
+
+   </style>
 </head>
+
 <body>
 <div th:include="/common/header.html"></div>
 
@@ -131,31 +179,33 @@
 
     <div class="wrap">
         <!-- 카드 리스트 -->
-        <div class="card" th:each="r : ${list}" th:attr="data-no=${r.no}">
-            <div class="meta" th:text="${r.stationName} + ' - ' + ${r.toiletLocation}">강변역 - 2번</div>
-            <div class="text content" th:text="${r.content}">이용하고 깔끔했어요 :)</div>
+        <div id="reviewList">
+            <div class="card" th:each="r : ${list}" th:attr="data-no=${r.no}">
+                <div class="meta" th:text="${r.stationName} + ' - ' + ${r.toiletLocation}">강변역 - 2번</div>
+                <div class="text content" th:text="${r.content}">이용하고 깔끔했어요 :)</div>
 
-            <div class="footer">
-                <div class="date">
-                    <span class="score" th:text="${r.score}">3</span>
-                    <span style="margin:0 8px;">|</span>
-                    <!-- 타입 안전한 날짜 출력 위해......... -->
-                    <span th:if="${r.date instanceof T(java.util.Date)}"
-                          th:text="${#dates.format(r.date, 'yyyy-MM-dd')}">2025-09-24</span>
-                    <span th:if="${r.date instanceof T(java.time.LocalDate)}"
-                          th:text="${#temporals.format(r.date, 'yyyy-MM-dd')}">2025-09-24</span>
-                    <span th:unless="${(r.date instanceof T(java.util.Date)) or (r.date instanceof T(java.time.LocalDate))}"
-                          th:text="${r.date}">2025-09-24</span>
-                </div>
+                <div class="footer">
+                    <div class="date">
+                        <span class="score" th:text="${r.score}">3</span>
+                        <span style="margin:0 8px;">|</span>
+                        <!-- 타입 안전한 날짜 출력 -->
+                        <span th:if="${r.date instanceof T(java.util.Date)}"
+                              th:text="${#dates.format(r.date, 'yyyy-MM-dd')}">2025-09-24</span>
+                        <span th:if="${r.date instanceof T(java.time.LocalDate)}"
+                              th:text="${#temporals.format(r.date, 'yyyy-MM-dd')}">2025-09-24</span>
+                        <span th:unless="${(r.date instanceof T(java.util.Date)) or (r.date instanceof T(java.time.LocalDate))}"
+                              th:text="${r.date}">2025-09-24</span>
+                    </div>
 
-                <div class="actions">
-                    <button class="chip edit">수정</button>
-                    <button class="chip danger del">삭제</button>
+                    <div class="actions">
+                        <button class="chip edit">수정</button>
+                        <button class="chip danger del">삭제</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div th:if="${total == 0}" style="padding:12px; color:#555;">작성한 리뷰가 없습니다.</div>
+            <div th:if="${total == 0}" style="padding:12px; color:#555;">작성한 리뷰가 없습니다.</div>
+        </div>
 
         <!-- 페이징 -->
         <div class="pagination" th:if="${totalPages > 1}">
@@ -169,10 +219,10 @@
     </div>
 </div>
 
-<!-- ===== 모달들 ===== -->
+<!-- ===== 공용 백드롭 (하나만 사용) ===== -->
 <div class="deleteback" id="modalBack"></div>
 
-<!-- 확인/경고 모달 -->
+<!-- 확인/경고 공용 모달 -->
 <div id="confirmModal" class="modal-card" style="display:none;">
     <p id="confirmMsg">메시지</p>
     <div class="btns">
@@ -181,39 +231,37 @@
     </div>
 </div>
 
-<!-- 수정 모달 -->
+<!-- 수정 모달 (백드롭 공유) -->
 <div id="editModal" class="modal-card" style="display:none;">
-    <p style="font-weight:700; margin-bottom:12px;">리뷰 수정</p>
-    <form id="editForm" autocomplete="off">
+    <p style="font-weight:700;margin-bottom:10px;">리뷰 수정</p>
+    <form id="editForm" style="display:flex;flex-direction:column;gap:8px;width:100%;">
         <input type="hidden" name="no" id="editNo">
-        <div style="margin-bottom:10px; width:100%;">
-            <label style="display:block; font-size:12px; margin-bottom:6px;">내용</label>
-            <textarea id="editContent" name="content" rows="4"
-                      style="width:100%; padding:8px; border:1px solid rgba(0,0,0,.25); border-radius:8px;"></textarea>
-        </div>
-        <div style="margin-bottom:14px; width:100%;">
-            <label style="display:block; font-size:12px; margin-bottom:6px;">별점 (1~5)</label>
-            <input id="editScore" name="score" type="number" min="1" max="5"
-                   style="width:100%; height:34px; padding:0 10px; border:1px solid rgba(0,0,0,.25); border-radius:8px;">
-        </div>
-        <div class="btns">
+        <textarea id="editContent" name="content" rows="4" style="width:100%;resize:vertical;"></textarea>
+        <input id="editScore" name="score" type="number" min="1" max="5" style="width:90px;">
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
             <button type="button" id="editCancel">취소</button>
             <button type="submit" id="editSave">저장</button>
         </div>
     </form>
 </div>
-
 <script>
-    (function(){
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1) 공용 백드롭/모달
         const back     = document.getElementById('modalBack');
         const mConfirm = document.getElementById('confirmModal');
         const mEdit    = document.getElementById('editModal');
 
-        function showBackdrop(){ back.className = 'deleteback viewdeleteback'; }
-        function hideBackdrop(){ back.className = 'deleteback'; }
-        function closeModals(){ mConfirm.style.display='none'; mEdit.style.display='none'; hideBackdrop(); }
+        // 필수 요소 존재 확인(콘솔로 즉시 확인됨)
+        if (!back || !mConfirm || !mEdit) {
+            console.error('[mypage/review] modal elements missing', { back: !!back, mConfirm: !!mConfirm, mEdit: !!mEdit });
+        }
 
-        function openConfirm(message, onOk){
+        const showBackdrop = () => back.className = 'deleteback viewdeleteback';
+        const hideBackdrop = () => back.className = 'deleteback';
+        const closeModals  = () => { mConfirm.style.display='none'; mEdit.style.display='none'; hideBackdrop(); };
+
+        // 2) 공용 확인/알림
+        function openConfirm(message, onOk) {
             document.getElementById('confirmMsg').textContent = message || '';
             mEdit.style.display = 'none';
             mConfirm.style.display = 'flex';
@@ -222,10 +270,9 @@
             const cancel = document.getElementById('confirmCancel');
             ok.textContent = '예';
             cancel.style.display = 'inline-flex';
-            ok.onclick = async ()=>{ try{ await onOk?.(); } finally{ closeModals(); } };
+            ok.onclick = async () => { try { await onOk?.(); } finally { closeModals(); } };
             cancel.onclick = closeModals;
         }
-
         function openAlert(message, onOk){
             document.getElementById('confirmMsg').textContent = message || '';
             mEdit.style.display = 'none';
@@ -235,64 +282,67 @@
             const cancel = document.getElementById('confirmCancel');
             ok.textContent = '확인';
             cancel.style.display = 'none';
-            ok.onclick = ()=>{ closeModals(); onOk?.(); };
-            back.onclick = (e)=>{ if(e.target===back){ closeModals(); ok.onclick=null; back.onclick=null; cancel.style.display='inline-flex'; ok.textContent='예'; } };
+            ok.onclick = () => { closeModals(); onOk?.(); };
         }
+        back.addEventListener('click', (e)=>{ if (e.target===back) closeModals(); });
 
-        function openEdit({no, content, score}){
-            document.getElementById('editNo').value = no;
+        // 3) 수정 모달
+        function openEdit({ no, content, score }) {
+            // 안전 로그 (한 번만 찍혀도 클릭은 들어온 것)
+            // console.log('openEdit', { no, content, score });
+
+            document.getElementById('editNo').value      = no;
             document.getElementById('editContent').value = content || '';
-            document.getElementById('editScore').value = score || 5;
+            document.getElementById('editScore').value   = score || 5;
+
             mConfirm.style.display = 'none';
             mEdit.style.display = 'flex';
             showBackdrop();
         }
 
-        back.addEventListener('click', (e)=>{ if (e.target===back) closeModals(); });
+        // 4) 위임 리스너 (수정/삭제 버튼 공용)
+        const list = document.getElementById('reviewList');
+        list.addEventListener('click', (e) => {
+            const btn  = e.target.closest('button.chip');
+            if (!btn) return;
 
-        // ===== 삭제 =====
-        document.querySelectorAll('.card .del').forEach(btn=>{
-            btn.addEventListener('click', ()=>{
-                const card = btn.closest('.card');
-                const no   = card.getAttribute('data-no');
-                openConfirm('삭제 하시겠습니까?', async ()=>{
-                    try{
-                        const csrf = document.querySelector('input[name="_csrf"]')?.value
-                            || document.querySelector('meta[name="_csrf"]')?.content;
-                        const headers = { 'Content-Type':'application/x-www-form-urlencoded' };
-                        if (csrf) headers['X-CSRF-TOKEN'] = csrf;
+            const card = btn.closest('.card');
+            const no   = card?.getAttribute('data-no');
+            if (!no) return;
 
-                        const resp = await fetch(`/mypage/reviews/${no}/delete`, {
-                            method:'POST', headers, credentials:'same-origin'
-                        });
-                        if(resp.ok) openAlert('삭제가 완료되었습니다.', ()=> location.reload());
-                        else        openAlert('삭제 중 오류가 발생했습니다.');
-                    }catch(e){
-                        openAlert('네트워크 오류가 발생했습니다.');
-                    }
-                });
-            });
-        });
-
-        // ===== 수정 =====
-        document.querySelectorAll('.card .edit').forEach(btn=>{
-            btn.addEventListener('click', ()=>{
-                const card    = btn.closest('.card');
-                const no      = card.getAttribute('data-no');
-                const content = card.querySelector('.content')?.innerText || '';
+            if (btn.classList.contains('edit')) {
+                const content = card.querySelector('.content')?.innerText?.trim() || '';
                 const score   = parseInt(card.querySelector('.score')?.innerText || '5', 10);
-                openEdit({no, content, score});
-            });
+                openEdit({ no, content, score });
+                return;
+            }
+
+            if (btn.classList.contains('del')) {
+                const csrf = document.querySelector('input[name="_csrf"]')?.value
+                    || document.querySelector('meta[name="_csrf"]')?.content;
+                const headers = { 'Content-Type':'application/x-www-form-urlencoded' };
+                if (csrf) headers['X-CSRF-TOKEN'] = csrf;
+
+                openConfirm('삭제 하시겠습니까?', async () => {
+                    const body = new URLSearchParams({ no });
+                    // ✅ 컨트롤러와 동일 경로로 통일
+                    const resp = await fetch('/mypage/review/delete', {
+                        method:'POST', headers, credentials:'same-origin', body
+                    });
+                    if (resp.ok) openAlert('삭제가 완료되었습니다.', ()=> location.reload());
+                    else         openAlert('삭제 중 오류가 발생했습니다.');
+                });
+            }
         });
 
-        // 저장(Ajax)
+        // 5) 수정 저장
         const editForm   = document.getElementById('editForm');
         const editCancel = document.getElementById('editCancel');
         editCancel.addEventListener('click', closeModals);
 
-        editForm.addEventListener('submit', async function(e){
+        editForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const form = new FormData(editForm);
+            const form    = new FormData(editForm);
             const no      = form.get('no');
             const content = (form.get('content') || '').trim();
             const score   = Number(form.get('score'));
@@ -301,28 +351,19 @@
 
             const csrf = document.querySelector('input[name="_csrf"]')?.value
                 || document.querySelector('meta[name="_csrf"]')?.content;
-            const headers = { 'Content-Type':'application/x-www-form-urlencoded' };
+            const headers = { 'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8' };
             if (csrf) headers['X-CSRF-TOKEN'] = csrf;
 
+            const body = new URLSearchParams({ no, content, score: String(score) }).toString();
+            const resp = await fetch('/mypage/review/update', {
+                method:'POST', headers, credentials:'same-origin', body
+            });
+            const data = await resp.json().catch(() => ({}));
 
-            const UPDATE_URL = '/review/update';
-
-            const params = new URLSearchParams();
-            params.set('no', no);
-            params.set('content', content);
-            params.set('score', String(score));
-
-            try{
-                const resp = await fetch(UPDATE_URL, {
-                    method:'POST', headers, credentials:'same-origin', body: params.toString()
-                });
-                if(resp.ok) openAlert('수정이 완료되었습니다.', ()=> location.reload());
-                else        openAlert('수정 중 오류가 발생했습니다.');
-            }catch(e){
-                openAlert('네트워크 오류가 발생했습니다.');
-            }
+            if (resp.ok && data.ok !== false) openAlert('수정이 완료되었습니다.', () => location.reload());
+            else                               openAlert(data.msg || '수정 중 오류가 발생했습니다.');
         });
-    })();
+    });
 </script>
 </body>
 </html>

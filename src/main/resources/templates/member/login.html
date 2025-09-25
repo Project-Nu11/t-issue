@@ -61,10 +61,10 @@
     }
 
     .title{
-      margin: 25px 20px 10px;
-      font-family: 'Aggravo';
-      font-size: 25px;
+      font-size: 48px;
       font-weight: 700;
+      margin-left: 29px;
+      margin-top: 29px;
     }
 
     .btn-row{
@@ -72,6 +72,7 @@
       gap: 12px;
       margin: 200px 30px 100px;
       font-family: 'Aggravo';
+      font-weight: 300;
     }
 
     .btn-row button {
@@ -196,43 +197,50 @@
     <button id="loginOkBtn">확인</button>
   </div>
 </div>
+
 <script>
-  // 기존 포커스 유지
+//로그인 포커스
   document.getElementById('memberId')?.focus();
 
   (function () {
-    const back   = document.getElementById('loginModalBack');  // .deleteback / .viewdeleteback
-    const okBtn  = document.getElementById('loginOkBtn');
-    const msgEl  = document.getElementById('loginModalMsg');
+    const back  = document.getElementById('loginModalBack');
+    const msgEl = document.getElementById('loginModalMsg');
+    let okBtn   = document.getElementById('loginOkBtn'); // ← let 로!
 
+    function closeModal(){ back.className = 'deleteback'; }
 
-    function openModal(message) {
-      if (message) msgEl.textContent = message;
-      back.className = 'viewdeleteback';       // ← 보이기
+    // OK 버튼 리스너 리셋
+    function bindOk(onOk){
+      const fresh = okBtn.cloneNode(true);
+      okBtn.parentNode.replaceChild(fresh, okBtn);
+      okBtn = fresh;
+      okBtn.addEventListener('click', () => {
+        closeModal();
+        onOk && onOk();
+      });
     }
-    function closeModal() {
-      back.className = 'deleteback';           // ← 숨기기
-    }
 
-    // 확인 버튼 → 닫고 메인으로
-    okBtn.addEventListener('click', function () {
-      closeModal();
-      location.href = '/main';
-    });
+    function openModal(message, onOk){
+      msgEl.textContent = message || '';
+      back.className = 'viewdeleteback';
+      bindOk(onOk);
+    }
 
     try {
       const url = new URL(window.location.href);
 
       if (url.searchParams.get('success') !== null) {
-        // 로그인 성공 → 확인 누르면 메인으로
+        // 로그인 성공 → 메인
         openModal('로그인되었습니다!', () => location.href = '/main');
       } else if (url.searchParams.get('code') === 'LOGIN_FAIL') {
-        // 로그인 실패 → 확인 누르면 로그인 페이지로 (계속 시도 유도)
-        // 파라미터 제거 위해 /member/login 으로 리다이렉트
+        // 로그인 실패 → 로그인 페이지로 유지
         openModal('아이디 또는 비밀번호가 올바르지 않습니다.', () => location.href = '/member/login');
       }
-    } catch (_) {}
+    } catch (_) {
+
+    }
   })();
 </script>
+
 </body>
 </html>

@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeclarationService {
 
+
     @Autowired
     private DeclarationMapper declarationMapper;
 
     public int declareReview(int no, String id) {
         return declarationMapper.declareReview(no,id);
+
 
     }
 }

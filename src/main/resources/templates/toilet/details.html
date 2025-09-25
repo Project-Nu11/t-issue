@@ -139,6 +139,7 @@
         .memberId, .date {
             font-family: AggravoM;
         }
+
         .star,.dec{
             cursor: pointer;
         }
@@ -174,6 +175,7 @@
             height: 30px;
             border: none;
         }
+
     </style>
 </head>
 <body>
@@ -272,12 +274,16 @@
             <div id="reviews" style="margin-top: 20px;margin-left: 25px">
                 <div class="review" th:each="review : ${reviewList}"
                      th:attr="data-no=${review.no},
+                     data-review-no=${review.no},
                   data-station=${review.stationName},
                   data-toilet=${review.toiletLocation}">
 <!--                    <div class="no" th:text="${review.no}"></div>-->
 <!--                    <div class="stationName" th:text="${review.stationName}"></div>-->
 <!--                    <div class="toiletLocation" th:text="${review.toiletLocation}"></div>-->
                     <div class="memberId" style="font-size:18px;margin-bottom: 5px " th:text="${review.memberId}"></div>
+                    <button class="declareBtn" th:if="${member != null and member.memberId != review.memberId}">
+                        <img src="/icon/marketing.png" alt="신고" width="20" height="20">
+                    </button>
                     <div>
                         <div class="score"  style="font-size: 16px" th:text="${review.score}"></div>
                     </div>
@@ -307,7 +313,7 @@
         <!--리뷰 작성 모달-->
         <div id="reviewModal" class="modal">
             <div id="insertReview">
-                <form action="/toilet/details" method="post">
+                <form id="reviewForm" action="/toilet/details" method="post">
                     <div><input type="hidden" name="memberId" th:value="${member?.memberId}" readonly></div>
                     <div><input type="hidden" name="stationName" th:value="${stationName}"></div>
                     <div><input type="hidden" name="toiletLocation" th:value="${toilet.toiletLocation}"></div>
@@ -331,9 +337,27 @@
                 </form>
             </div>
         </div>
+        <!-- 리뷰 신고 모달-->
+        <div id="declareModal" class="modal">
+            <div id="insertDeclare" style="display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;">
+                <form id="declareForm" action="/review/declared" method="post">
+                    <input type="hidden" name="reviewNo" id="declareReviewNo">
+                    <input type="hidden" name="memberId" th:value="${member?.memberId}">
+                        <p style="font-size: 28px;font-family: AggravoM">리뷰를 신고하시겠습니까?</p>
+                    <div class="btns" style="margin-left: 110px">
+                        <button class="dregistbtn" type="submit">신고</button>
+                        <button class="dcancelbtn" type="button" style="margin-left: 20px">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
 </div>
 <script th:inline="javascript">
+
 
     const $stars = document.querySelectorAll('.star') // 별들
     const $ititle = document.getElementById('ititle') // 별점
@@ -400,6 +424,7 @@
 
 
 
+
     function openModal(id) {
         document.getElementById(id).style.display = "block";
     }
@@ -433,14 +458,56 @@
             }
         });
 
+        const $contentlen = document.querySelector(".contentlength");
+        const $contentinput = document.querySelector('#icontent');
+        const $insert = document.querySelector('#insertReview');
+        const $ititle = $insert.querySelector('#ititle')
+        const $icontent = $insert.querySelector('#icontent')
+
+
+        $contentinput.addEventListener('input',function (){
+
+            let currenlength = $contentinput.value.length;
+
+            $contentlen.textContent = currenlength;
+        })
+
+
+
         const cancelBtn = document.querySelector(".cancelbtn");
 
         cancelBtn.addEventListener('click', () => {
             document.getElementById("reviewModal").style.display = "none";
+            $contentlen.textContent=0;
+            $ititle.value='';
+            $icontent.value='';
+        });
+
+        const declareBtns = document.querySelectorAll(".declareBtn")
+        declareBtns.forEach(btn=>{
+            btn.addEventListener('click', () => {
+                if (isLoggedIn) {
+                    openModal("declareModal");
+                } else {
+                    alert('로그인이 필요합니다.');
+                    window.location.href = '/member/login';
+                }
+            });
+        });
+
+        let msg = /*[[${msg}]]*/ null; // 서버에서 전달된 msg
+        if(msg !== null && msg !== '') {
+            alert(msg);
+        }
+
+        const dcancelBtn = document.querySelector(".dcancelbtn");
+
+        dcancelBtn.addEventListener('click', () => {
+            document.getElementById("declareModal").style.display = "none";
         });
 
         window.onclick = (event) => {
-            ["manModal", "womanModal", "disabledModal", "diaperModal", "reviewModal"].forEach(id => closeModal(event, id));
+            ["manModal", "womanModal", "disabledModal", "diaperModal", "reviewModal", "declareModal"].forEach(id => closeModal(event, id));
         };
 
     });

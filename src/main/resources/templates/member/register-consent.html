@@ -39,6 +39,7 @@
             gap: 20px;
             justify-content: flex-end;
             margin-top: 30px;
+            margin-right: 20px;
         }
         .btns button, #nextBtn {
             height: 32px;
@@ -87,7 +88,10 @@
                     <input type="checkbox" name="agreePrivacy" id="agreePrivacy" value="true">
                     개인정보 수집 및 이용 동의
                 </label>
-                <div class="box">…약관 내용… 동의 해야만 가입 할 수 있지롱 😜</div>
+                <div class="box"> 사이트에서는 서비스 운영에 필요한 최소한의 개인정보를 수집하며,
+                    서비스 이용을 위하여 개인정보가 추가로 필요한 경우 회원에게 별도의 동의를 받은 후
+                    개인정보를 수집할 예정입니다.
+                    회사가 수집하는 개인정보의 항목, 방법 및 수집 목적은 아래 표와 같습니다.</div>
             </section>
 
             <section class="card">
@@ -95,11 +99,17 @@
                     <input type="checkbox" name="agreeTerms" id="agreeTerms" value="true">
                     이용약관 동의
                 </label>
-                <div class="box">…약관 내용…동의 해라 아니면 가입 못한다 😤</div>
+                <div class="box"> **정보통신망 이용촉진 및 정보보호 등에 관한 법률 (정보통신망법)**
+
+                    **제44조의7 (불법정보 유통 방지 등)**
+                    - 불법정보 (음란, 도박, 저작권 침해 등)
+                    - 명예훼손
+                    - 차별, 혐오 표현
+                    - 허위사실 유포 </div>
             </section>
 
             <div class="btns">
-                <button type="button" id="selectAgree">선택동의</button>
+<!--                <button type="button" id="selectAgree">선택동의</button>-->
                 <button type="button" id="allAgree">전체동의</button>
             </div>
 
@@ -114,7 +124,8 @@
     const next = document.getElementById('nextBtn');
 
     function update() { next.disabled = !(p.checked && t.checked); }
-    document.getElementById('selectAgree').onclick = update;
+    //선택 동의 버튼
+    // document.getElementById('selectAgree').onclick = update;
     document.getElementById('allAgree').onclick = () => { p.checked = true; t.checked = true; update(); };
     p.onchange = t.onchange = update; update();
 </script>

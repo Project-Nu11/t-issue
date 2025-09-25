@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.toiletissue.declaration.model.dao.DeclarationMapper">
 
+
     <resultMap id="declaration" type="com.toiletissue.declaration.model.dto.DeclarationDTO">
         <id property="no" column="review_no"/>
         <result property="id" column="member_id"/>
@@ -12,5 +13,6 @@
     <insert id="declareReview">
         insert into declaration (review_no,member_id) values (#{no},#{id})
     </insert>
+
 
 </mapper>
