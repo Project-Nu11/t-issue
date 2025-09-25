@@ -167,7 +167,7 @@
         }
         .dec{
             position: relative;
-            left: 80%;
+            left: 90%;
             bottom: 80%;
         }
         .decY,.decN{
@@ -276,22 +276,22 @@
                      th:attr="data-no=${review.no},
                      data-review-no=${review.no},
                   data-station=${review.stationName},
-                  data-toilet=${review.toiletLocation}">
+                  data-toilet=${review.toiletLocation}" style="width: 80%;background: white;border-radius: 8px;margin-bottom: 10px">
 <!--                    <div class="no" th:text="${review.no}"></div>-->
 <!--                    <div class="stationName" th:text="${review.stationName}"></div>-->
 <!--                    <div class="toiletLocation" th:text="${review.toiletLocation}"></div>-->
-                    <div class="memberId" style="font-size:18px;margin-bottom: 5px " th:text="${review.memberId}"></div>
-                    <div class="starscore"></div>
+                    <div class="memberId" style="font-size:18px;margin-bottom: 5px;position: relative;top: 10px;left: 10px " th:text="${review.memberId}"></div>
+                    <div class="starscore" style="width: 200px;position: relative;left: calc(100% - 150px);bottom: 20px;font-size: 18px;"></div>
                     <button class="declareBtn" th:if="${member != null and member.memberId != review.memberId}">
                         <img src="/icon/marketing.png" alt="신고" width="20" height="20">
                     </button>
                     <div>
-                        <div class="score"  style="font-size: 16px" th:text="${review.score}"></div>
+                        <div class="score"  style="font-size: 16px" th:text="${review.score}" hidden ></div>
                     </div>
-                    <div class="content" style="font-size: 16px;" th:text="${review.content}"></div>
+                    <div class="content" style="font-size: 16px;position: relative;bottom: 10px;left: 10px " th:text="${review.content}"></div>
                     <div class="dec">신고</div>
                     <div th:text="${review.no}" class="reno" hidden></div>
-                    <div class="date" style="font-size: 12px;margin-left: 300px" th:text="${review.date}"></div>
+                    <div class="date" style="font-size: 12px;margin-left: 10px;margin-bottom: 5px" th:text="${review.date}"></div>
                 </div>
             </div>
 
@@ -511,6 +511,35 @@
         };
 
     });
+
+    const $starscore = document.querySelectorAll('.starscore')
+    $starscore.forEach((a)=>{
+        const review = a.closest('.review')
+        const starscore = review.querySelector(".starscore")
+        const scorenum = review.querySelector(".score").textContent
+        let score = "별점 : "
+        console.log(scorenum)
+        console.log(5-scorenum)
+        for(let i = 0;i<scorenum;i++){
+            score+="★"
+        }
+        for(let  j = 0 ; j<5-scorenum;j++){
+            score+="☆"
+        }
+
+        console.log(score)
+
+
+        starscore.textContent=score
+
+        // console.log("starscore : " + starscore)
+        // console.log("score : " + score)
+    })
+
+
+
+
+
 </script>
 </body>
 </html>
