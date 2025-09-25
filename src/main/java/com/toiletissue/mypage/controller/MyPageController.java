@@ -144,12 +144,21 @@ public class MyPageController {
     }
 
     //  삭제 (AJAX)
-    @PostMapping("/reviews/{no}/delete")
+    @PostMapping("/review/delete")
     @ResponseBody
     public java.util.Map<String, Object> deleteMyReview(@PathVariable int no,
                                                         @AuthenticationPrincipal UserDetails user) {
         if (user == null) return java.util.Map.of("ok", false, "msg", "로그인이 필요합니다.");
         myPageService.deleteMyReview(no, user.getUsername());
         return java.util.Map.of("ok", true);
+    }
+
+
+    /* =========== 마이페이지 - 내 문의 내역 ========= */
+
+    @GetMapping("/request")
+    public String mypageRequest() {
+        // 기존 /request/member 그대로 재사용
+        return "forward:/request/member";
     }
 }
