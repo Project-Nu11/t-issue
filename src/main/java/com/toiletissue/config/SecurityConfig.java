@@ -65,8 +65,13 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
-//    // AuthenticationProvider 빈 생성
+
+    //    // AuthenticationProvider 빈 생성
 //    @Bean
 //    public DaoAuthenticationProvider authenticationProvider() {
 //        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -80,11 +85,5 @@ public class SecurityConfig {
 //    public AuthenticationManager authenticationManager(DaoAuthenticationProvider authProvider) {
 //        return authentication -> authProvider.authenticate(authentication);
 //    }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
 }
