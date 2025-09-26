@@ -38,11 +38,11 @@ public class ReviewService {
         return result;
     }
 
-    public List<ReviewDTO> selectReviewListByStation(String stationName) {
+    public List<ReviewDTO> selectReviewListByStationAndLocation(String stationName, String toiletLocation) {
 
         List<ReviewDTO> reviewList = new ArrayList<>();
         try {
-            reviewList = reviewMapper.selectReviewListByStation(stationName);
+            reviewList = reviewMapper.selectReviewListByStationAndLocation(stationName, toiletLocation);
         } catch (Exception e) {
             e.printStackTrace();
         }

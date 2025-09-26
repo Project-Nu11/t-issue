@@ -269,7 +269,7 @@ public class ToiletController {
     public String toiletDetails(
             @RequestParam(value = "stationName", required = false) String stationName,
             @RequestParam(value = "toiletName", required = false) String toiletName,
-//            @RequestParam(value = "toiletLocation", required = false) String toiletLocation,
+            @RequestParam(value = "toiletLocation", required = false) String toiletLocation,
             Model model, Principal principal) {
 
 //        System.out.println("==== get /details 호출 ====");
@@ -306,7 +306,7 @@ public class ToiletController {
         }
 
         // 리뷰
-        List<ReviewDTO> reviewList = reviewService.selectReviewListByStation(stationName);
+        List<ReviewDTO> reviewList = reviewService.selectReviewListByStationAndLocation(stationName, toiletLocation);
         model.addAttribute("reviewList", reviewList != null ? reviewList : Collections.emptyList());
 
         // 로그인 회우ㅝㄴ 정보
@@ -321,7 +321,7 @@ public class ToiletController {
         model.addAttribute("toilet", toilet);
         model.addAttribute("stationName", stationName);
         model.addAttribute("toiletName", toiletName);
-//        model.addAttribute("toiletLocation", toiletLocation);
+        model.addAttribute("toiletLocation", toiletLocation);
 
         System.out.println("stationName: " + stationName);
 //        System.out.println("toiletLocation: " + toiletLocation);
@@ -332,7 +332,8 @@ public class ToiletController {
     }
 
     @PostMapping("/details/declaration")
-    public String declareReview (ReviewDTO reviewDTO,Model model, @RequestParam("no") int no,Principal principal,RedirectAttributes rttr){
+    public String declareReview (ReviewDTO reviewDTO,Model model,
+                                 @RequestParam("no") int no,Principal principal,RedirectAttributes rttr){
 
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odcloud.kr/api/15044453/v1/uddi:4189de50-12db-4ae2-a9ca-dfb4d2e25101?page=1&perPage=200&serviceKey=" + serviceKey;
@@ -365,6 +366,7 @@ public class ToiletController {
         rttr.addAttribute("stationName", reviewDTO.getStationName());
         rttr.addAttribute("toiletName", toiletName);
         model.addAttribute("id",principal.getName());
+        rttr.addAttribute("toiletLocation", reviewDTO.getToiletLocation());
         return "redirect:/toilet/details";
     }
 

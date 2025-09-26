@@ -36,7 +36,8 @@
         <ul>
             <li th:each="toilet : ${toilets}"
                 th:text="|${stationName}역 ${toilet.ground} ${toilet.floor}층 ${toilet.gateInOut} 화장실|"
-                th:attr="data-station=${stationName}, data-toilet=${stationName + '역 ' + toilet.ground + ' ' + toilet.floor + ' ' + toilet.gateInOut + ' 화장실'}"
+                th:attr="data-station=${stationName}, data-toilet=${stationName + '역 ' + toilet.ground + ' ' + toilet.floor + ' ' + toilet.gateInOut + ' 화장실'},
+                        data-location=${toilet.toiletLocation}"
                 class="toilet-item">
             </li>
         </ul>
@@ -48,8 +49,11 @@
         item.addEventListener('click', () => {
             const station = item.dataset.station;
             const toiletName = item.dataset.toilet;
+            const toiletLocation = encodeURIComponent(item.dataset.location);
 
-            window.location.href = `/toilet/details?stationName=${station}&toiletName=${toiletName}`;
+            console.log(item.dataset)
+
+            window.location.href = `/toilet/details?stationName=${station}&toiletName=${toiletName}&toiletLocation=${toiletLocation}`;
         });
     });
 </script>
