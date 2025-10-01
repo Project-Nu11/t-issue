@@ -353,6 +353,7 @@
 
 
 
+
     </style>
 </head>
 <body>
@@ -406,7 +407,7 @@
                 <div id="did" style="font-family: AggravoL;font-size: 20px;" hidden></div>
             </div>
             <div id="dno" style="display: none"></div>
-            <div class="btns">
+            <div class="btns detbtns">
                 <button class="deletebtn">거절</button>
                 <button class="updatebtn">답변</button>
             </div>
@@ -528,6 +529,8 @@
     const $contentinput1 = document.querySelector('#ucontent');
     const $updateNoInput = document.querySelector('#updateNo')
 
+    const $detbtns = document.querySelector('.detbtns')
+
     $contentinput1.addEventListener('input',function (){
 
         let currenlength1 = $contentinput1.value.length;
@@ -640,8 +643,17 @@
             const no = $notice.querySelector('.no')?.textContent||'';
             const answer = $notice.querySelector('.answer')?.textContent||'';
             const reject = $notice.querySelector('.reject')?.textContent||'';
+            const status = $notice.querySelector('.status')?.textContent||'';
+
+            if(status!=='대기중'){
+                $detbtns.style.display='none';
+            }
+            if(status==='대기중'){
+                $detbtns.style.display='flex';
+            }
 
             $notice.style.background="#fafad2"
+
 
 
             // 버튼에 해당하는 공지사항 제목,내용 모달창에 띄우기 (비동기)
@@ -658,6 +670,7 @@
             }
             if(reject==="" && answer===""){
                 $danswer.textContent="";
+
             }
 
             // 인덱스에 해당하는 내용을 가진 모달창이 열려있을 때 상세버튼을 누르면 꺼지게
